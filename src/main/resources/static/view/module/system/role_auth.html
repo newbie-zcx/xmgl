@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>角色权限分配</title>
+    <% include("../../layout/cssPart.html"){} %>
+    <link rel="stylesheet" href="/static/assets/libs/zTree/css/metroStyle/metroStyle.css"/>
+</head>
+
+<body>
+
+<div style="height: 350px;overflow-y: auto;overflow-x: hidden;">
+    <input id="roleId" type="hidden" value="${roleId}">
+    <ul id="treeAuth" class="ztree" style="padding: 20px 0px 20px 40px;"></ul>
+</div>
+
+<div class="text-right" style="padding-top: 10px;padding-right: 25px;">
+    <button class="layui-btn layui-btn-primary" ew-event="closeDialog">取消</button>
+    <button id="btnSave" class="layui-btn">保存</button>
+</div>
+
+
+<!-- js部分 -->
+<script type="text/javascript" src="/static/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<% include("../../layout/jsPart.html"){} %>
+<script type="text/javascript" src="/static/assets/libs/zTree/js/jquery.ztree.all-3.5.min.js"></script>
+
+<script>
+    layui.use(['layer', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var admin = layui.admin;
+
+        var roleId = $('#roleId').val();
+        layer.load(2);
+        var setting = {
+            check: {enable: true},
+            data: {
+                simpleData: {enable: true}
+            },
+            view:{
+                fontCss:{color:"black"}
+            }
+        };
+        $.get('authTree', {
+            roleId: roleId
+        }, function (data) {
+            $.fn.zTree.init($('#treeAuth'), setting, data);
+            layer.closeAll('loading');
+        }, 'json');
+
+        // 保存按钮点击事件
+        $('#btnSave').click(function () {
+            layer.load(2);
+            var treeObj = $.fn.zTree.getZTreeObj('treeAuth');
+            var nodes = treeObj.getCheckedNodes(true);
+            var ids = new Array();
+            for (var i = 0; i < nodes.length; i++) {
+                ids[i] = nodes[i].id;
+            }
+            $.post('updateRoleAuth', {
+                roleId: roleId,
+                authIds: JSON.stringify(ids)
+            }, function (data) {
+                layer.closeAll('loading');
+                if (200 == data.code) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    // 关闭当前iframe弹出层
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            }, 'json');
+        });
+
+    });
+</script>
+
+</body>
+</html>

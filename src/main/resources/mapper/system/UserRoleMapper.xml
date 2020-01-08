@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scsoft.wlyz.system.mapper.UserRoleMapper">
+
+    <select id="selectByUserIds" resultType="com.scsoft.wlyz.system.entity.UserRole">
+        SELECT a.*,b.name FROM sys_user_role a
+        LEFT JOIN sys_role b ON a.role_id=b.id
+        WHERE a.user_id IN
+        <foreach collection="userIds" open="(" close=")" separator="," item="userId">
+            #{userId}
+        </foreach>
+    </select>
+
+    <insert id="insertBatch">
+        <selectKey  keyProperty="id" resultType="long" order="BEFORE">
+            SELECT if(max(id) is null,1,MAX(id) + 1 ) as id from sys_user_role
+        </selectKey>
+        INSERT INTO sys_user_role(id,user_id,role_id) VALUES
+        <foreach collection="roleIds" item="roleId" separator=",">
+            (#{id},#{userId},#{roleId})
+        </foreach>
+    </insert>
+</mapper>

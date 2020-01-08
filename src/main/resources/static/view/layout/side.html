@@ -1,0 +1,59 @@
+<div class="layui-side">
+    <div class="layui-side-scroll">
+        <ul class="layui-nav layui-nav-tree" lay-filter="admin-side-nav" lay-accordion="true"
+            style="margin: 15px 0;">
+            <li class="layui-nav-item">
+                <a ><i class="layui-icon layui-icon-home"></i>&emsp;<cite>主页</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/welcome">欢迎页</a></dd>
+                    <!--<dd><a lay-href="home/console">控制台</a></dd>-->
+                </dl>
+            </li>
+            <% for(menu in menus) { %>
+            <li class="layui-nav-item">
+                <a lay-href="${menu.menuUrl}" href="javascript:;"><i class="layui-icon ${menu.menuIcon}"></i>&emsp;<cite>${menu.menuName}</cite></a>
+                <% if(menu.subMenus.~size>0) { %>
+                <dl class="layui-nav-child">
+                    <% for(subMenu in menu.subMenus) { %>
+                    <dd>
+                        <a lay-href="${subMenu.menuUrl}" href="javascript:;">${subMenu.menuName}</a>
+                        <% if(subMenu.subMenus.~size>0) { %>
+                        <dl class="layui-nav-child">
+                            <% for(temp in subMenu.subMenus) { %>
+                            <dd>
+                                <a lay-href="${temp.menuUrl}">${temp.menuName}</a>
+                                <% if(temp.subMenus.~size>0) { %>
+                                <dl class="layui-nav-child">
+                                    <% for(temps in temp.subMenus) { %>
+                                    <dd>
+                                        <a lay-href="${temps.menuUrl}">${temps.menuName}</a>
+                                    </dd>
+                                    <% } %>
+                                </dl>
+                                <% } %>
+                            </dd>
+                            <% } %>
+                        </dl>
+                        <% } %>
+                    </dd>
+                    <% } %>
+                </dl>
+                <% } %>
+            </li>
+            <% } %>
+
+            <li class="layui-nav-item">
+                <a href="javascript:;"><i class="layui-icon layui-icon-engine"></i>&emsp;<cite>系统监控</cite></a>
+                <dl class="layui-nav-child">
+                    <dd><a lay-href="/druid/" href="javascript:;">Druid监控</a></dd>
+                    <dd><a lay-href="/genCode" href="javascript:;">代码生成</a></dd>
+                    <dd><a lay-href="/swagger-ui.html" href="javascript:;">swagger接口</a></dd>
+                </dl>
+            </li>
+        </ul>
+
+    </div>
+</div>
+
+
+

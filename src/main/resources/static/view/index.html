@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scsoft电子公文处理系统 1.0</title>
+    <% include("./layout/cssPart.html"){} %>
+</head>
+
+<body class="layui-layout-body">
+
+<div class="layui-layout layui-layout-admin">
+    <!-- 头部 -->
+    <% include("./layout/header.html"){} %>
+    <!-- 侧边栏 -->
+    <% include("./layout/side.html"){} %>
+    <!-- 主体部分 -->
+    <div class="layui-body"></div>
+    <!-- 底部 -->
+    <% include("./layout/footer.html"){} %>
+</div>
+<!-- 底部 -->
+<% include("./layout/loading.html"){} %>
+
+<!-- js部分 -->
+<% include("./layout/jsPart.html"){} %>
+<script type="text/javascript" src="${ctxPath }/static/assets/js/main.js"></script>
+</body>
+
+</html>

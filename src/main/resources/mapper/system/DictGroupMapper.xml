@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scsoft.wlyz.system.mapper.DictGroupMapper">
+
+    <!-- 开启二级缓存 -->
+   <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.scsoft.wlyz.system.entity.DictGroup">
+        <id column="id" property="id" />
+    <result column="create_id" property="createId" />
+    <result column="create_name" property="createName" />
+    <result column="update_id" property="updateId" />
+        <result column="name" property="name" />
+        <result column="code" property="code" />
+        <result column="update_date" property="updateDate" />
+        <result column="create_date" property="createDate" />
+        <result column="update_name" property="updateName" />
+        <result column="remark" property="remark" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_id,
+        create_name,
+        update_id,
+        id, name, code, update_date, create_date, update_name, remark, is_del
+    </sql>
+    <select id="findById" resultMap="dictgroupmap" parameterType="Integer">
+        select  g.id id ,g.create_name gcreate_name,g.update_id gupdate_id,
+        g.name gname,g.code gcode,g.update_date gupdate_date,g.create_date gcreate_date,g.update_name gupdate_name
+        ,g.remark gremark,g.is_del gis_del,
+        d.id did,d.gid,d.label,d.value,d.sort,d.create_name,d.create_id,d.update_id
+        ,d.update_date,d.create_date,d.update_name,d.remark,d.is_del FROM  sys_dict_group g
+        LEFT JOIN sys_dict d
+        ON  g.id=d.gid
+        where 1=1
+        <if test="_parameter != null">
+            and g.id = #{dictGroupId}
+        </if>
+    </select>
+    <resultMap id="dictgroupmap" type="com.scsoft.wlyz.system.entity.DictGroup">
+        <id column="id" property="id" />
+        <result column="gcreate_id" property="createId" />
+        <result column="gcreate_name" property="createName" />
+        <result column="gupdate_id" property="updateId" />
+        <result column="gname" property="name" />
+        <result column="gcode" property="code" />
+        <result column="gupdate_date" property="updateDate" />
+        <result column="gcreate_date" property="createDate" />
+        <result column="gupdate_name" property="updateName" />
+        <result column="gremark" property="remark" />
+        <result column="gis_del" property="isDel" />
+        <collection property="dicts"  ofType="com.scsoft.wlyz.system.entity.Dict">
+       <!--select="com.scsoft.wlyz.system.mapper.DictMapper.findById"-->
+            <id column="did" property="id" />
+            <result column="create_id" property="createId" />
+            <result column="create_name" property="createName" />
+            <result column="update_id" property="updateId" />
+            <result column="gid" property="gid" />
+            <result column="label" property="label" />
+            <result column="value" property="value" />
+            <result column="sort" property="sort" />
+            <result column="update_date" property="updateDate" />
+            <result column="create_date" property="createDate" />
+            <result column="update_name" property="updateName" />
+            <result column="remark" property="remark" />
+            <result column="is_del" property="isDel" />
+
+        </collection>
+    </resultMap>
+
+</mapper>

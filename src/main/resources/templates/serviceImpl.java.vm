@@ -1,0 +1,67 @@
+package ${package.ServiceImpl};
+import org.springframework.stereotype.Service;
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import org.springframework.beans.factory.annotation.Autowired;
+/**
+ * <p>
+ * ${table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+     @Autowired
+    private ${table.mapperName} ${table.entityPath}Mapper;
+    /**
+     * 通过分页查询
+     * @param page
+     * @return PageResult
+     */
+    @Override
+    public PageResult<${entity}> listPage(int pageNum, int pageSize, ${entity} ${table.entityPath}) {
+       Page<${table.entityName}> page = new Page<${table.entityName}>(pageNum, limit);
+         QueryWrapper<${entity}> ew = new QueryWrapper<${entity}>();
+          getEntityWrapper(ew,${table.entityPath});
+         IPage iPage = ${table.entityPath}Mapper.selectPage(page,ew);
+          return new PageResult<${entity}>(iPage.getRecords(), iPage.getTotal());
+    }
+
+    @Override
+    public List<${entity}> selectList(${entity} ${table.entityPath}) {
+        QueryWrapper<${entity}> ew = new QueryWrapper<${entity}>();
+        getEntityWrapper(ew,${table.entityPath});
+        return ${table.entityPath}Mapper.selectList(ew);
+
+     }
+    /**
+     *  公共查询条件
+     * @param entityWrapper
+     * @return
+     */
+    public QueryWrapper<${entity}> getEntityWrapper(QueryWrapper<${entity}> entityWrapper,${entity} ${table.entityPath}){
+        //条件拼接
+        #foreach($field in ${table.fields})
+            #if(!${field.keyFlag})
+                    if (StringUtils.isNotBlank(${table.entityPath}.get${field.capitalName}())){
+                    entityWrapper.like(${entity}.${field.name.toUpperCase()},${table.entityPath}.get${field.capitalName}());
+                    }
+            #end
+        #end
+        return entityWrapper;
+    }
+
+
+    /**
+         *  逻辑删除
+         */
+        @Override
+        public Boolean logicDelete(${entity} ${table.entityPath}){
+            ${table.entityPath}.setIsDel(1);
+            return this.updateById(${table.entityPath});
+        }
+}

@@ -1,0 +1,33 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import ${superServiceClassPackage};
+import com.scsoft.scpt.common.PageResult;
+
+/**
+ * <p>
+ * ${table.comment} 服务类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+    /**
+     *  分页查询结果集
+     * @param ${table.entityPath}
+     */
+    PageResult<${entity}> listPage(int pageNum, int pageSize,${entity} ${table.entityPath});
+
+    /**
+      *  list查询
+      */
+    List<${entity}> selectList(${entity} ${table.entityPath});
+
+    /**
+      *  逻辑删除
+      */
+    Boolean logicDelete(${entity} ${table.entityPath});
+}
+

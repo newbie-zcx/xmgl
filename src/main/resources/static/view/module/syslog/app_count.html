@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>应用统计管理</title>
+    <% include("../../layout/cssPart.html"){} %>
+</head>
+<body>
+
+<!-- 页面加载loading -->
+<% include("../../layout/loading.html"){} %>
+
+
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div id="main" style="width: auto; height:700px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- 引入 ECharts 文件 -->
+<script src="/static/assets/libs/echarts/echarts.min.js"></script>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'table', 'util', 'admin','carousel'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var carousel= layui.carousel;
+
+// 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var labelRight = {
+            normal: {
+                position: 'right'
+            }
+        };
+
+        $(function () {
+            getData4();
+        });
+        function  getData4() {
+            $.ajax({
+                type: 'post',
+                dataType: 'text',
+                url: '/mplog/appCount/countlist',
+                data: {},
+                cache: false,
+                async: true,
+                success: function (data) {
+                    var data = eval('(' + data + ')');
+                    var data1 = new Array();
+                    var data2 = new Array();
+                    //  console.log(data.data);
+                    var myjson=data.data;
+                    for (var i = 0; i < myjson.length; i++) {
+                        data1= myjson[0];
+                        data2 =  myjson[1];
+                    }
+                    //   console.log(data1);
+                    //   console.log(data2);
+                    var myChart = echarts.init(document.getElementById('main'));
+
+                    // 指定图表的配置项和数据
+                    option = {
+                        color: ['#3398DB'],
+                        tooltip: {
+                            trigger: 'axis',
+                            formatter: "应用类型 : {b} <br/>应用总数: {c} "
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: {
+                            type: 'category',
+                            axisLabel:{
+                                interval:0,
+                                rotate:45,
+                                margin:2,
+                            },
+                            data: data1
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            name: '应用类型统计',
+                            type: 'bar',
+                            barCategoryGap: 20,
+                            barWidth : 20,//柱图宽度
+                            lineStyle: {
+                                normal: {
+                                    width: 3,
+                                    shadowColor: 'rgba(0,0,0,0.4)',
+                                    shadowBlur: 10,
+                                    shadowOffsetY: 10
+                                }
+                            },
+                            data: data2,
+                        }]
+                    };
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                }
+            });
+        }
+
+
+
+    });
+
+</script>
+</body>
+
+
+</html>

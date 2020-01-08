@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <title>添加/修改权限</title>
+    <% include("../../layout/cssPart.html"){} %>
+    <link rel="stylesheet" href="/static/assets/module/dtree/dtree.css"/>
+    <link rel="stylesheet" href="/static/assets/module/dtree/font/dtreefont.css"/>
+</head>
+<style type="text/css">
+    .select-test{position: absolute;max-height: 500px;height: 350px;overflow: auto;width: 100%;z-index: 123;display: none;border:1px solid silver;top: 42px;}
+    .layui-show{display: block!important;}
+</style>
+<body>
+
+<form id="authForm" lay-filter="authForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限名称</label>
+        <div class="layui-input-block">
+            <input name="name" placeholder="请输入权限名称" type="text" class="layui-input" maxlength="50"
+                   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否为菜单</label>
+        <div class="layui-input-block">
+            <input type="radio" id="yesType" name="type" value="0" lay-filter="menutype" title="是" checked/>
+            <input type="radio" id="noType" name="type" value="1" lay-filter="menutype" title="否"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">上级菜单</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="parentId" id="parentId">
+            <div class="layui-unselect layui-form-select" id="parentNameDiv">
+                <div class="layui-select-title">
+                    <input type="text" name="parentName" id="parentName" placeholder="请选择" readonly="" class="layui-input layui-unselect">
+                    <i class="layui-edge"></i>
+                </div>
+            </div>
+            <div class="layui-card select-test" id="menuDiv">
+                <div class="layui-card-body">
+                    <div id="toolbarDiv"><ul id="slTree" class="dtree" data-id="0" style="width: 100%;"></ul></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" id="permission" style="display: none">
+        <label class="layui-form-label">权限标识</label>
+        <div class="layui-input-block">
+            <input name="permission" placeholder="请输入权限标识" type="text" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item"  id="url">
+        <label class="layui-form-label">菜单url</label>
+        <div class="layui-input-block">
+            <input name="url" placeholder="请输入菜单url" type="text" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item" id="menuIcon">
+        <label class="layui-form-label">菜单图标</label>
+        <div class="layui-input-block">
+            <input name="menuIcon" type="text" placeholder="请输入菜单图标" id="iconPicker" lay-filter="iconPicker" style="display:none;" value="layui-icon-app"/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序号</label>
+        <div class="layui-input-block">
+            <input name="sort" placeholder="请输入排序号" type="number" class="layui-input"/>
+        </div>
+    </div>
+
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="formSubmit" lay-submit>保存</button>
+    </div>
+</form>
+
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'iconPicker','admin','dtree'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var admin = layui.admin;
+        var iconPicker = layui.iconPicker;
+        var dtree= layui.dtree;
+
+        var url = 'add';
+        // 回显数据
+        var authoritie = admin.getTempData('t_authoritie');
+        if (authoritie) {
+            url = 'update';
+            if (authoritie.type==1){
+                $("#permission").show();
+                $("#url").hide();
+                $("#menuIcon").hide();
+            }
+            form.val('authForm', authoritie);
+        }
+
+        // 表单提交事件
+        form.on('submit(formSubmit)', function (data) {
+            layer.load(2);
+            $.post(url, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    // 关闭当前iframe弹出层
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+
+        var DTree = dtree.render({
+            elem: "#slTree",
+            url: "getPartents ",
+            icon: "4",
+            accordion:true,
+            skin: "layui",
+            dataStyle: "layuiStyle",  //使用layui风格的数据格式
+            response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
+            done: function(result, obj){
+                var parentId=$("#parentId").val();
+                if (null!=parentId&&""!=parentId) {
+                    var params = dtree.dataInit("slTree", parentId);
+                    $("#parentName").val(params.context);
+                }
+            }
+
+        });
+        $("#parentNameDiv").on("click",function(){
+            $(this).toggleClass("layui-form-selected");
+            $("#menuDiv").toggleClass("layui-show layui-anim layui-anim-upbit");
+        });
+        dtree.on("node(slTree)", function(obj){
+            $("#parentName").val(obj.param.context);
+            $("#parentId").val(obj.param.nodeId);
+            $("#parentNameDiv").toggleClass("layui-form-selected");
+            $("#menuDiv").toggleClass("layui-show layui-anim layui-anim-upbit");
+        });
+        form.on('radio(menutype)', function (data) {
+            var type = data.value;
+            if (this.value == '0') {
+                $("#permission").hide();
+                $("#url").show();
+                $("#menuIcon").show();
+            } else if (this.value == '1') {
+                $("#permission").show();
+                $("#url").hide();
+                $("#menuIcon").hide();
+            }
+        });
+
+        iconPicker.render({
+            elem: '#iconPicker',
+            // 数据类型：fontClass/unicode，推荐使用fontClass
+            type: 'fontClass',
+            search: true,
+            page: true,
+            // 每页显示数量，默认12
+            limit: 12,
+            // 点击回调
+            click: function (data) {
+                //console.log(data);
+            },
+            // 渲染成功后的回调
+            success: function(d) {
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

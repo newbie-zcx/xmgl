@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html class="bg-white">
+
+<head>
+    <title>查看${table.comment}</title>
+    <% include("../../layout/cssPart.html"){} %>
+</head>
+
+<body>
+<form id="${table.entityPath}Form" lay-filter="${table.entityPath}Form" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+     #foreach($field in ${table.fields})
+        #if(!${field.keyFlag})##生成普通字段
+        <div class="layui-form-item">
+            <label class="layui-form-label">${field.comment}</label>
+            <div class="layui-input-block">
+                <input name="${field.propertyName}" id="${field.propertyName}" placeholder="请输入${field.comment}" type="text" class="layui-input"
+                       lay-verify="required" required/>
+            </div>
+        </div>
+        #end
+        #end
+
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">关闭</button>
+    </div>
+</form>
+
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var admin = layui.admin;
+
+        // 回显数据
+        var ${table.entityPath} = admin.getTempData('t_${table.entityPath}');
+        if (${table.entityPath}) {
+            form.val('${table.entityPath}Form', ${table.entityPath});
+        }
+    });
+</script>
+
+</body>
+</html>

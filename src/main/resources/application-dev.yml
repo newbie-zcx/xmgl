@@ -1,0 +1,7 @@
+################### 开发环境数据源配置 #########################
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.15.241:3306/wlyz?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: password123

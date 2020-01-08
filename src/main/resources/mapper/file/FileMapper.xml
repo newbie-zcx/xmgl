@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scsoft.wlyz.file.mapper.FileMapper">
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.scsoft.wlyz.file.entity.FileInfo">
+        <id column="id" property="id" />
+    <result column="create_id" property="createId" />
+    <result column="create_name" property="createName" />
+    <result column="update_id" property="updateId" />
+        <result column="file_purpose" property="filePurpose" />
+        <result column="filename" property="filename" />
+        <result column="extname" property="extname" />
+        <result column="file_path" property="filePath" />
+        <result column="source_name" property="sourceName" />
+        <result column="file_size" property="fileSize" />
+        <result column="file_date" property="fileDate" />
+        <result column="file_desc" property="fileDesc" />
+        <result column="thumb_small_file" property="thumbSmallFile" />
+        <result column="thumb_medium_file" property="thumbMediumFile" />
+        <result column="media_duration" property="mediaDuration" />
+        <result column="create_date" property="createDate" />
+        <result column="update_name" property="updateName" />
+        <result column="update_date" property="updateDate" />
+        <result column="remark" property="remark" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_id,
+        create_name,
+        update_id,
+        id, file_purpose, filename, extname, file_path, source_name, file_size, file_date, file_desc, thumb_small_file, thumb_medium_file, media_duration, create_date, update_name, update_date, remark, is_del
+    </sql>
+
+</mapper>

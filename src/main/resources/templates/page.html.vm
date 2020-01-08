@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${table.comment}</title>
+    <% include("../../layout/cssPart.html"){} %>
+</head>
+<body>
+
+<!-- 页面加载loading -->
+<% include("../../layout/loading.html"){} %>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">搜索：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                        </div>
+                    </div>
+                    #foreach($field in ${table.fields})
+                    #if(!${field.keyFlag})##生成普通字段
+                    <div class="layui-inline">
+                        <label class="layui-form-label">${field.comment}：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="${field.propertyName}" id="${field.propertyName}" placeholder="请输入${field.comment}" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    #end
+                    #end
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 表格顶部操作列 -->
+            <script type="text/html" id="${table.entityPath}-toolbar">
+                <div class="layui-btn-container">
+                    <%if(shiro.hasPermission("${table.entityPath}:add")){ %>
+                    <button id="btn1Add"  class="layui-btn  layui-btn-sm" lay-event="add">
+                        <i class="layui-icon">&#xe654;</i>添加
+                    </button>
+                    <% } %>
+                    <%if(shiro.hasPermission("${table.entityPath}:delete")){ %>
+                    <button id="btnDel" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">
+                        <i class="layui-icon">&#xe640;</i>删除
+                    </button>
+                    <% } %>
+                    <button id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" >
+                        <i class="layui-icon">&#xe67d;</i>导出
+                    </button>
+                </div>
+            </script>
+            <table class="layui-table" id="${table.entityPath}Table" lay-filter="${table.entityPath}Table"></table>
+
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="view">查看</a>
+    <%if(shiro.hasPermission("${table.entityPath}:update")){ %>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <% } %>
+    <%if(shiro.hasPermission("${table.entityPath}:delete")){ %>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <% } %>
+    <!--<a class="layui-btn layui-btn-xs" lay-event="auth">权限分配</a>-->
+</script>
+
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        //渲染表格
+        table.render({
+            elem: '#${table.entityPath}Table',
+            title:"${table.comment}",
+            url: '/${package.ModuleName}/${table.entityPath}/list',
+            toolbar: '#${table.entityPath}-toolbar',
+            where: $('form').serialize(),
+            page: true,
+            cols: [[
+                {type: 'numbers', title:'序号'},
+                {type: 'checkbox'},
+                #foreach($field in ${table.fields})
+                #if(!${field.keyFlag})
+                {title: '${field.comment}', field: '${field.propertyName}', align: 'center', valign: 'middle', sort: true},
+                #end
+                #end
+               /* {field: 'orgType',align: 'center', sort: true, width:140,
+                    templet: function (d) {
+                        if (d.orgType=="1"){
+                            return "区域";
+                        } else if (d.orgType=="2"){
+                            return "职能部门";
+                        }
+                    },
+                    title: '机构类型'},
+                    { field: 'createDate', width:180, sort: true, templet: function (d) {
+                    return util.toDateString(d.createDate);
+                      },align:'center', title: '创建时间'},
+                    */
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+
+        //头工具栏事件
+        table.on('toolbar(${table.entityPath}Table)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'add':
+                    showAddModel();
+                    break;
+                case 'del':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要删除的数据', {icon: 2});
+                    } else {
+                        var data = checkStatus.data;
+                        var id_str="";
+                        for (var i=0;i<data.length;i++){
+                            id_str +=data[i].id+",";
+                        }
+                        id_str = id_str.substr(0, id_str.length-1);
+                        layer.confirm('真的删除么', function(index){
+                            layer.load(2);
+                            $.post('${table.entityPath}/batchDelete', {
+                                departIds: id_str
+                            }, function (data) {
+                                layer.closeAll('loading');
+                                if (data.code == 200) {
+                                    layer.msg(data.msg, {icon: 1});
+                                    obj.del();
+                                    // table.reload('${table.comment}Table');
+                                } else {
+                                    layer.msg(data.msg, {icon: 2});
+                                }
+                            });
+                        });
+                    }
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table.exportFile(ins1.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            };
+        });
+
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            table.reload('roleTable', {where: $('form').serialize()});
+        });
+
+        // 工具条点击事件
+        table.on('tool(${table.entityPath}Table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') { //修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } else if (obj.event === 'view') {  //查看
+                showViewModel(obj.data.id);
+            }
+        });
+
+        // 删除
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post('${table.entityPath}/delete', {
+                    ${table.entityPath}Id: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+
+        // 显示编辑弹窗
+        function showEditModel(data) {
+            admin.putTempData('t_${table.entityPath}', data);
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                title: '修改${table.comment}',
+                area: ['350px', '380px'],
+                content: '/${package.ModuleName}/${table.entityPath}/${table.entityPath}update',
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('${table.comment}Table');  // 成功刷新表格
+                }
+            });
+        }
+
+        // 显示编辑弹窗
+        function showAddModel(data) {
+            top.layui.admin.open({
+                type: 2,
+                title: '添加${table.comment}',
+                area: ['350px', '380px'],
+                content: '/${package.ModuleName}/${table.entityPath}/${table.entityPath}add',
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('roleTable');  // 成功刷新表格
+                }
+            });
+        }
+
+        // 查看
+        function showViewModel(${table.entityPath}Id) {
+            top.layui.admin.open({
+                type: 2,
+                title: '查看',
+                area: ['380px', '455px'],
+                content: '${table.entityPath}/detail/' + ${table.entityPath}Id
+            });
+        }
+        /* // 导出excel
+                $('#btnExp').click(function () {
+                    var checkRows = table.checkStatus('${table.entityPath}Table');
+                    if (checkRows.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table.exportFile(ins1.config.id, checkRows.data, 'xls');
+                    }
+                });*/
+    });
+
+</script>
+</body>
+
+</html>

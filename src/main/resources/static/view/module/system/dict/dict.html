@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>添加/修改字典</title>
+    <% include("../../../layout/cssPart.html"){} %>
+</head>
+<body>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <input id="gid" type="hidden" value="${gid}">
+                        <label class="layui-form-label w-auto">搜索：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="edtSearch" class="layui-input" type="text" placeholder="输入字典名称"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 表格顶部操作列 -->
+            <script type="text/html" id="dic-toolbar">
+                <div class="layui-btn-container">
+                    <button id="btnAdd" lay-event="add" class="layui-btn layui-btn-normal layui-btn-sm" >
+                        <i class="layui-icon">&#xe654;</i>添加字典
+                    </button>
+                   <!-- <button id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" >
+                        <i class="layui-icon">&#xe67d;</i>导出
+                    </button>-->
+                </div>
+            </script>
+            <table class="layui-table" id="dictTable" lay-filter="dictTable"></table>
+
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+    <!--<a class="layui-btn layui-btn-xs" lay-event="look">查看</a>-->
+</script>
+
+<!-- js部分 -->
+<% include("../../../layout/jsPart.html"){} %>
+<script>
+
+    layui.use(['layer', 'form', 'table', 'util', 'admin'],function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+       var gid = $('#gid').val();
+
+        //渲染表格
+        table.render({
+            elem: '#dictTable',
+            url: 'dictlist?gid=' + gid,
+            toolbar: '#dic-toolbar',
+            page: true,
+            cols: [[
+                {type: 'numbers',title:'序号'},
+                {field: 'label', sort: true,align:'center',title: '字典名称'},
+                {field: 'value', sort: true,align:'center', title: '值'},
+                {field: 'remark', sort: true, align:'center', title: '备注'},
+                {field: 'gid', sort: true,align:'center', title: '分组id'},
+                {field: 'createDate', sort: true, align:'center',title: '创建时间'},
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+        // 添加字典组按钮点击事件
+      /*  $('#btnAdd').click(function () {
+            showEditModel();
+        });*/
+
+        //头工具栏事件
+        table.on('toolbar(dictTable)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'add':
+                    showEditModel();
+                    break;
+            };
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var code = $('#edtSearch').val();
+            table.reload('dictTable', {where: {keyword: code}});
+        });
+
+        // 工具条点击事件
+        table.on('tool(dictTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') { //修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } /* else if(obj.event === 'look'){//查看
+                showModel(obj);
+            }*/
+        });
+        // function showModel(data) {
+        //     admin.putTempData('t_adddict', data);
+        //     top.layui.admin.open({
+        //         type: 2,
+        //         title:  '查看',
+        //         area: ['420px', '520px'],
+        //         content: 'system/dict/editForm',
+        //     });
+        // 删除
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post('delete', {
+                    dictid: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+
+        }
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('dictTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+        // 显示编辑弹窗
+        function showEditModel(data) {
+            admin.putTempData('t_adddict', data);
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                title: data ? '修改字典数据' : '添加字典数据',
+                area: ['680px', '420px'],
+                content: 'system/dict/dict_add?gid='+gid,
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('dictTable');  // 成功刷新表格
+                }
+            });
+        }
+
+        //查看
+       /* // 显示表单弹窗
+        function showModel(data) {
+            admin.putTempData('t_dictchakan', data);
+            top.layui.admin.open({
+                type: 2,
+                title:  '查看',
+                area: ['420px', '520px'],
+                content: 'system/dict/editForm',
+            });*/
+    });
+
+</script>
+</body>
+
+</html>

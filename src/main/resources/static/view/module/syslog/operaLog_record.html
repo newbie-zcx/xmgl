@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>登录日志</title>
+    <% include("../../layout/cssPart.html"){} %>
+</head>
+<body>
+<!-- 页面加载loading -->
+<% include("../../layout/loading.html"){} %>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <input type="hidden" id="type" name="type" value="${type}">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">账号：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="edtAccount" class="layui-input" type="text" placeholder="请输入账号"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">日期：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="edtDate" class="layui-input date-icon" type="text" placeholder="请选择日期范围"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="logTable" lay-filter="logTable"></table>
+
+        </div>
+    </div>
+
+</div>
+    <!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var laydate = layui.laydate;
+        var type=$("#type").val();
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#logTable',
+            url: 'list?type='+type,
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+               /* {field: 'deviceSn', align:'center', title: '设备标识', templet:function (d) {
+                    if(d.deviceInfo.deviceSn!=null && d.deviceInfo.deviceSn!=" "){
+                            return d.deviceInfo.deviceSn;
+                        }else{
+                            return "";
+                        }
+                    }},*/
+                {field: 'operaTitle', align:'center', title: '标题'},
+                {field: 'operaContent', align:'center', title: '内容'},
+                {field: 'deviceName', align:'center', title: '设备名称',templet:function (d) {
+                    if (d.deviceInfo!=null){
+                        return  d.deviceInfo.deviceName
+                    }
+                    }},
+                {field: 'deviceModel', align:'center', title: '设备型号',templet:function (d) {
+                        if (d.deviceInfo!=null){
+                            return  d.deviceInfo.deviceModel
+                        }
+                    }},
+                {field: 'loginName', align:'center', title: '登陆账号'},
+                {field: 'appVersion', align:'center', title: 'APP版本'},
+                {field: 'requestUri', align:'center', title: '请求接口地址'},
+               // {field: 'params', title: '请求参数'},
+                {field: 'createDate', align:'center',title: '操作时间'}
+            ]]
+        });
+
+        // 时间范围
+        laydate.render({
+            elem: '#edtDate',
+            type: 'date',
+            range: true,
+            theme: 'molv'
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var searchDate = $('#edtDate').val().split(' - ');
+            var searchAccount = $('#edtAccount').val();
+            table.reload('logTable', {
+                where: {
+                    startDate: searchDate[0],
+                    endDate: searchDate[1],
+                    account: searchAccount
+                }
+            });
+        });
+
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('logTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+    });
+</script>
+<script type="text/html" id="zq_formatter">
+    {{#  if( d.deviceInfo!= null){ }}
+    {{d.deviceInfo.deviceSn}}
+    {{#  }  }}
+</script>
+</body>
+
+</html>

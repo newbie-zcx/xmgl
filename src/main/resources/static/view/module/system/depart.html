@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>机构管理</title>
+    <% include("../../layout/cssPart.html"){} %>
+    <link rel="stylesheet" href="/static/assets/module/dtree/dtree.css"/>
+    <link rel="stylesheet" href="/static/assets/module/dtree/font/dtreefont.css"/>
+</head>
+
+<body>
+
+<!-- 页面加载loading -->
+<% include("../../layout/loading.html"){} %>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space12">
+        <!-- 左树 -->
+        <div class="layui-col-sm12 layui-col-md3 layui-col-lg3" >
+            <div class="layui-card" style="overflow:auto;">
+                <div class="layui-card-body" style="min-height: 560px;">
+                    <div class="layui-card-header">组织机构树 ${ctxPath}</div>
+                    <div class="layui-card-body mini-bar" id="ltTree">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右表 -->
+        <div class="layui-col-sm12 layui-col-md9 layui-col-lg9">
+            <div class="layui-card">
+                <div class="layui-card-body" style="min-height: 560px;">
+                    <input id="id" name="id" value="${depart.id}"  type="hidden"/>
+                    <input id="parentId" name="parentId" value="${depart.parentId}"  type="hidden"/>
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto">搜索：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="edtSearch" class="layui-input" type="text" placeholder="输入机构名称"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn icon-btn" id="btnSearch">
+                                    <i class="layui-icon">&#xe615;</i>搜索
+                                </button>
+
+                              <!--  <button id="btnAdd1" class="layui-btn icon-btn">
+                                    <i class="layui-icon">&#xe654;</i>新增
+                                </button>-->
+                              <!--  <button id="btnDel" class="layui-btn layui-btn-danger icon-btn">
+                                    <i class="layui-icon">&#xe640;</i>删除
+                                </button>-->
+                            </div>
+                        </div>
+                    </div>
+                     <!--表格顶部操作列 -->
+                    <script type="text/html" id="depart-toolbar">
+                        <div class="layui-btn-container">
+                            <%if(shiro.hasPermission("depart:add")){ %>
+                            <button id="btnAdd"  class="layui-btn  layui-btn-sm" lay-event="add">
+                                <i class="layui-icon">&#xe654;</i>添加
+                            </button>
+                            <%} %>
+                            <button id="btnDel" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">
+                                <i class="layui-icon">&#xe640;</i>删除
+                            </button>
+                            <button id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export">
+                                <i class="layui-icon">&#xe67d;</i>导出
+                            </button>
+                        </div>
+                    </script>
+                    <table class="layui-table" id="rtTable" lay-filter="rtTable"></table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="depart-table-bar">
+
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="view">查看</a>
+
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer',  'table', 'admin', 'dtree'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var dtree = layui.dtree;
+        var admin = layui.admin;
+
+        var departId=$("#id").val();
+        var parentId=$("#parentId").val();
+        // 树形渲染
+        var dtr=dtree.render({
+            elem: '#ltTree',
+            url: '/system/depart/treeDepart?departId='+departId,
+            line:false,
+            load:false,
+            menubar:true,
+            ficon:["1", "2"],
+            skin: "layui",
+            dataStyle: "layuiStyle",  //使用layui风格的数据格式
+            response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
+            formatter: {
+                title: function(data) {  // 示例给有子集的节点返回节点统计
+                    var s = data.title;
+                    if (data.children){
+                        s += ' <span style=\'color:blue\'>(' + data.children.length + ')</span>';
+                    }
+                    return s;
+                }
+            }
+        });
+
+
+        // 树形点击事件
+        dtree.on('node("ltTree")', function (obj) {
+            var data = obj.param;
+            $("#id").val(data.nodeId);
+            // layer.msg('你选择了：' + data.nodeId + '-' + data.context);
+            // console.log(obj.param); // 点击当前节点传递的参数
+            // console.log(obj.dom); // 当前节点的jquery对象
+            // console.log(obj.childParams); // 当前节点的所有子节点参数
+            // console.log(obj.parentParam); // 当前节点的父节点参数
+            table.reload("rtTable",{where: {departId: data.nodeId}});
+        });
+
+
+
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#rtTable',
+            title:"机构数据",
+            url: 'depart/list',
+            where: {departId: departId},
+            page: true,
+            toolbar: '#depart-toolbar',
+            cellMinWidth: 80,
+            cols: [[
+                {type: 'numbers', title:'序号'},
+                {type: 'checkbox'},
+                {field: 'id', align: 'center', hide: true, title: 'id'},
+                {field: 'departName', align: 'center',width:180, sort: true, title: '机构名称'},
+                {field: 'orgCode', align: 'center', width:120, sort: true, title: '机构编码'},
+                {field: 'description', align: 'center',  sort: true, title: '机构描述'},
+                {field: 'orgType',align: 'center', sort: true, width:140,
+                    templet: function (d) {
+                        if (d.orgType=="1"){
+                            return "区域";
+                        } else if (d.orgType=="2"){
+                            return "职能部门";
+                        }
+                    },
+                     title: '机构类型'},
+                // {field: 'address', align: 'center', width:160, sort: true, title: '地址'},
+                {sort: true, field: 'departLevel', align: 'center', width:120, templet: function (d) {
+                        return d.departLevel+"级";
+                    }, title: '机构级别'
+                },
+                {align: 'center', align: 'center', toolbar: '#depart-table-bar', title: '操作', width: 200}
+            ]]
+        });
+
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var departName = $('#edtSearch').val();
+            var departId = $('#id').val();
+            table.reload('rtTable', {where: {departName: departName, departId: departId}});
+        });
+
+
+        //头工具栏事件
+        table.on('toolbar(rtTable)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'add':
+                    showEditModel();
+                    break;
+                case 'del':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要删除的数据', {icon: 2});
+                    } else {
+                        var data = checkStatus.data;
+                        var id_str="";
+                        for (var i=0;i<data.length;i++){
+                            id_str +=data[i].id+",";
+                        }
+                        id_str = id_str.substr(0, id_str.length-1);
+                        layer.msg('你选择了' + data.length + '条数据', {icon: 1});
+                        layer.confirm('真的删除么', function(index){
+                            layer.load(2);
+                            $.post('depart/batchDelete', {
+                                departIds: id_str
+                            }, function (data) {
+                                layer.closeAll('loading');
+                                if (data.code == 200) {
+                                    layer.msg(data.msg, {icon: 1});
+                                    table.reload('rtTable')&& dtree.reload('ltTree');  // 成功刷新表格
+                                    // obj.del();
+                                } else {
+                                    layer.msg(data.msg, {icon: 2});
+                                }
+                            });
+                        });
+                    }
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table.exportFile(ins1.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            };
+        });
+
+        // 工具条点击事件
+        table.on('tool(rtTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(obj);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } else if (layEvent === 'view') { // 查看
+                showModel(obj);
+            }
+        });
+
+
+
+
+        // 显示表单弹窗
+        function showModel(data) {
+            admin.putTempData('t_depart', data);
+            top.layui.admin.open({
+                type: 2,
+                title:  '查看',
+                area: ['420px', '520px'],
+                content: 'system/depart/editForm',
+            });
+        }
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            var departId = $('#id').val();
+            admin.putTempData('t_depart', data);
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                title: data ? '修改' : '添加',
+                area: ['420px', '520px'],
+                content: 'system/depart/editForm?departId='+departId,
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('rtTable')&&dtree.reload('ltTree');  // 成功刷新表格
+                }
+            });
+        }
+        // 删除
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post('depart/delete', {
+                    departId: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                        dtree.reload('ltTree');  // 成功刷新表格
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+
+    });
+</script>
+</body>
+
+</html>

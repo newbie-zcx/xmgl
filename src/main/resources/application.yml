@@ -1,0 +1,155 @@
+##################  所有profile共有的配置  #################
+###################  项目启动端口  ###################
+server:
+  port: 8088
+  servlet:
+    context-path: /
+  tomcat:
+    uri-encoding: UTF-8
+##################  spring配置  ###################
+spring:
+  application:
+    name: wlyz
+  profiles:
+    active: dev
+  datasource:
+    ###################以下为druid增加的配置###########################
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 下面为连接池的补充设置，应用到上面所有数据源中
+      # 初始化大小，最小，最大
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 配置获取连接等待超时的时间
+      max-wait: 30000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 300000
+      test-while-idle: true
+      test-on-borrow: true
+      test-on-return: false
+      validation-query: SELECT 1 FROM DUAL
+      remove-abandoned: true
+      remove-abandoned-timeout: 1800
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙，此处是filter修改的地方
+      filter:
+        commons-log:
+          connection-logger-name: stat,wall,log4j
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      web-stat-filter:
+        enabled: true
+        url-pattern: "/*"
+        exclusions: ".js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+      #  profile-enable: true
+      stat-view-servlet:
+        url-pattern: /druid/*
+        reset-enable: false
+      aop-patterns: com.scsoft.wlyz.*.service.*
+
+
+  redis:
+    #集群模式
+    #cluster:
+    #  nodes:
+    #    - 39.XXX.XX.69:6661
+    #    - 39.XXX.XX.69:6662
+    #    - 39.XXX.XX.69:6663
+    #    - 39.XXX.XX.69:6664
+    #    - 39.XXX.XX.69:6665
+    #    - 39.XXX.XX.69:6666
+    #单机模式
+    # Redis服务器地址
+    host: 192.168.15.241
+    # Redis数据库索引（默认为0）
+    database: 0
+    # Redis服务器连接端口
+    port: 6379
+    #  自己redis设置的密码
+    password:
+    #连接超时时间（毫秒）
+    timeout: 10000
+    lettuce:
+      pool:
+        max-idle: 10
+        max-active: 10
+        min-idle: 5
+        max-wait: 10000
+  mvc:
+    #    static-path-pattern: /static/**
+    view:
+      prefix: /static/view/
+      suffix: .html
+  http:
+    converters:
+      preferred-json-mapper: fastjson
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  devtools:
+    restart:
+      #热部署生效
+      enabled: true #是否开启开发者工具（true/false）
+      #设置重启的目录
+      #classpath目录下的WEB-INF文件夹内容修改不重启
+      additional-paths: src/main/java
+      exclude: static/**,WEB-INF/view/**
+  aop:
+    proxy-target-class: true #false为启用jdk默认动态代理,true为cglib动态代理
+
+  ################### mybatis-plus #########################
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  typeAliasesPackage: com.scsoft.wlyz.*.entity
+  #  type-enums-package: com.xyz.bigcorn.admin.**.entity.enums
+  # type-handlers-package: com.baomidou.mybatisplus.samples.quickstart.handler
+  configuration:
+    aggressive-lazy-loading: true
+    auto-mapping-behavior: partial
+    auto-mapping-unknown-column-behavior: none
+  global-config:
+    refresh: true    #该配置不建议在生产环境打开！
+    sql-parser-cache: true
+    banner: false
+    db-config:
+      id-type: AUTO #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID",ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      field-strategy: not_empty #字段策略 IGNORED:"忽略判断",NOT_NULL:"非 NULL 判断"),NOT_EMPTY:"非空判断"
+      db-type: mysql
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+logging:
+  level:
+    com.baomidou.mybatisplus: DEBUG
+    com.scsoft.wlyz: DEBUG
+
+beetlsql:
+  enabled: false
+jwt:
+  #  header: Authorization
+  token:
+    secret: mySecret
+    #    7天
+    #    expiration: 604800
+    #    一天
+    expiration: 86400
+
+file:
+  ftp:
+    use: false
+    ip: 192.168.15.241
+    port: 21
+    username: administrator
+    password: Scsoft
+    basePath: D://upload/swmoftp
+  localtion:  #配置默认文件保存位置
+    windows: D://upload/wlyz
+    linux: /opt/upload/wlyz/
+  maxFileSize: 10240KB #单个文件最大KB/MB
+  maxRequestSize: 102400KB   #设置总上传数据总大小

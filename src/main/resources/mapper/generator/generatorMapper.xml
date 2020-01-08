@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scsoft.wlyz.generator.mapper.GeneratorMapper">
+	<resultMap type="com.scsoft.wlyz.generator.entity.TableInfo" id="TableInfoResult">
+		<result property="tableName"   column="table_name"      />
+		<result property="comments" column="table_comment"   />
+		<result property="createTime"  column="create_time"     />
+		<result property="updateTime"  column="update_time"     />
+	</resultMap>
+	<sql id="selectGenVo">
+        select table_name, table_comment, create_time, update_time from information_schema.tables
+    </sql>
+
+	<select id="queryList" resultMap="TableInfoResult">
+		select * from (
+		<include refid="selectGenVo"/>
+		where table_schema = (select database()) ) t
+		${ew.customSqlSegment}
+	</select>
+
+	<select id="queryTable" resultMap="TableInfoResult">
+		<include refid="selectGenVo"/>
+			where table_schema = (select database()) ${ew.customSqlSegment}
+	</select>
+
+</mapper>

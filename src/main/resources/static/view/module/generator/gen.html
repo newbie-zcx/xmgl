@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>代码生成管理</title>
+    <% include("../../layout/cssPart.html"){} %>
+</head>
+<body>
+<style>
+    .w-flort {
+        text-align:right;
+        width: 90px;
+        margin-right: -10px;
+    }
+</style>
+<!-- 页面加载loading -->
+<% include("../../layout/loading.html"){} %>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label w-flort" required>项目地址:</label>
+                    <i class="layui-icon layui-icon-tips" lay-tips="具体到项目名，磁盘上项目所在路径,如:E:\idea_space\scpt-base" style="display: inline-block;float: left;vertical-align: middle;margin-top: 8px;margin-right: 10px;"></i>
+                    <div class="layui-input-inline" style="width: 80%;vertical-align: middle;">
+                        <input id="projectPath" name="projectPath"  lay-verify="required" class="layui-input" type="text"  value="${projectPath}" placeholder="项目磁盘地址 例如：E:\idea_space\scpt-base">
+                    </div>
+                    <div style="color: #FF5722;display: inline-block;margin-top: 13px;font-size: 32px;">*</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label w-flort">项目模块名称:</label>
+                    <i class="layui-icon layui-icon-tips" lay-tips="开发的人员名称。可以是全拼也可以是汉字名称" style="display: inline-block;float: left;vertical-align: middle;margin-top: 8px;margin-right: 10px;"></i>
+                    <div class="layui-input-inline " style="width: 80%;vertical-align: middle;">
+                        <input id="moduleName" name="moduleName"  lay-verify="required"  class="layui-input" type="text" placeholder="输入模块名称如：system"/>
+                    </div>
+                    <div style="color: #FF5722;display: inline-block;margin-top: 13px;font-size: 32px;">*</div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label w-flort">项目包名称:</label>
+                    <i class="layui-icon layui-icon-tips" lay-tips="开发的人员名称。可以是全拼也可以是汉字名称"  style="display: inline-block;float: left;vertical-align: middle;margin-top: 8px;margin-right: 10px;"></i>
+                    <div class="layui-input-inline " style="width: 80%;vertical-align: middle;">
+                        <input id="projectPackage" name="projectPackage" lay-verify="required" class="layui-input" type="text" placeholder="包名称如：com.scsoft.scpt"/>
+                    </div>
+                    <div style="color: #FF5722;display: inline-block;margin-top: 13px;font-size: 32px;">*</div>
+                </div>
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label w-flort" required>开发者:</label>
+                    <i class="layui-icon layui-icon-tips" lay-tips="开发的人员名称。可以是全拼也可以是汉字名称"  style="display: inline-block;float: left;vertical-align: middle;margin-top: 8px;margin-right: 10px;"></i>
+                    <div class="layui-input-inline" style="width: auto;vertical-align: middle;">
+                        <input id="author" name="author"  class="layui-input"  lay-verify="required" type="text" placeholder="输入姓名全拼或者汉字姓名"/>
+                    </div>
+                    <div style="color: #FF5722;display: inline-block;margin-top: 13px;font-size: 32px;">*</div>
+                </div>
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label w-flort">忽略表前缀:</label>
+                    <i class="layui-icon layui-icon-tips" lay-tips="需要过滤掉的表前缀，生成实体时候不带前缀"  style="display: inline-block;float: left;vertical-align: middle;margin-top: 8px;margin-right: 10px;"></i>
+                    <div class="layui-input-inline " style="width: auto;vertical-align: middle;">
+                        <input id="ignoreTabelPrefix" name="ignoreTabelPrefix"  class="layui-input" type="text" placeholder="输入表前缀非必填如：sys_"/>
+                    </div>
+                    <div style="color: #FF5722;display: inline-block;margin-top: 13px;font-size: 32px;">*</div>
+                </div>
+
+                  <!--  <div class="layui-inline">
+                        <label class="layui-form-label w-auto">数据库类型：</label>
+                        <div class="layui-input-inline mr0">
+                            <select id="dbType" lay-filter="dbType" name="sqlite" lay-verify="required" lay-search="">
+                                <option value="mysql">MySql数据库</option>
+                                <option value="oracle">Oracle数据库</option>
+                                <option value="dm">达梦数据库</option>
+                                <option value="h2">H2数据库</option>
+                                <option value="db2">DB2数据库</option>
+                                <option value="mariadb">MariaDB数据库</option>
+                                <option value="hsql">HSQL数据库</option>
+                                <option value="sqlite">SQLite数据库</option>
+                                <option value="postgresql">Postgre数据库</option>
+                                <option value="sqlserver2005">SQLServer2005数据库</option>
+                                <option value="sqlserver">SQLServer数据库</option>
+                                <option value="other">其他数据库</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">数据库驱动：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="driverName" name="driverName" lay-verify="required"  class="layui-input" type="text" value="com.mysql.jdbc.Driver" placeholder="输入数据库驱动"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">数据库url：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="url" name="url" class="layui-input" lay-verify="required"  type="text" placeholder="jdbc:mysql://192.168.15.241:3306/scpt?useUnicode=true&useSSL=false&characterEncoding=utf8"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">数据库账号：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="userName" name="userName"  lay-verify="required" class="layui-input" type="text" placeholder="输入数据库账号"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">数据库密码：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="password" name="password" lay-verify="required"  class="layui-input" type="text" placeholder="数据库密码"/>
+                        </div>
+                    </div>-->
+
+
+                <fieldset class="layui-elem-field site-demo-button" style="margin-top: 1px;">
+                    <legend>选择表</legend>
+                    <div class="layui-form-item" style="margin: 10px">
+                        <div class="layui-inline">
+                            <label class="layui-form-label w-auto">表名称：</label>
+                            <div class="layui-input-inline mr0">
+                                <input id="tableName" name="tableName"  class="layui-input" type="text" placeholder="输入表名称"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label w-auto">表描述：</label>
+                            <div class="layui-input-inline">
+                                <input id="bizName" name="bizName" class="layui-input" type="text" placeholder="输入表描述"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        </div>
+                     </div>
+                <table class="layui-table" id="genTable" lay-filter="genTable"></table>
+                </fieldset>
+                <div style="margin-left: 10px;">
+                    <button class="layui-btn" lay-submit="" id="execute" lay-filter="formGen">  <i class="layui-icon">&#xe635;</i>生成代码</button>
+                    <button type="reset" id="reset" class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe633;</i>重置</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">定制表单</a>
+    <a class="layui-btn layui-btn-xs" lay-event="auth">查询条件</a>
+</script>
+
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        //渲染表格
+        table.render({
+            elem: '#genTable',
+            url: '${ctxPath}/genCode/list',
+            page: true,
+            cols: [[
+                {type: 'numbers'},
+                {type: 'checkbox'},
+                {field: 'tableName', sort: true, title: '表名'},
+                {field: 'comments', sort: true, title: '表备注'},
+                {
+                    sort: true, templet: function (d) {
+                    return util.toDateString(d.createTime);
+                }, title: '创建时间'
+                },
+                {
+                    sort: true, templet: function (d) {
+                        return util.toDateString(d.updateTime);
+                    }, title: '更新时间'
+                },
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+
+
+
+
+        //监听提交
+        form.on('submit(formGen)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            var projectPath = $("#projectPath").val();
+            var author = $("#author").val();
+            var projectPackage = $("#projectPackage").val();
+            var ignoreTabelPrefix = $("#ignoreTabelPrefix").val();
+            var moduleName = $("#moduleName").val();
+            console.info(Code);
+            if (Code.tableNames==""){
+                layer.msg('请选择表', {icon: 5});
+                return false;
+            }
+            if (projectPath==""){
+                layer.msg('请填写项目路径', {icon: 5});
+                return false;
+            }
+            if (projectPackage==""){
+                layer.msg('项目包', {icon: 5});
+                return false;
+            }
+            if (moduleName==""){
+                layer.msg('请填写模块名', {icon: 5});
+                return false;
+            }
+            // window.location.href = "genCode/generate?projectPath=" + projectPath + "&author="
+            //     + author + "&projectPackage=" + projectPackage + "&ignoreTabelPrefix=" + ignoreTabelPrefix + "&tables=" + Code.tableNames + "&moduleName=" + moduleName;
+            $.post('genCode/generate', {
+                'projectPath': projectPath,
+                'author': author,
+                'projectPackage': projectPackage,
+                'ignoreTabelPrefix': ignoreTabelPrefix,
+                'tableName': Code.tableNames,
+                'moduleName': moduleName
+            }, function (data) {
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                }
+            });
+
+            return false;
+        });
+
+
+
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            showEditModel();
+        });
+        /**
+         * 重置
+         */
+        $('#reset').click(function () {
+
+            form.render();
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var tableName = $('#tableName').val();
+            var bizName = $('#bizName').val();
+            table.reload('genTable', {where: {tableName: tableName,bizName:bizName}});
+        });
+
+        // 工具条点击事件
+        table.on('tool(genTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') { //修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } else if (obj.event === 'auth') {  // 权限管理
+                showPermDialog(obj.data.id);
+            }
+        });
+
+        // 删除
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function () {
+                layer.load(2);
+                $.post('gen/delete', {
+                    genId: obj.data.genId
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+        // 导出excel
+        $('#btnExp').click(function () {
+            var checkRows = table.checkStatus('userTable');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+        // 显示编辑弹窗
+        function showEditModel(data) {
+            admin.putTempData('t_gen', data);
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                title: data ? '修改角色' : '添加角色',
+                area: ['380px', '293px'],
+                content: 'system/gen/editForm',
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('genTable');  // 成功刷新表格
+                }
+            });
+        }
+
+        // 权限管理
+        function showPermDialog(genId) {
+            top.layui.admin.open({
+                type: 2,
+                title: '角色权限分配',
+                area: ['380px', '455px'],
+                content: 'system/gen/auth?genId=' + genId
+            });
+        }
+        var Code = {
+            tableNames: "",
+            dbId: "",
+            tables: {}
+        };
+        table.on('checkbox(genTable)', function (obj) {
+            var checkStatus = table.checkStatus('genTable');
+            var tableNames = "";
+            for (var tableItem in checkStatus.data) {
+                tableNames += "," + checkStatus.data[tableItem].tableName;
+            }
+            Code.tableNames = tableNames;
+        });
+
+
+
+        form.on('select(dbType)', function(data){
+            var dbtype=data.value;
+            if (dbtype=='mysql'){
+                $("#driverName").val("com.mysql.jdbc.Driver");
+            }else if (dbtype=='oracle'){
+                $("#driverName").val("oracle.jdbc.driver.OracleDriver");
+            }else if (dbtype=='dm'){
+                $("#driverName").val("dm.jdbc.driver.DmDriver");
+            }else if (dbtype=='h2'){
+                $("#driverName").val("org.h2.Driver");
+            }else if (dbtype=='db2'){
+                $("#driverName").val("com.ibm.db2.jcc.DB2Driver");
+            }else if (dbtype=='mariadb'){
+                $("#driverName").val("org.mariadb.jdbc.Driver");
+            }else if (dbtype=='hsql'){
+                $("#driverName").val("org.hsqldb.jdbcDriver");
+            }else if (dbtype=='sqlite'){
+                $("#driverName").val("SQLite3 ODBC Driver");
+            }else if (dbtype=='postgresql'){
+                $("#driverName").val("org.postgresql.Driver");
+            }else if (dbtype=='sqlserver2005'){
+                $("#driverName").val("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            }else if (dbtype=='sqlserver'){
+                $("#driverName").val("com.microsoft.jdbc.sqlserver.SQLServer");
+            }else if (dbtype=='other'){
+                $("#driverName").val("");
+            }else {
+                $("#driverName").val("com.mysql.jdbc.Driver");
+            }
+        })
+
+
+
+    });
+
+</script>
+</body>
+
+</html>
