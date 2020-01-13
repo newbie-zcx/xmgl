@@ -4,11 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scsoft.scpt.common.PageResult;
+import com.scsoft.wlyz.discuss.entity.ReplyFile;
+import com.scsoft.wlyz.discuss.mapper.ReplyFileMapper;
+import com.scsoft.wlyz.discuss.model.ReplyModel;
 import org.springframework.stereotype.Service;
 import com.scsoft.wlyz.discuss.entity.Reply;
 import com.scsoft.wlyz.discuss.mapper.ReplyMapper;
 import com.scsoft.wlyz.discuss.service.IReplyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -26,6 +30,10 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyMapper, Reply> implements
 
     @Resource
     private ReplyMapper replyMapper;
+
+    @Resource
+    private ReplyFileMapper replyFileMapper;
+
     /**
      * 通过分页查询
      * @param page
@@ -46,5 +54,32 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyMapper, Reply> implements
         return replyMapper.selectList(ew);
 
      }
+
+    @Override
+    @Transactional
+    public boolean saveModel(ReplyModel replyModel) {
+        Reply reply = new Reply();
+        reply.setIssueId(replyModel.getIssueId());
+        reply.setReplyDesc(replyModel.getReplyDesc());
+        reply.setShowLevel(replyModel.getShowLevel());
+        Integer successNum = this.replyMapper.insert(reply);
+
+        List<Integer> fileList = replyModel.getFileList();
+        if(null == fileList || fileList.size() == 0){
+
+        }else{
+            for(Integer file : fileList){
+                ReplyFile replyFile = new ReplyFile();
+                replyFile.setFileId(file);
+                replyFile.setReplyId(reply.getId());
+                replyFileMapper.insert(replyFile);
+            }
+        }
+        if(successNum >= 1){
+            return true;
+        }else {
+            return false;
+        }
+    }
 
 }

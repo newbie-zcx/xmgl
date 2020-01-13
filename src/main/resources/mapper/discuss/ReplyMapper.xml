@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scsoft.wlyz.discuss.mapper.ReplyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.scsoft.wlyz.discuss.entity.Reply">
+        <id column="id" property="id" />
+        <result column="ISSUE_ID" property="issueId"/>
+        <result column="REPLY_DESC" property="replyDesc"/>
+        <result column="TO_REPLY_USER_ID" property="toReplyUserId"/>
+        <result column="TO_REPLY_USER_NAME" property="toReplyUserName"/>
+        <result column="SHOW_LEVEL" property="showLevel"/>
+        <result column="create_id" property="createId" />
+        <result column="create_name" property="createName" />
+        <result column="update_id" property="updateId" />
+        <result column="create_date" property="createDate" />
+        <result column="update_name" property="updateName" />
+        <result column="update_date" property="updateDate" />
+        <result column="remark" property="remark" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID,
+        ISSUE_ID,
+        REPLY_DESC,
+        TO_REPLY_USER_ID,
+        TO_REPLY_USER_NAME,
+        SHOW_LEVEL,
+        create_id,
+        create_name,
+        create_date,
+        update_id,
+        update_name,
+        update_date,
+        remark,
+        is_del
+    </sql>
+
+</mapper>

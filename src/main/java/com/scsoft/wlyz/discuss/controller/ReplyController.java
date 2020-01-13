@@ -1,6 +1,7 @@
 package com.scsoft.wlyz.discuss.controller;
 
 import com.scsoft.scpt.annotation.SysLog;
+import com.scsoft.wlyz.discuss.model.ReplyModel;
 import org.springframework.web.bind.annotation.*;
 import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;
@@ -43,9 +44,9 @@ public class ReplyController extends BaseController {
     /**
      * 跳转到回复表首页
      */
-    @RequiresPermissions("reply:view")
-    @RequestMapping("")
-    public String index(Model model, HttpServletRequest request) {
+    @RequestMapping("/{issue_id}")
+    public String index(@PathVariable("issue_id") String issueId, Model model, HttpServletRequest request) {
+        model.addAttribute("issue_id", issueId);
         return PREFIX + "reply";
     }
 
@@ -53,18 +54,16 @@ public class ReplyController extends BaseController {
      * 跳转到添加回复表
      */
     @RequestMapping("/replyadd")
-    @RequiresPermissions("reply:add")
     public String toAdd(Model model,HttpServletRequest request) {
-        return PREFIX + "reply_add.html";
+        return PREFIX + "reply_add";
     }
 
     /**
      * 跳转到修改回复表
      */
     @RequestMapping("/replyupdate")
-     @RequiresPermissions("reply:update")
     public String toUpdate(Model model,HttpServletRequest request) {
-        return PREFIX + "reply_edit.html";
+        return PREFIX + "reply_edit";
     }
 
 
@@ -81,7 +80,6 @@ public class ReplyController extends BaseController {
      * 获取回复表列表
      */
     @RequestMapping(value = "/list")
-    @RequiresPermissions("reply:view")
     @ResponseBody
     public PageResult<Reply> list(Integer page, Integer limit, Reply reply,String condition, Model model,HttpServletRequest request) {
         return replyService.listPage(page,limit,reply);
@@ -93,10 +91,9 @@ public class ReplyController extends BaseController {
      */
     @RequestMapping(value = "/add")
     @ResponseBody
-    @RequiresPermissions("reply:add")
     @SysLog(operationType="add操作:",operationName="添加回复表")
-    public JsonResult add(Reply reply) {
-        if (replyService.save(reply)) {
+    public JsonResult add(ReplyModel replyModel) {
+        if (replyService.saveModel(replyModel)) {
             return JsonResult.ok("添加成功");
         } else {
             return JsonResult.error("添加失败");
