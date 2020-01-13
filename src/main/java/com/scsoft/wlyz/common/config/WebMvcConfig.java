@@ -4,6 +4,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.scsoft.wlyz.common.filter.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -35,6 +36,13 @@ import java.util.List;
 @Configuration
 @ComponentScan
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Value("${file.localtion.windows}")
+    public static String WINDOWS_BASE_PATH = "///D://upload/wlyz/";
+
+    @Value("${file.localtion.linux}")
+    public static String LINUX_BASE_PATH = "";
+
     /**
      *静态资源处理
      **/
@@ -42,7 +50,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-//        registry.addResourceHandler("/view/**").addResourceLocations("classpath:/view/");
+        String os = System.getProperty("os.name");
+        registry.addResourceHandler("/upload/wlyz/**").addResourceLocations("file:"+WINDOWS_BASE_PATH);
+
     }
 
     /* 视图跳转控制器 */
