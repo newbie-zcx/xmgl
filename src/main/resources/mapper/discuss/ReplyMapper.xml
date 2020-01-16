@@ -7,6 +7,7 @@
         <id column="id" property="id" />
         <result column="ISSUE_ID" property="issueId"/>
         <result column="REPLY_DESC" property="replyDesc"/>
+        <result column="TO_REPLY_ID" property="toReplyId"/>
         <result column="TO_REPLY_USER_ID" property="toReplyUserId"/>
         <result column="TO_REPLY_USER_NAME" property="toReplyUserName"/>
         <result column="SHOW_LEVEL" property="showLevel"/>
@@ -24,6 +25,7 @@
         ID,
         ISSUE_ID,
         REPLY_DESC,
+        TO_REPLY_ID,
         TO_REPLY_USER_ID,
         TO_REPLY_USER_NAME,
         SHOW_LEVEL,
@@ -36,5 +38,18 @@
         remark,
         is_del
     </sql>
+    <select id="selectListByIssue" parameterType="map" resultMap="BaseResultMap">
+        SELECT * FROM (
+            SELECT * FROM yz_reply x where x.ISSUE_ID = #{issueId} and x.SHOW_LEVEL = '公开'
+            <if test="toReplyUserName != null">
+                AND TO_REPLY_USER_NAME = #{toReplyUserName}
+            </if>
+            union
+            SELECT * FROM yz_reply z where z.ISSUE_ID = #{issueId} and z.SHOW_LEVEL = '隐私' and z.create_name = #{createName}
+            <if test="toReplyUserName != null">
+                AND TO_REPLY_USER_NAME = #{toReplyUserName}
+            </if>
+        ) m order by m.create_date desc
+    </select>
 
 </mapper>

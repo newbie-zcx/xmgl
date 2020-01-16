@@ -1,0 +1,151 @@
+<div id="reply_list"  class="layui-card">
+    <div class="layui-row" style="background-color: #f2f2f2;height: 55px;">
+        <div class="layui-col-md2" style="width: 44px;">
+            <span class="big_font" style="display: table-cell;">评</span>
+        </div>
+        <div id="replyNum" class="layui-col-md10 layui-card-header" style="font-size: 16px; color: #666666;text-align: left;">
+
+        </div>
+    </div>
+    <div class="layui-card-body">
+        <div id="showHtml" class="flow-default">
+
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form', 'flow'], function (){
+        var $ = layui.$;
+        var form = layui.form;
+        var layer = layui.layer;
+        var flow = layui.flow;
+
+        <!-- 初始化加载方法 -->
+        $(document).ready(function () {
+            console.log('start show replay');
+            showReplay();
+        });
+
+        <!-- 展示评论 -->
+        function showReplay(){
+            console.log("start showReplay");
+            flow.load({
+                elem: '#showHtml',
+                scrollElem: '#reply_list',
+                isAuto: true,
+                done: function (page, next) {
+                    var lis = [];
+                    $.ajax({
+                        url : '/discuss/reply/page/list',
+                        type: 'POST',
+                        data:{
+                            'issueId':$("#issueId").val(),
+                            'toReplyUserName': $("#issueName").val(),
+                            'page': page,
+                            'limit': 7
+                        },
+                        success: function(resp){
+                            if(resp.code == 200){
+                                var dataList = resp.data;
+                                var replyNum = resp.count;
+                                var pages = Math.ceil(replyNum/8);
+                                var divShow = "";
+
+                                $("#replyNum").html("已有"+replyNum+"人回复");
+
+                                $.each(dataList, function(i,data){
+                                    var value = filterMessage(data.replyDesc);
+                                    var name = filterMessage(data.createName);
+                                    var time = filterMessage(data.createDate);
+                                    var id = data.id;
+
+                                    divShow =
+                                        "<div class='layui-row'>"+
+                                        "<div class='layui-col-md6' style='font-size: 15px; color: #454545'>"+
+                                        name+
+                                        "</div>"+
+                                        "<div class='layui-col-md6' style='font-size: 15px; color: #999999'>" +
+                                        time+
+                                        "</div>" +
+                                        "</div>" +
+                                        "<div class='layui-row' style='font-size: 15px'>" +
+                                        value+
+                                        "</div>"+
+                                        "<div class='layui-row' style='text-align: right;'>"+
+                                        "<img id='"+id+"' class='moreReply' src='/static/assets/images/more_reply.png' />"+
+                                        "<img id='"+id+"' class='reply' src='/static/assets/images/reply.png' />"+
+                                        "</div>";
+                                    console.log("success divShow is "+ divShow);
+                                    lis.push(divShow);
+                                });
+                                next(lis.join(''), page < pages);
+                            }else{
+                                top.layer.msg(resp.msg, {icon: 1});
+                            }
+                        }
+                    });
+                }
+            });
+        };
+
+        <!-- 过滤特殊字符串 -->
+        function filterMessage(value) {
+            var regl = new RegExp("&lt;","g");
+            var regg = new RegExp("&gt;","g");
+            var regu = new RegExp("&quot;","g");
+            value = value.replace(regl,"<");
+            value = value.replace(regg,">");
+            value = value.replace(regu,"");
+            return value;
+        };
+
+        <!-- 单独回复弹出框-->
+        $(document).on('click',".reply", function () {
+            top.layui.admin.open({
+                type: 2,
+                title:"回复",
+                area: ['350px', '300px'],
+                content: ['/discuss/reply/reply_add?id='+this.id,'no']
+            });
+        });
+
+        <!-- 更多消息弹出框-->
+        $(document).on('click',".moreReply", function () {
+            var toReplyId=this.id;
+            console.log(toReplyId);
+            $.ajax({
+                url: '/discuss/reply/list/replyId',
+                type: 'POST',
+                data: {
+                    'toReplyId': toReplyId
+                },
+                success: function (resp) {
+                    dealReplay(resp);
+                }
+            });
+
+            function dealReplay(resp) {
+                if(resp.code == '200'){
+                    if(resp.count == '0'){
+                        layer.tips('无单独回复','#'+toReplyId,{
+                            tips: [1, '#3595CC'], time: 4000
+                        });
+                    }else{
+                        top.layui.admin.open({
+                            type: 2,
+                            title:"回复",
+                            area: ['350px', '300px'],
+                            content: ['/discuss/reply/reply_more?id='+toReplyId,'no']
+                        });
+                    }
+                }else if(resp.code == '500'){
+                    layer.tips('无单独回复','#'+toReplyId,{
+                        tips: [4, '#3595CC'], time: 4000
+                    });
+                }else{
+                    top.layer.msg(resp.msg, {icon: 1});
+                }
+            };
+        });
+    });
+</script>

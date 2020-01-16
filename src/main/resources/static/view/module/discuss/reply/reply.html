@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>回复管理</title>
+    <title>回复管理--老版本弃用，修改为reply_main.html页面</title>
     <% include("../../../layout/cssPart.html"){} %>
     <link href="/static/assets/css/wangEditor.css" rel="stylesheet" />
     <link href="/static/assets/css/wangEditor-verb.css" rel="stylesheet" />
@@ -16,24 +16,31 @@
 <script src="/static/assets/js/wangEditor-image-upload.js"></script>
 
 <!-- 正文开始 -->
-<div class="layui-fluid" style="height: 1920px">
+<div class="layui-fluid">
     <div class="layui-col-md9">
-        <div class="layui-row" style="height: 70%">
+        <div class="layui-row" style="height: 260px">
             <div class="layui-card">
-                <div class="layui-card-header">议题</div>
+                <div class="layui-card-header">
+                    提
+                </div>
                 <div class="layui-card-body">
 
                 </div>
             </div>
         </div>
 
-        <div class="layui-row" style="height: 30%">
+        <div class="layui-row" style="height: 150px">
             <div class="layui-card">
-                <div class="layui-card-header">我要回复</div>
+                <div class="layui-card-header" >评 我要回复</div>
                 <div class="layui-card-body">
                     <div class="layui-form">
-                        <input id="issueId" type="hidden" value="1111"/>
+                        <input id="issueId" type="hidden" name="issueId"/>
+                        <input id="issueName" type="hidden" name="issueName"/>
+                        <input id="toReplyUserId" type="hidden" name="toReplyUserId"/>
                         <div>
+                            <div>
+                                <a href="#" id="fileUpload" style="color:#4bbc8b"><img src="/static/assets/images/fujian.png" style="color:#4bbc8b" />添加附件  </a>  (最大为20M)
+                            </div>
                             <div id="layui-upload-list" name="layui-upload-list" class="layui-upload-list">
 
                             </div>
@@ -45,11 +52,7 @@
                             <div class="layui-input-block" style="text-align: right;">
                                 <input type="radio" name="shiro" value="公开" title="公开" checked>
                                 <input type="radio" name="shiro" value="隐私" title="隐私">
-                            </div>
-                            <div style="margin: 5px;text-align: center;">
-                                <button class="layui-btn layui-btn-sm" id="fileUpload">上传</button>
-                                <button class="layui-btn layui-btn-sm" type="reset">重置</button>
-                                <button class="layui-btn layui-btn-sm" lay-filter="submitEdit" lay-submit>保存</button>
+                                <button class="layui-btn layui-btn-radius layui-btn-primary" lay-filter="submitEdit" lay-submit>发送</button>
                             </div>
                         </div>
                     </div>
@@ -57,11 +60,13 @@
             </div>
         </div>
     </div>
-    <div class="layui-col-md3" style="height: 100%">
+    <div class="layui-col-md3" style="height: 480px">
         <div class="layui-card">
-            <div class="layui-card-header">评价</div>
+            <div id="replyNum" class="layui-card-header" style="font-size: 16px; color: #666666">
+
+            </div>
             <div class="layui-card-body">
-                <div id="showHtml">
+                <div id="showHtml" class="flow-default">
 
                 </div>
             </div>
@@ -158,7 +163,7 @@
                         url = encodeURIComponent(url);
                         var windowShow = 'http://127.0.0.1:8012/onlinePreview?url='+url;
                         var windowShowBlank = "<a class='btn btn-default' id='"+dataValue.id+"' target='_blank' href="+windowShow+">"+dataValue.sourceName+"</a>";
-                        $("#layui-upload-list").append(windowShowBlank);
+                        $("#layui-upload-list").append(windowShowBlank).append("<i id='"+dataValue.id+"_img' class='layui-icon layui-icon-close'></i>");
                     }
                 }
             }
@@ -166,60 +171,74 @@
     });
 </script>
 
-<!-- 展示议题 -->
-
-<!-- 展示评论 -->
-<script>
-    layui.use(['layer','form'],function(){
+<script type="text/javascript">
+    layui.use(['layer', 'form', 'flow'], function () {
         var $ = layui.$;
-        var layer = layui.layer;
-        var value = "&lt;blockquote&gt;&lt;p&gt;&lt;br&gt;打发斯蒂芬&lt;/p&gt;&lt;/blockquote&gt;";
-        var regl = new RegExp("&lt;","g");
-        var regg = new RegExp("&gt;","g");
-        var regu = new RegExp("&quot;","g");
-
-        value = value.replace(regl,"<");
-        value = value.replace(regg,">");
-        value = value.replace(regu,"");
-        console.log("value is "+value);
-
-        $("#showHtml").html(value);
-
-    });
-</script>
-
-<!-- 提交回复 -->
-<script>
-    layui.use(['form'], function () {
         var form = layui.form;
-        var $ = layui.$;
+        var layer = layui.layer;
+        var flow = layui.flow;
+        var dataValue;
 
+        <!-- 初始化加载方法 -->
+        $(document).ready(function () {
+            console.log('start show replay');
+            setHiddenValue();
+            showReplay();
+        });
+
+        <!-- 设置hidden值 -->
+        function setHiddenValue() {
+            var issueId='${issueId}';
+            var issueName = '${issueName}';
+            var toReplyUserId='${toReplyUserId}';
+            $("#issueId").val(issueId);
+            $("#issueName").val(issueName);
+            $("#toReplyUserId").val(toReplyUserId);
+        }
+
+        <!-- 富文本提交回复 -->
         form.on('submit(submitEdit)', function (obj) {
-            console.log('start');
+            var replyText = editor.txt.text();
+            if(null == replyText || ""== replyText || undefined == replyText){
+                alert("请添加评论内容!");
+                return;
+            }
             var issueId = $("#issueId").val();
             var replyDesc = editor.txt.html();
             var showLevel = $("input[name='shiro']:checked").val();
+
             var child = $("#layui-upload-list").children();
             var size = child.size();
-            console.log(size);
             var fileList = [];
             var fileValue;
             for(var ix = 0; ix < size; ix++){
-                fileList[ix] = child.eq(ix).attr("id");
+                console.log(child.eq(ix));
+                /* 以这种方式判断是否标签 */
+                if(ix%2 == 0){
+                    fileList[ix] = child.eq(ix).attr("id");
+                }
             };
-            console.log("fileList = "+fileList);
+
             fileValue = fileList.join(',');
             layer.load(2);
+
+            var toReplyUserId = $("#toReplyUserId").val();
+            var toReplyUserName = $("#issueName").val();
 
             var dataValue = {
                 'issueId':issueId,
                 'replyDesc':replyDesc,
                 'showLevel':showLevel,
+                'toReplyUserId': toReplyUserId,
+                'toReplyUserName':toReplyUserName,
                 'fileList': fileValue
             };
 
             console.log('dataValue = ' + dataValue);
+            addReply(dataValue);
+        });
 
+        function addReply(dataValue) {
             $.ajax({
                 url: '/discuss/reply/add',
                 type: 'POST',
@@ -227,6 +246,7 @@
                 success: function (data) {
                     layer.closeAll('loading');
                     if (data.code == 200) {
+                        location.reload();
                         top.layer.msg(data.msg, {icon: 1});
                         // 关闭当前iframe弹出层
                         parent.layer.close(parent.layer.getFrameIndex(window.name));
@@ -235,9 +255,135 @@
                     }
                 }
             });
-        })
+        };
+
+        <!-- 展示评论 -->
+        function showReplay(){
+            console.log("start showReplay");
+            flow.load({
+                elem: '#showHtml',
+                done: function (page, next) {
+                    var lis = [];
+                    $.ajax({
+                        url : '/discuss/reply/page/list',
+                        type: 'POST',
+                        data:{
+                            'issueId':$("#issueId").val(),
+                            'toReplyUserName': $("#issueName").val(),
+                            'page': page,
+                            'limit': 7
+                        },
+                        success: function(resp){
+                            if(resp.code == 200){
+                                var dataList = resp.data;
+                                var replyNum = resp.count;
+                                var pages = Math.ceil(replyNum/8);
+                                var divShow = "";
+
+                                $("#replyNum").html("已有"+replyNum+"人回复");
+                                
+                                $.each(dataList, function(i,data){
+                                    var value = filterMessage(data.replyDesc);
+                                    var name = filterMessage(data.createName);
+                                    var time = filterMessage(data.createDate);
+                                    var id = data.id;
+
+                                    divShow =
+                                        "<div class='layui-row'>"+
+                                        "<div class='layui-col-md6' style='font-size: 15px; color: #454545'>"+
+                                        name+
+                                        "</div>"+
+                                        "<div class='layui-col-md6' style='font-size: 15px; color: #999999'>" +
+                                        time+
+                                        "</div>" +
+                                        "</div>" +
+                                        "<div class='layui-row' style='font-size: 15px'>" +
+                                        value+
+                                        "</div>"+
+                                        "<div class='layui-row' style='text-align: right;'>"+
+                                            "<img id='"+id+"_more' class='moreReply' src='/static/assets/images/more_reply.png' />"+
+                                            "<img id='"+id+"' class='reply' src='/static/assets/images/reply.png' />"+
+                                        "</div>";
+                                    console.log("success divShow is "+ divShow);
+                                    lis.push(divShow);
+                                });
+                                next(lis.join(''), page < pages);
+                            }else{
+                                top.layer.msg(resp.msg, {icon: 1});
+                            }
+                        }
+                    });
+                }
+            });
+        };
+
+        <!-- 过滤特殊字符串 -->
+        function filterMessage(value) {
+            var regl = new RegExp("&lt;","g");
+            var regg = new RegExp("&gt;","g");
+            var regu = new RegExp("&quot;","g");
+            value = value.replace(regl,"<");
+            value = value.replace(regg,">");
+            value = value.replace(regu,"");
+            return value;
+        };
+
+        <!-- 删除附件事件 -->
+        $(document).on('click',".layui-icon-close",function() {
+            var img_id = this.id;
+            var div_id = img_id.replace('_img','');
+            $('#'+img_id).remove();
+            $('#'+div_id).remove();
+        });
+
+        <!-- 单独回复弹出框-->
+        $(document).on('click',".reply", function () {
+            top.layui.admin.open({
+                type: 2,
+                title:"回复",
+                area: ['350px', '300px'],
+                content: ['/discuss/reply/reply_add?id='+this.id,'no']
+            });
+        });
+
+        <!-- 更多消息弹出框-->
+        $(document).on('click',".moreReply", function () {
+            var toReplyId=this.id;
+            $.ajax({
+                url: '/discuss/reply/list/replyId',
+                type: 'POST',
+                data: {
+                    'toReplyId': toReplyId
+                },
+                success: function (resp) {
+                    dealReplay(resp);
+                }
+            });
+
+            function dealReplay(resp) {
+                if(resp.code == '200'){
+                    if(resp.count == '0'){
+                        layer.tips('无单独回复','#'+toReplyId,{
+                            tips: [4, '#3595CC'], time: 4000
+                        });
+                    }else{
+                        top.layui.admin.open({
+                            type: 2,
+                            title:"回复",
+                            area: ['350px', '300px'],
+                            content: ['/discuss/reply/reply_more?id='+toReplyId,'no']
+                        });
+                    }
+                }else if(resp.code == '500'){
+                    layer.tips('无单独回复','#'+toReplyId,{
+                        tips: [4, '#3595CC'], time: 4000
+                    });
+                }else{
+                    top.layer.msg(resp.msg, {icon: 1});
+                }
+            };
+        });
     });
 </script>
-
 </body>
 </html>

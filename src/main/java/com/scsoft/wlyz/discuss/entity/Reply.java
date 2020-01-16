@@ -40,6 +40,12 @@ public class Reply extends BaseEntity {
     private String replyDesc;
 
     /**
+     * 被回复内容ID
+     */
+    @TableField("TO_REPLY_ID")
+    private Integer toReplyId;
+
+    /**
      * 被回复用户ID
      */
     @TableField("TO_REPLY_USER_ID")

@@ -30,5 +30,11 @@ public interface IReplyService extends IService<Reply> {
     List<Reply> selectList(Reply reply);
 
     boolean saveModel(ReplyModel replyModel);
+
+    List<Reply> selectListByIssue(Reply reply);
+
+    List<Reply> selectListByReplyId(Reply reply);
+
+    PageResult<Reply> selectPageListByIssue(Reply reply, Integer page, Integer limit);
 }
 
