@@ -46,6 +46,7 @@ public class ReplyController extends BaseController {
     /**
      * 跳转到回复表首页
      */
+    @RequiresPermissions("reply:add")
     @RequestMapping("")
     public String index(Model model,Integer issueId, Integer toReplyUserId, String toReplyUserName, HttpServletRequest request) {
         /*议题测试数据，需要修改*/
