@@ -125,7 +125,7 @@ public class IssueController extends BaseController {
     /**
      * 获取列表
      */
-    @RequestMapping(value = "/list")
+    @RequestMapping(value = "/list/host")
     @RequiresPermissions("issue:view")
     @ResponseBody
     public PageResult<Issue> listHost(Integer page, Integer limit, Issue issue,String condition, Model model,HttpServletRequest request) {
