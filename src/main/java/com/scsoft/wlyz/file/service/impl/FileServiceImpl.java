@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -208,6 +209,20 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
         fileInfo.setContent(Files.newInputStream(path));
         return fileInfo;
     }
+
+    @Override
+    public Map<String, Object> uploadImage(MultipartFile file) {
+        try {
+            String fileId = upload(file);
+            Map<String,Object> rtMap = new HashMap<>();
+            rtMap.put("url", fileId);
+            return rtMap;
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+
     /*
      * 在线预览图片
      */

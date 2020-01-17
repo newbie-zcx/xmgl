@@ -52,7 +52,7 @@ public class FileUtils {
      */
     public static String getFolder(){
         String ftpPath= DateUtil.getYear()+DateUtil.getCurrentMonth() +"/" +DateUtil.getCurrentDay();
-        return   getFileSeparator() + ftpPath + getFileSeparator();
+        return   getFileSeparator() + getFileSeparator();
     }
     /**
      * 获取随机文件名

@@ -72,6 +72,8 @@ public class ShiroConfiguration {
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         //配置记住我或认证通过可以访问的地址
         filterChainDefinitionManager.put("/static/assets/**",  "anon");
+        // 配置静态映射文件过滤
+        filterChainDefinitionManager.put("/upload/wlyz/**", "anon");
         filterChainDefinitionManager.put("/view/login.html", "anon");
 //        filterChainDefinitionManager.put("/api/**", "authcToken");
         filterChainDefinitionManager.put("/system/file/**", "anon");

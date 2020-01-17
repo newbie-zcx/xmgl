@@ -3,6 +3,7 @@ package com.scsoft.wlyz.discuss.service;
 import com.scsoft.scpt.common.PageResult;
 import com.scsoft.wlyz.discuss.entity.Reply;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.scsoft.wlyz.discuss.model.ReplyModel;
 
 import java.util.List;
 
@@ -28,5 +29,12 @@ public interface IReplyService extends IService<Reply> {
       */
     List<Reply> selectList(Reply reply);
 
+    boolean saveModel(ReplyModel replyModel);
+
+    List<Reply> selectListByIssue(Reply reply);
+
+    List<Reply> selectListByReplyId(Reply reply);
+
+    PageResult<Reply> selectPageListByIssue(Reply reply, Integer page, Integer limit);
 }
 

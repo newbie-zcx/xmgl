@@ -1,35 +1,28 @@
 package com.scsoft.wlyz.discuss.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scsoft.scpt.annotation.SysLog;
 import com.scsoft.wlyz.common.handler.SystemCommonHandler;
+import com.scsoft.wlyz.discuss.entity.Issue;
 import com.scsoft.wlyz.system.entity.Depart;
 import com.scsoft.wlyz.system.service.IDepartService;
+import com.scsoft.wlyz.discuss.service.IIssueService;
 import org.springframework.web.bind.annotation.*;
 import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.scsoft.wlyz.discuss.service.IIssueService;
-import com.scsoft.wlyz.discuss.entity.Issue;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.stereotype.Controller;
 import com.scsoft.scpt.base.controller.BaseController;
 
 import javax.servlet.http.HttpServletRequest;

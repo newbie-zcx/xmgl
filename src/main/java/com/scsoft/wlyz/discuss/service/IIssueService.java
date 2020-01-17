@@ -1,8 +1,8 @@
 package com.scsoft.wlyz.discuss.service;
 
-import com.scsoft.wlyz.discuss.entity.Issue;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.scsoft.scpt.common.PageResult;
+import com.scsoft.wlyz.discuss.entity.Issue;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface IIssueService extends IService<Issue> {
      *  分页查询结果集
      * @param issue
      */
-    PageResult<Issue> listPage(Integer page, Integer limit,Issue issue);
+    PageResult<Issue> listPage(Integer page, Integer limit, Issue issue);
 
     /**
       *  list查询

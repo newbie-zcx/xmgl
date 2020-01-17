@@ -1,5 +1,6 @@
 package com.scsoft.wlyz.file.controller;
 
+import com.scsoft.scpt.common.PageResult;
 import com.scsoft.wlyz.common.exception.BusinessException;
 import com.scsoft.wlyz.common.utils.FileUtils;
 import com.scsoft.wlyz.file.entity.FileInfo;
@@ -18,6 +19,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -60,6 +64,55 @@ public class FileController extends BaseController {
         } catch (BusinessException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @PostMapping("upload/multi/file")
+    @ResponseBody
+    public PageResult uploadMultiFile(@RequestParam("file") List<MultipartFile> fileList, HttpServletRequest request) {
+        PageResult result = new PageResult();
+        if(null == fileList){
+            result.setCode(500);
+            result.setMsg("未选择文件");
+        }
+        List<FileInfo> rtList = new ArrayList<>();
+        for(MultipartFile file : fileList){
+            try {
+                String id = fileService.upload(file);
+                FileInfo info = fileService.getImage(id);
+                rtList.add(info);
+            } catch (Exception e) {
+                logger.error("error is ", e.getMessage());
+            }
+        }
+        result.setCode(200);
+        result.setData(rtList);
+        return result;
+    }
+
+    /**
+     * 文件上传
+     * 1. 文件上传后的文件名
+     * 2. 上传后的文件路径 , 当前年月日时 如:2018060801  2018年6月8日 01时
+     * 3. file po 类需要保存文件信息 ,旧名 ,大小 , 上传时间 , 是否删除 ,
+     *
+     * @param file
+     * @param request
+     * @return
+     */
+    @PostMapping("uploadImage")
+    @ResponseBody
+    public Map uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        // 判断文件是否为空
+        if (file.isEmpty()) {
+            return JsonResult.error("图片不能为空");
+        }
+        try {
+            Map<String, Object> rtMap =fileService.uploadImage(file);
+            return rtMap;
+        }  catch (Exception e) {
             e.printStackTrace();
         }
         return null;

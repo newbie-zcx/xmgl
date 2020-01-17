@@ -3,13 +3,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scsoft.scpt.common.PageResult;
-import com.scsoft.wlyz.discuss.entity.Reply;
-import org.springframework.stereotype.Service;
 import com.scsoft.wlyz.discuss.entity.Issue;
 import com.scsoft.wlyz.discuss.mapper.IssueMapper;
 import com.scsoft.wlyz.discuss.service.IIssueService;
+import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.util.List;

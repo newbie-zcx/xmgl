@@ -32,4 +32,6 @@ public interface IFileService extends IService<FileInfo> {
      String upload(MultipartFile file) throws IOException;
      void downloadFile(String fileId, HttpServletResponse res) throws UnsupportedEncodingException;
      FileInfo getImage(String fileName) throws IOException;
+
+     Map<String, Object> uploadImage(MultipartFile file);
 }

@@ -1,9 +1,7 @@
 package com.scsoft.wlyz.discuss.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
 import com.scsoft.scpt.base.enitity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
@@ -12,44 +10,37 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- *
+ * 回复附件关系表
  * </p>
  *
- * @author chengshangshu
- * @since 2020-01-09
+ * @author wangchao
+ * @since 2020-01-13
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("yz_issue")
-public class Issue extends BaseEntity {
+@TableName("yz_reply_file")
+public class ReplyFile extends BaseEntity {
 
     private static final long serialVersionUID=1L;
 
     /**
-     * 议题ID
+     * 回复附件ID
      */
-    @TableId(value = "ID", type = IdType.AUTO)
+    @TableId("ID")
     private Integer id;
 
     /**
-     * 议题标题
+     * 回复ID
      */
-    @TableField("TITLE")
-    private String title;
+    @TableField("REPLY_ID")
+    private Integer replyId;
 
     /**
-     * 议题内容
+     * 附件ID
      */
-    @TableField("CONTENT")
-    private String content;
-
-    /**
-     * 议题类型
-     */
-    @TableField("ISSUE_TYPE")
-    private String issueType;
-
+    @TableField("FILE_ID")
+    private Integer fileId;
 
 
 }

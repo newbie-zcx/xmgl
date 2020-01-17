@@ -1,7 +1,7 @@
 package com.scsoft.wlyz.discuss.mapper;
 
-import com.scsoft.wlyz.discuss.entity.Issue;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.scsoft.wlyz.discuss.entity.Issue;
 
 /**
  * <p>

@@ -25,19 +25,25 @@ public class Reply extends BaseEntity {
     private static final long serialVersionUID=1L;
 
     @TableId("ID")
-    private String id;
+    private Integer id;
 
     /**
      * 议题ID
      */
     @TableField("ISSUE_ID")
-    private String issueId;
+    private Integer issueId;
 
     /**
      * 回复内容
      */
     @TableField("REPLY_DESC")
     private String replyDesc;
+
+    /**
+     * 被回复内容ID
+     */
+    @TableField("TO_REPLY_ID")
+    private Integer toReplyId;
 
     /**
      * 被回复用户ID
