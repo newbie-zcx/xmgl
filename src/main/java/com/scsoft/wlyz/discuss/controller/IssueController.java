@@ -44,7 +44,7 @@ import javax.servlet.http.HttpServletRequest;
 public class IssueController extends BaseController {
    private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private String PREFIX = "/module/discuss/";
+    private String PREFIX = "/module/discuss/issue/";
 
     @Autowired
     private IIssueService issueService;
