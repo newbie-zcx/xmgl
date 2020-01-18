@@ -111,6 +111,15 @@ public class IssueController extends BaseController {
         return PREFIX + "discussissue_edit";
     }
 
+    /**
+     * 详情
+     */
+    @RequestMapping(value = "/detail/view/{issueId}")
+    public String toDetailView(@PathVariable("issueId") Integer issueId, Model model, HttpServletRequest request) {
+        model.addAttribute("issueId", issueId);
+        return PREFIX + "discussissue_view";
+    }
+
 
 
 
@@ -118,6 +127,7 @@ public class IssueController extends BaseController {
      * 详情
      */
     @RequestMapping(value = "/detail/{issueId}")
+    @ResponseBody
     public Object toDetail(@PathVariable("issueId") Integer issueId, Model model, HttpServletRequest request) {
         return issueService.getById(issueId);
     }
