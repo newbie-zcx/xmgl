@@ -50,6 +50,12 @@ public class Issue extends BaseEntity {
     @TableField("ISSUE_TYPE")
     private String issueType;
 
+    /**
+     * 议题权限类型
+     */
+    @TableField("ISSUE_SHIRO_TYPE")
+    private String issueShiroType;
+
 
 
 }
