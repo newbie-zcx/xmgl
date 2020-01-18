@@ -4,108 +4,125 @@
 <head>
     <title>查看</title>
     <% include("../../../layout/cssPart.html"){} %>
+    <link href="/static/assets/css/wangEditor.css" rel="stylesheet" />
+    <link href="/static/assets/css/wangEditor-verb.css" rel="stylesheet" />
+    <style>
+        .big_font{
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background:#4bbc8b;
+            color: #fff;
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+            padding: 0.2em;
+        }
+    </style>
 </head>
-
 <body>
-<form id="issueForm" lay-filter="issueForm" class="layui-form model-form">
-    <input name="id" type="hidden"/>
-        <div class="layui-form-item">
-            <label class="layui-form-label">议题标题</label>
-            <div class="layui-input-block">
-                <input name="title" id="title" placeholder="请输入议题标题" type="text" class="layui-input"
-                       lay-verify="required" required/>
-            </div>
+<div class="layui-fluid">
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题</label>
+        <div id="issue_title" class="layui-input-block layui-input">
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">议题内容</label>
-            <div class="layui-input-block">
-                <input name="content" id="content" placeholder="请输入议题内容" type="text" class="layui-input"
-                       lay-verify="required" required/>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">议题类型</label>
-            <div class="layui-input-block">
-                <input name="issueType" id="issueType" placeholder="请输入议题类型" type="text" class="layui-input"
-                       lay-verify="required" required/>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">创建人ID</label>
-            <div class="layui-input-block">
-                <input name="createId" id="createId" placeholder="请输入创建人ID" type="text" class="layui-input"
-                       lay-verify="required" required/>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">创建人姓名</label>
-            <div class="layui-input-block">
-                <input name="createName" id="createName" placeholder="请输入创建人姓名" type="text" class="layui-input"
-                       lay-verify="required" required/>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">创建时间</label>
-            <div class="layui-input-block">
-                <input name="createDate" id="createDate" placeholder="请输入创建时间" type="text" class="layui-input"
-                       lay-verify="required" required/>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">修改人ID</label>
-            <div class="layui-input-block">
-                <input name="updateId" id="updateId" placeholder="请输入修改人ID" type="text" class="layui-input"
-                       lay-verify="required" required/>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">修改人</label>
-            <div class="layui-input-block">
-                <input name="updateName" id="updateName" placeholder="请输入修改人" type="text" class="layui-input"
-                       lay-verify="required" required/>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">修改时间</label>
-            <div class="layui-input-block">
-                <input name="updateDate" id="updateDate" placeholder="请输入修改时间" type="text" class="layui-input"
-                       lay-verify="required" required/>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">备注</label>
-            <div class="layui-input-block">
-                <input name="remark" id="remark" placeholder="请输入备注" type="text" class="layui-input"
-                       lay-verify="required" required/>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">是否删除：0 未删除，1已删除</label>
-            <div class="layui-input-block">
-                <input name="isDel" id="isDel" placeholder="请输入是否删除：0 未删除，1已删除" type="text" class="layui-input"
-                       lay-verify="required" required/>
-            </div>
-        </div>
-
-    <div class="layui-form-item text-right">
-        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">关闭</button>
     </div>
-</form>
 
+    <div class="layui-form-item">
+        <label class="layui-form-label">创建用户</label>
+        <div id="issue_name" class="layui-input-block layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">创建时间</label>
+        <div id="issue_time" class="layui-input-block layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">议题类型</label>
+        <div id="issue_type" class="layui-input-block layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">附件</label>
+        <div id="issue_file_name" style="font-size: 15px; color: #48b285">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">正文</label>
+    </div>
+    <div id="issue_desc" class="layui-input-block layui-textarea">
+    </div>
+</div>
 <!-- js部分 -->
 <% include("../../../layout/jsPart.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'admin'], function () {
-        var $ = layui.jquery;
-        var layer = layui.layer;
-        var form = layui.form;
-        var admin = layui.admin;
+    layui.use(['admin'], function () {
+        var $ = layui.$;
 
-        // 回显数据
-        var issue = admin.getTempData('t_issue');
-        if (issue) {
-            form.val('issueForm', issue);
+        $(document).ready(function () {
+            var issueId='${issueId}';
+            issue_info(issueId);
+            issue_file(issueId);
+        });
+
+        function issue_info(issueId) {
+            /* 调用议政详情信息 */
+            $.ajax({
+                url: '/discuss/issue/detail/'+issueId,
+                success: function (data) {
+                    console.log(data);
+                    $("#issue_title").text(data.title);
+                    $("#issue_name").text(data.createName);
+                    $("#issue_time").text(data.createDate);
+                    $("#issue_type").text(data.issueType);
+                    $("#issue_desc").html(filterMessage(data.content));
+                }
+            });
         }
+
+        function issue_file(issueId) {
+            /* 调用议政附件信息 */
+            $.ajax({
+                url: '/discuss/issueFile/list/'+issueId,
+                success: function (res) {
+                    console.log(res);
+                    if(res == ''){
+                        $("#issue_file_name").html("无附件");
+                    }else{
+                        show_file(res);
+                    }
+                }
+            });
+        }
+
+        /* 显示并预览附件 */
+        function show_file(data) {
+            for(var i=0; i<data.length; i++){
+                var dv = data[i];
+                var url = "http://127.0.0.1:8088/upload/wlyz/"+dv.filename;
+                url = encodeURIComponent(url);
+                var windowShow = 'http://127.0.0.1:8012/onlinePreview?url='+url;
+                var windowShowBlank = "<a class='btn btn-default' id='"+dv.id+"' target='_blank' href="+windowShow+">"+dv.sourceName+"</a>";
+                $("#issue_file_name").append(windowShowBlank);
+            }
+        }
+
+        <!-- 过滤特殊字符串 -->
+        function filterMessage(value) {
+            var regl = new RegExp("&lt;","g");
+            var regg = new RegExp("&gt;","g");
+            var regu = new RegExp("&quot;","g");
+            value = value.replace(regl,"<");
+            value = value.replace(regg,">");
+            value = value.replace(regu,"");
+            return value;
+        };
     });
 </script>
 

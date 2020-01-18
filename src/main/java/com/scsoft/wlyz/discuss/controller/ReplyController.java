@@ -50,7 +50,7 @@ public class ReplyController extends BaseController {
     @RequestMapping("")
     public String index(Model model,Integer issueId, Integer toReplyUserId, String toReplyUserName, HttpServletRequest request) {
         /*议题测试数据，需要修改*/
-        model.addAttribute("issueId", "3");
+        model.addAttribute("issueId", "5");
         model.addAttribute("issueName", "超级管理员");
         model.addAttribute("toReplyUserId", 1);
 

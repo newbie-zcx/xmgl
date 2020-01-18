@@ -4,94 +4,255 @@
 <head>
     <title>添加</title>
     <% include("../../../layout/cssPart.html"){} %>
+    <link href="/static/assets/css/wangEditor.css" rel="stylesheet" />
+    <link href="/static/assets/css/wangEditor-verb.css" rel="stylesheet" />
+    <link href="/static/assets/css/fonts/w-e-icon.woff"  rel="stylesheet" />
 </head>
-
 <body>
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">议题标题</label>
+                    <div class="layui-input-block">
+                        <input name="title" id="title" placeholder="请输入议题标题" type="text" class="layui-input"
+                               lay-verify="required" required/>
+                    </div>
+                </div>
 
-<form id="issueForm" lay-filter="issueForm" class="layui-form model-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">议题类型</label>
+                    <div id="issueType" class="layui-input-block" lay-verify="titleType">
+                        <input type="radio" name="titleType" value="一般议题" title="一般议题" checked>
+                        <input type="radio" name="titleType" value="置顶议题" title="置顶议题" >
+                        <input type="radio" name="titleType" value="紧急议题" title="紧急议题" >
+                    </div>
+                </div>
 
+                <div>
+                    <div>
+                        <a href="#" id="fileUpload" style="color:#4bbc8b"><img src="/static/assets/images/fujian.png" style="color:#4bbc8b" />添加附件  </a>  (最大为20M)
+                    </div>
+                    <div id="layui-upload-list" name="layui-upload-list" class="layui-upload-list">
+                    </div>
+                    <div id="editor" name="editor">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md6">
+                        <label class="layui-form-label">查看范围</label>
+                        <div class="layui-input-block">
+                            <select name="issueShiroType" lay-filter="shiroType" lay-verify="issueShiroType">
+                                <option value="全部" selected>全部</option>
+                                <option value="部分">部分</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="userList" class="layui-form-item" hidden>
+                        <label class="layui-form-label">用户列表</label>
+                        <div class="layui-input-block">
+                            <div class="layui-input-block">
+                                <select name="userName" xm-select="userName" xm-select-direction="down">
+                                    <% for(user in users) { %>
+                                    <option value="${user.realName}">${user.realName}</option>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">议题标题</label>
-        <div class="layui-input-block">
-            <input name="title" id="title" placeholder="请输入议题标题" type="text" class="layui-input"
-                   lay-verify="required" required/>
+                <div class="layui-form container">
+                    <div class="layui-input-block" style="text-align: right;">
+                        <button class="layui-btn layui-btn-radius layui-btn-primary" lay-filter="submitEdit" lay-submit>保存</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">议题内容</label>
-        <div class="layui-input-block">
-            <input name="content" id="content" placeholder="请输入议题内容" type="text" class="layui-input"
-                   lay-verify="required" required/>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">议题类型</label>
-        <div class="layui-input-block">
-            <!--<input name="issueType" id="issueType" placeholder="请输入议题类型" type="text" class="layui-input"
-                   lay-verify="required" required/>-->
-            <#dict_tag id="issueType" name="issueType" defaultVal="" dictCode="issueType"/>
-        </div>
-    </div>
-
-
-
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">备注</label>
-        <div class="layui-input-block">
-            <input name="remark" id="remark" placeholder="请输入备注" type="text" class="layui-input"
-                   lay-verify="required" required/>
-        </div>
-    </div>
-
-            <input name="isDel" id="isDel" placeholder="请输入是否删除：0 未删除，1已删除" value="0" type="hidden" class="layui-input"
-                   lay-verify="required" required/>
-
-
-    <div class="layui-form-item text-right">
-        <button class="layui-btn" lay-filter="formSubmit" lay-submit>保存</button>
-        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
-    </div>
-</form>
-
 <!-- js部分 -->
-<% include("../../layout/jsPart.html"){} %>
-<script>
-    layui.use(['layer', 'form', 'admin',"laydate"], function () {
-        var $ = layui.jquery;
-        var layer = layui.layer;
-        var form = layui.form;
-        var admin = layui.admin;
-        var laydate = layui.laydate;
-        var url = 'add';
-        // 回显数据
-        var issue = admin.getTempData('t_issue');
+<% include("../../../layout/jsPart.html"){} %>
+<script src="/static/assets/js/wangEditor.js"></script>
+    <!-- 富文本编辑器 -->
+    <script>
+        var E = window.wangEditor;
+        var editor = new E('#editor');
+        // 设置图片上传的type的参数
+        editor.customConfig.uploadFileName = "file";
+        // 设置图片上传接口
+        editor.customConfig.uploadImgServer = '/system/file/uploadFile';
 
-        laydate.render({
-            elem: '#createDate',
-            value: new Date()
-            ,format: 'yyyyMMdd'
-        });
-        // 表单提交事件
-        form.on('submit(formSubmit)', function (data) {
-            layer.load(2);
-            $.post(url, data.field, function (data) {
-                layer.closeAll('loading');
-                if (data.code == 200) {
-                    top.layer.msg(data.msg, {icon: 1});
-                    admin.putTempData('formOk', true);  // 操作成功刷新表格
-                    // 关闭当前iframe弹出层
-                    parent.layer.close(parent.layer.getFrameIndex(window.name));
-                } else {
-                    top.layer.msg(data.msg, {icon: 2});
+        //自定义上传图片事件
+        editor.customConfig.uploadImgHooks = {
+            before: function (xhr, editor, files) {
+
+            },
+            success: function (xhr, editor, result) {
+
+            },
+            fail: function (xhr, editor, result) {
+                alert("上传失败,原因是" + result);
+            },
+            error: function (xhr, editor) {
+                alert("上传出错");
+            },
+            timeout: function (xhr, editor) {
+                alert("上传超时");
+            },
+            customInsert: function (insertImg, result, editor) {
+                /**
+                 * 图片上传并返回结果，自定义插入图片的事件，而不是编辑器自动插入图片
+                 * insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果，必须是一个 JSON 格式字符串
+                 */
+                var url = "/system/file/view?fileId="+result.msg;
+                insertImg(url)
+            }
+        };
+        //开启debug模式
+        editor.customConfig.debug = true;
+        // 关闭粘贴内容中的样式
+        editor.customConfig.pasteFilterStyle = false;
+        // 忽略粘贴内容中的图片
+        editor.customConfig.pasteIgnoreImg = true;
+
+        // 自定义菜单配置
+        editor.customConfig.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',  // 字号
+            'fontName',  // 字体
+            'italic',  // 斜体
+            'underline',  // 下划线
+            'strikeThrough',  // 删除线
+            'foreColor',  // 文字颜色
+            'backColor',  // 背景颜色
+            'link',  // 插入链接
+            'list',  // 列表
+            'justify',  // 对齐方式
+            'quote',  // 引用
+            'emoticon',  // 表情
+            'image',  // 插入图片
+            'undo',  // 撤销
+            'redo'  // 重复
+        ];
+
+        // 隐藏tab中网络图片功能
+        editor.customConfig.showLinkImg = false;
+        editor.create();
+    </script>
+
+    <!-- 文件上传与预览 -->
+    <script>
+        layui.use(['upload'], function () {
+            var $ = layui.$;
+            var upload = layui.upload;
+
+            <!-- 富文本上传与预览-->
+            upload.render({
+                elem: '#fileUpload',
+                url: '/system/file/upload/multi/file',
+                accept: 'file',
+                multiple: true,
+                done: function (res) {
+                    var code = res.code;
+                    if(code == '200'){
+                        for(var i=0; i<res.data.length; i++){
+                            var dataValue = res.data[i];
+                            var url = "http://127.0.0.1:8088/upload/wlyz/"+dataValue.filename;
+                            url = encodeURIComponent(url);
+                            var windowShow = 'http://127.0.0.1:8012/onlinePreview?url='+url;
+                            var windowShowBlank = "<a class='btn btn-default' id='"+dataValue.id+"' target='_blank' href="+windowShow+">"+dataValue.sourceName+"</a>";
+                            $("#layui-upload-list").append(windowShowBlank).append("<i id='"+dataValue.id+"_img' class='layui-icon layui-icon-close'></i>");
+                        }
+                    }
                 }
             });
-            return false;
+            <!-- 删除附件事件 -->
+            $(document).on('click',".layui-icon-close",function() {
+                var img_id = this.id;
+                var div_id = img_id.replace('_img','');
+                $('#'+img_id).remove();
+                $('#'+div_id).remove();
+            });
         });
+    </script>
 
-    });
-</script>
+    <!-- 富文本提交 -->
+    <script>
+        layui.use(['layer', 'form','formSelects'], function (){
+            var $ = layui.$;
+            var form = layui.form;
+            var layer = layui.layer;
+            var formSelects = layui.formSelects;
+            var dataValue ="";
 
+            var issueShiroType="";
+
+            form.on('select(shiroType)', function(data){
+                issueShiroType = data.value;
+                if(data.value == '部分'){
+                    $("#userList").show();
+                }
+                if(data.value == '全部'){
+                    $("#userList").hide();
+                }
+            });
+
+            form.on('submit(submitEdit)', function (obj) {
+                console.log("form");
+                var replyText = editor.txt.text();
+                if (null == replyText || "" == replyText || undefined == replyText) {
+                    alert("请添加评论内容!");
+                    return;
+                }
+                var child = $("#layui-upload-list").children();
+                var size = child.size();
+                var fileList = [];
+                var fileValue;
+                for (var ix = 0; ix < size; ix++) {
+                    console.log(child.eq(ix));
+                    /* 以这种方式判断是否标签 */
+                    if (ix % 2 == 0) {
+                        fileList[ix] = child.eq(ix).attr("id");
+                    }
+                };
+
+                fileValue = fileList.join(',');
+                layer.load(2);
+
+                var userList = formSelects.value('userName','val');
+
+                dataValue = {
+                    'title': $("#title").val(),
+                    'content': editor.txt.html(),
+                    'issueType': $("#issueType input[name='titleType']:checked").val(),
+                    'issueShiroType': issueShiroType,
+                    'userList': userList.join(','),
+                    'fileList': fileValue
+                };
+                console.log('dataValue = ' + JSON.stringify(dataValue));
+                addReply(dataValue);
+            });
+
+            function addReply(dataValue) {
+                $.ajax({
+                    url: '/discuss/issue/add',
+                    type: 'POST',
+                    data: dataValue,
+                    success: function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 200) {
+                            location.reload();
+                            top.layer.msg(data.msg, {icon: 1});
+                            // 关闭当前iframe弹出层
+                            parent.layer.close(parent.layer.getFrameIndex(window.name));
+                        } else {
+                            top.layer.msg(data.msg, {icon: 2});
+                        }
+                    }
+                });
+            };
+        });
+    </script>
 </body>
 </html>

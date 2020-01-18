@@ -5,14 +5,14 @@
         </div>
         <div class="layui-col-md5">
             <div id="issue_title" class="layui-row" style="font-size: 24px; color: #333333">
-                标题
+
             </div>
             <div class="layui-row">
                 <div id="issue_name" class="layui-col-md6" style="font-size: 15px; color: #666666">
-                    姓名
+
                 </div>
                 <div id="issue_time" class="layui-col-md6" style="font-size: 15px; color: #666666">
-                    时间
+
                 </div>
             </div>
         </div>
@@ -20,49 +20,42 @@
         </div>
     </div>
     <div class="layui-card-body">
-        <div id="issue_file_name" class="layui-row" style="font-size: 15px; color: #48b285">附件</div>
-        <div id="issue_desc" class="layui-row" style="font-size: 15px; color: #454545">正文显示</div>
+        <div id="issue_file_name" class="layui-row" style="font-size: 15px;"></div>
+        <div id="issue_desc" class="layui-row" style="font-size: 15px; color: #454545"></div>
     </div>
 </div>
 <script>
-  layui.use([], function () {
+  layui.use(['admin'], function () {
       var $ = layui.$;
 
       $(document).ready(function () {
-          issue_info();
-          issue_file();
+          var issueId='${issueId}';
+          issue_info(issueId);
+          issue_file(issueId);
       });
 
-      function issue_info() {
+      function issue_info(issueId) {
           /* 调用议政详情信息 */
           $.ajax({
-              url: '',
-              data: {
-                  id: $("#issueId").val()
-              },
-              success: function (res) {
-                  var code = res.code;
-                  if(code == '200'){
-                      var data = res.data;
-                      $("#issue_title").val();
-                      $("#issue_name").val();
-                      $("#issue_time").val();
-                      $("#issue_desc").val();
-                  }
+              url: '/discuss/issue/detail/'+issueId,
+              success: function (data) {
+                  console.log(data);
+                  $("#issue_title").text(data.title);
+                  $("#issue_name").text(data.createName);
+                  $("#issue_time").text(data.createDate);
+                  $("#issue_desc").html(filterMessage(data.content));
               }
           });
       }
 
-      function issue_file() {
+      function issue_file(issueId) {
           /* 调用议政附件信息 */
           $.ajax({
-              url: '',
-              data: {
-                  issueId: $("#issueId").val()
-              },
+              url: '/discuss/issueFile/list/'+issueId,
               success: function (res) {
-                  var code = res.code;
-                  if(code == '200'){
+                  if("" == res){
+                      $("#issue_file_name").append("无附件");
+                  }else{
                       show_file(res.data);
                   }
               }
@@ -76,9 +69,20 @@
               var url = "http://127.0.0.1:8088/upload/wlyz/"+dv.filename;
               url = encodeURIComponent(url);
               var windowShow = 'http://127.0.0.1:8012/onlinePreview?url='+url;
-              var windowShowBlank = "<a class='btn btn-default' id='"+dv.id+"' target='_blank' href="+windowShow+">"+dv.sourceName+"</a>";
-              $("#layui-upload-list").append(windowShowBlank);
+              var windowShowBlank = "<a class='btn btn-default' style='font-size: 15px; color: #48b285' id='"+dv.id+"' target='_blank' href="+windowShow+">"+dv.sourceName+"</a>";
+              $("#issue_file_name").append(windowShowBlank);
           }
       }
+
+      <!-- 过滤特殊字符串 -->
+      function filterMessage(value) {
+          var regl = new RegExp("&lt;","g");
+          var regg = new RegExp("&gt;","g");
+          var regu = new RegExp("&quot;","g");
+          value = value.replace(regl,"<");
+          value = value.replace(regg,">");
+          value = value.replace(regu,"");
+          return value;
+      };
   });
 </script>

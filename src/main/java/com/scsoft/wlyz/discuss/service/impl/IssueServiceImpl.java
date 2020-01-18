@@ -4,10 +4,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scsoft.scpt.common.PageResult;
 import com.scsoft.wlyz.discuss.entity.Issue;
+import com.scsoft.wlyz.discuss.entity.IssueFile;
+import com.scsoft.wlyz.discuss.entity.IssueShiro;
+import com.scsoft.wlyz.discuss.entity.ReplyFile;
+import com.scsoft.wlyz.discuss.mapper.IssueFileMapper;
 import com.scsoft.wlyz.discuss.mapper.IssueMapper;
+import com.scsoft.wlyz.discuss.mapper.IssueShiroMapper;
+import com.scsoft.wlyz.discuss.model.IssueModel;
 import com.scsoft.wlyz.discuss.service.IIssueService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -24,6 +31,11 @@ import java.util.List;
 public class IssueServiceImpl extends ServiceImpl<IssueMapper, Issue> implements IIssueService {
     @Resource
     private IssueMapper issueMapper;
+    @Resource
+    private IssueFileMapper issueFileMapper;
+    @Resource
+    private IssueShiroMapper issueShiroMapper;
+
     /**
      * 通过分页查询
      * @param page
@@ -59,4 +71,41 @@ public class IssueServiceImpl extends ServiceImpl<IssueMapper, Issue> implements
             issue.setIsDel(1);
             return this.updateById(issue);
         }
+
+        @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean saveModel(IssueModel model) {
+            Issue issue = new Issue();
+            issue.setTitle(model.getTitle());
+            issue.setContent(model.getContent());
+            issue.setIssueType(model.getIssueType());
+            issue.setIssueShiroType(model.getIssueShiroType());
+
+            Integer successNum = this.issueMapper.insert(issue);
+
+        List<Integer> fileList = model.getFileList();
+        if(!(null == fileList || fileList.size() == 0)){
+            for(Integer file : fileList){
+                IssueFile issueFile = new IssueFile();
+                issueFile.setFileId(file);
+                issueFile.setIssueId(issue.getId());
+                issueFileMapper.insert(issueFile);
+            }
+        }
+
+        List<String> userList = model.getUserList();
+        if(!(null == userList || userList.size() == 0)){
+            for(String userName : userList){
+                IssueShiro issueShiro = new IssueShiro();
+                issueShiro.setUserName(userName);
+                issueShiro.setIssueId(issue.getId());
+                issueShiroMapper.insert(issueShiro);
+            }
+        }
+            if(successNum >= 1){
+                return true;
+            }else {
+                return false;
+            }
+    }
 }

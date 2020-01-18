@@ -3,7 +3,6 @@ package com.scsoft.wlyz.discuss.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
 import com.scsoft.scpt.base.enitity.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
@@ -12,50 +11,37 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- *
+ * 议题附件关系表
  * </p>
  *
- * @author chengshangshu
- * @since 2020-01-09
+ * @author wangchao
+ * @since 2020-01-18
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("yz_issue")
-public class Issue extends BaseEntity {
+@TableName("yz_issue_file")
+public class IssueFile extends BaseEntity {
 
     private static final long serialVersionUID=1L;
 
     /**
-     * 议题ID
+     * 议题附件ID
      */
     @TableId(value = "ID", type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 议题标题
+     * 议题ID
      */
-    @TableField("TITLE")
-    private String title;
+    @TableField("ISSUE_ID")
+    private Integer issueId;
 
     /**
-     * 议题内容
+     * 附件ID
      */
-    @TableField("CONTENT")
-    private String content;
-
-    /**
-     * 议题类型
-     */
-    @TableField("ISSUE_TYPE")
-    private String issueType;
-
-    /**
-     * 议题权限类型
-     */
-    @TableField("ISSUE_SHIRO_TYPE")
-    private String issueShiroType;
-
+    @TableField("FILE_ID")
+    private Integer fileId;
 
 
 }

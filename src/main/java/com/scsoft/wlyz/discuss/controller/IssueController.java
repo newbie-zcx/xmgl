@@ -5,9 +5,13 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.scsoft.scpt.annotation.SysLog;
 import com.scsoft.wlyz.common.handler.SystemCommonHandler;
 import com.scsoft.wlyz.discuss.entity.Issue;
+import com.scsoft.wlyz.discuss.model.IssueModel;
 import com.scsoft.wlyz.system.entity.Depart;
+import com.scsoft.wlyz.system.entity.User;
 import com.scsoft.wlyz.system.service.IDepartService;
 import com.scsoft.wlyz.discuss.service.IIssueService;
+import com.scsoft.wlyz.system.service.IUserService;
+import com.scsoft.wlyz.system.service.impl.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
 import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;
@@ -50,6 +54,8 @@ public class IssueController extends BaseController {
     private IIssueService issueService;
     @Autowired
     private IDepartService departService;
+    @Autowired
+    private IUserService userService;
     /**
      * 跳转到首页
      */
@@ -91,6 +97,8 @@ public class IssueController extends BaseController {
         model.addAttribute("departList", departList1);
         model.addAttribute("LoginDepart", LoginDepart);
         model.addAttribute("LoginDepartID", LoginDepartID);
+        List<User> users = userService.list();
+        model.addAttribute("users", users);
         return PREFIX + "discussissue_add";
     }
 
@@ -102,6 +110,17 @@ public class IssueController extends BaseController {
     public String toUpdate(Model model, HttpServletRequest request) {
         return PREFIX + "discussissue_edit";
     }
+
+    /**
+     * 详情
+     */
+    @RequestMapping(value = "/detail/view/{issueId}")
+    public String toDetailView(@PathVariable("issueId") Integer issueId, Model model, HttpServletRequest request) {
+        model.addAttribute("issueId", issueId);
+        return PREFIX + "discussissue_view";
+    }
+
+
 
 
    /**
@@ -142,8 +161,8 @@ public class IssueController extends BaseController {
     @ResponseBody
     @RequiresPermissions("issue:add")
     @SysLog(operationType="add操作:",operationName="添加")
-    public JsonResult add(Issue issue) {
-        if (issueService.save(issue)) {
+    public JsonResult add(IssueModel issue) {
+        if (issueService.saveModel(issue)) {
                 return JsonResult.ok("添加成功");
         } else {
             return JsonResult.error("添加失败");
