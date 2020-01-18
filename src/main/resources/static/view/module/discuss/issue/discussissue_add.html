@@ -19,6 +19,16 @@
                                lay-verify="required" required/>
                     </div>
                 </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">议题类型</label>
+                    <div id="issueType" class="layui-input-block" lay-verify="titleType">
+                        <input type="radio" name="titleType" value="一般议题" title="一般议题" checked>
+                        <input type="radio" name="titleType" value="置顶议题" title="置顶议题" >
+                        <input type="radio" name="titleType" value="紧急议题" title="紧急议题" >
+                    </div>
+                </div>
+
                 <div>
                     <div>
                         <a href="#" id="fileUpload" style="color:#4bbc8b"><img src="/static/assets/images/fujian.png" style="color:#4bbc8b" />添加附件  </a>  (最大为20M)
@@ -29,36 +39,29 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">议题类型</label>
-                    <div class="layui-input-block">
-                        <select id="issueType" name="titleType" lay-verify="titleType">
-                            <option value="一般议题" selected>一般议题</option>
-                            <option value="置顶议题">置顶议题</option>
-                            <option value="紧急议题">紧急议题</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">查看范围</label>
-                    <div class="layui-input-block">
-                        <select name="issueShiroType" lay-filter="shiroType" lay-verify="issueShiroType">
-                            <option value="全部" selected>全部</option>
-                            <option value="部分">部分</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="userList" class="layui-form-item" hidden>
-                    <label class="layui-form-label">用户列表</label>
-                    <div class="layui-input-block">
+                    <div class="layui-col-md6">
+                        <label class="layui-form-label">查看范围</label>
                         <div class="layui-input-block">
-                            <select name="userName" xm-select="userName">
-                                <% for(user in users) { %>
-                                <option value="${user.realName}">${user.realName}</option>
-                                <% } %>
+                            <select name="issueShiroType" lay-filter="shiroType" lay-verify="issueShiroType">
+                                <option value="全部" selected>全部</option>
+                                <option value="部分">部分</option>
                             </select>
                         </div>
                     </div>
+                    <div id="userList" class="layui-form-item" hidden>
+                        <label class="layui-form-label">用户列表</label>
+                        <div class="layui-input-block">
+                            <div class="layui-input-block">
+                                <select name="userName" xm-select="userName" xm-select-direction="down">
+                                    <% for(user in users) { %>
+                                    <option value="${user.realName}">${user.realName}</option>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="layui-form container">
                     <div class="layui-input-block" style="text-align: right;">
                         <button class="layui-btn layui-btn-radius layui-btn-primary" lay-filter="submitEdit" lay-submit>保存</button>
@@ -222,7 +225,7 @@
                 dataValue = {
                     'title': $("#title").val(),
                     'content': editor.txt.html(),
-                    'issueType': $("#issueType").find("option:selected").val(),
+                    'issueType': $("#issueType input[name='titleType']:checked").val(),
                     'issueShiroType': issueShiroType,
                     'userList': userList.join(','),
                     'fileList': fileValue
