@@ -64,6 +64,7 @@
 <script>
     layui.use(['admin'], function () {
         var $ = layui.$;
+
         $(document).ready(function () {
             var issueId='${issueId}';
             issue_info(issueId);
@@ -79,10 +80,20 @@
                     $("#issue_title").text(data.title);
                     $("#issue_name").text(data.createName);
                     $("#issue_time").text(data.createDate);
-                    $("#issue_type").text(data.issueType);
+                    $("#issue_type").text(issueTypeShow(data.issueType));
                     $("#issue_desc").html(filterMessage(data.content));
                 }
             });
+        }
+
+        function issueTypeShow(d) {
+            if (d == "1") {
+                return "一般议题";
+            } else if (d == "2") {
+                return "置顶议题";
+            } else if (d == "3") {
+                return "紧急议题";
+            }
         }
 
         function issue_file(issueId) {

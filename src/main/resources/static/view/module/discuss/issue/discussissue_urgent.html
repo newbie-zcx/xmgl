@@ -17,31 +17,23 @@
             <div class="layui-form toolbar">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label w-auto">搜索：</label>
+                        <label class="layui-form-label w-auto">议题标题：</label>
                         <div class="layui-input-inline mr0">
-                            <input id="edtSearch" class="layui-input" type="text" placeholder="紧急"/>
+                            <input id="title" class="layui-input" type="text" placeholder="输入关键字"/>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">标题：</label>
+                        <label class="layui-form-label">提议人：</label>
                         <div class="layui-input-inline mr0">
-                            <input name="title" id="title" placeholder="请输入议题标题" type="text" class="layui-input"/>
+                            <input name="createName" id="proponent" placeholder="请输入责任领导" type="text" class="layui-input"/>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">内容：</label>
+                        <label class="layui-form-label">时间：</label>
                         <div class="layui-input-inline mr0">
-                            <input name="content" id="content" placeholder="请输入议题内容" type="text" class="layui-input"/>
+                            <input type="text" class="layui-input" id="timeRange" placeholder="请选择时间范围">
                         </div>
                     </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">类型：</label>
-                        <div class="layui-input-inline mr0">
-                            <!--<input name="issueType" id="issueType" placeholder="请输入议题类型" type="text" class="layui-input"/>-->
-                            <#dict_tag id="issueType" name="issueType" defaultVal="" dictCode="issueType"/>
-                        </div>
-                    </div>
-
                     <div class="layui-inline">
                         <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
                     </div>
@@ -56,14 +48,6 @@
                         <i class="layui-icon">&#xe654;</i>添加
                     </button>
                     <% } %>
-                    <%if(shiro.hasPermission("issue:delete")){ %>
-                    <button id="btnDel" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">
-                        <i class="layui-icon">&#xe640;</i>删除
-                    </button>
-                    <% } %>
-                    <button id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" >
-                        <i class="layui-icon">&#xe67d;</i>导出
-                    </button>
                 </div>
             </script>
 
@@ -81,15 +65,7 @@
 <!-- 表格操作列 -->
 <script type="text/html" id="tableBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="view">查看</a>
-    <%if(shiro.hasPermission("issue:update")){ %>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
-    <% } %>
-    <%if(shiro.hasPermission("issue:delete")){ %>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-    <% } %>
-    <!--<a class="layui-btn layui-btn-xs" lay-event="auth">权限分配</a>-->
-
-
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reply">回复</a>
 </script>
 
 
@@ -107,13 +83,19 @@
 <script>
 
 
-    layui.use(['layer', 'form', 'table', 'util', 'admin'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin','laydate'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
         var util = layui.util;
         var admin = layui.admin;
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#timeRange'
+            ,range: true
+        });
 
 
 
@@ -199,7 +181,27 @@
 
         // 搜索按钮点击事件
         $('#btnSearch').click(function () {
-            table.reload('roleTable', {where: $('form').serialize()});
+            var title = $("#title").val();
+            var createName  = $("#proponent").val();
+            var timeRange = $("#timeRange").val();
+            table.render({
+                elem: '#issueTable',
+                title:"",
+                url: '/discuss/issue/search',
+                toolbar: '#issue-toolbar',
+                where: {title: title, createName: createName, timeRange: timeRange, issueType: 3},
+                page: true,
+                cols: [[
+                    {type: 'numbers', title:'序号'},
+                    {type: 'checkbox'},
+                    {title: '标题', field: 'title', align: 'center', valign: 'middle', sort: true},
+                    {title: '内容', field: 'content', align: 'center', valign: 'middle', sort: true},
+                    {title: '类型', field: 'issueType', align: 'center', valign: 'middle', sort: true},
+                    {title: '创建人姓名', field: 'createName', align: 'center', valign: 'middle', sort: true},
+                    {title: '创建时间', field: 'createDate', align: 'center', valign: 'middle', sort: true},
+                    {align: 'center', toolbar: '#tableBar', title: '操作'}
+                ]]
+            });
         });
 
         // 工具条点击事件
@@ -211,6 +213,8 @@
                 doDelete(obj);
             } else if (obj.event === 'view') {  //查看
                 showViewModel(obj.data.id);
+            }else if(obj.event === 'reply'){ //回复
+                showReplyModel(obj.data.id);
             }
         });
 
@@ -269,6 +273,20 @@
                 area: ['650px', '880px'],
                 content: '/discuss/issue/detail/view/' + issueId
             });
+        }
+
+        // 回复
+        function showReplyModel(issueId) {
+            var url = '/discuss/reply?issueId=' + issueId;
+            parent.layui.element.tabDelete('admin-pagetabs',issueId);
+            parent.layui.element.tabAdd(
+                'admin-pagetabs',{
+                    title: '回复议题',
+                    content: '<iframe style="height : 100%;"  class="admin-iframe"  src="' + url + '" frameborder="0" />',
+                    id: issueId
+                }
+            );
+            parent.layui.element.tabChange('admin-pagetabs',issueId);
         }
         /* // 导出excel
                 $('#btnExp').click(function () {

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -45,7 +46,6 @@ public class IssueServiceImpl extends ServiceImpl<IssueMapper, Issue> implements
     public PageResult<Issue> listPage(Integer page, Integer limit, Issue issue) {
        Page<Issue> issuePage = new Page<Issue>(page, limit);
          QueryWrapper<Issue> ew = new QueryWrapper<Issue>();
-
          IPage iPage = issueMapper.selectPage(issuePage,ew);
           return new PageResult<Issue>(iPage.getRecords(), iPage.getTotal());
     }
@@ -107,5 +107,12 @@ public class IssueServiceImpl extends ServiceImpl<IssueMapper, Issue> implements
             }else {
                 return false;
             }
+    }
+
+    @Override
+    public PageResult<Issue> listPageByMap(Integer page, Integer limit, QueryWrapper queryWrapper) {
+        Page<Issue> issuePage = new Page<Issue>(page, limit);
+        IPage iPage = issueMapper.selectPage(issuePage, queryWrapper);
+        return new PageResult<Issue>(iPage.getRecords(), iPage.getTotal());
     }
 }

@@ -19,16 +19,6 @@
                                lay-verify="required" required/>
                     </div>
                 </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">议题类型</label>
-                    <div id="issueType" class="layui-input-block" lay-verify="titleType">
-                        <input type="radio" name="titleType" value="一般议题" title="一般议题" checked>
-                        <input type="radio" name="titleType" value="置顶议题" title="置顶议题" >
-                        <input type="radio" name="titleType" value="紧急议题" title="紧急议题" >
-                    </div>
-                </div>
-
                 <div>
                     <div>
                         <a href="#" id="fileUpload" style="color:#4bbc8b"><img src="/static/assets/images/fujian.png" style="color:#4bbc8b" />添加附件  </a>  (最大为20M)
@@ -36,6 +26,12 @@
                     <div id="layui-upload-list" name="layui-upload-list" class="layui-upload-list">
                     </div>
                     <div id="editor" name="editor">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">议题类型</label>
+                    <div  class="layui-input-block" lay-verify="titleType">
+                        <#dict_tag id="issueType" name="issueType" defaultVal="" dictCode="issueType"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -225,7 +221,7 @@
                 dataValue = {
                     'title': $("#title").val(),
                     'content': editor.txt.html(),
-                    'issueType': $("#issueType input[name='titleType']:checked").val(),
+                    'issueType': $("#issueType").val(),
                     'issueShiroType': issueShiroType,
                     'userList': userList.join(','),
                     'fileList': fileValue

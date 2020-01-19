@@ -1,7 +1,12 @@
 package com.scsoft.wlyz.discuss.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scsoft.wlyz.discuss.entity.Issue;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +18,5 @@ import com.scsoft.wlyz.discuss.entity.Issue;
  */
 public interface IssueMapper extends BaseMapper<Issue> {
 
+    IPage<Issue> listPageByMap(IPage<Issue> page, QueryWrapper queryWrapper);
 }

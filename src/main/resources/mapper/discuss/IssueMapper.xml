@@ -24,4 +24,25 @@
         ID, TITLE, CONTENT, ISSUE_TYPE,ISSUE_SHIRO_TYPE, CREATE_ID, CREATE_NAME, CREATE_DATE, UPDATE_ID, UPDATE_NAME, UPDATE_DATE, REMARK, IS_DEL
     </sql>
 
+    <select id="listPageByMap" resultMap="BaseResultMap">
+        SELECT * FROM yz_issue
+        <where>
+            <if test="issueType != null">
+                AND ISSUE_TYPE = #{issueType}
+            </if>
+            <if test="titleLike != null">
+                AND TITLE like #{titleLike}
+            </if>
+            <if test="createName != null">
+                AND CREATE_NAME = #{createName}
+            </if>
+            <if test="createDateStart != null">
+                AND CREATE_DATE &gt;= to_dat(#{createDateStart},'yyyy-MM-dd')
+            </if>
+            <if test="createDateEnd != null">
+                AND CREATE_DATE &lt;= to_dat(#{createDateEnd},'yyyy-MM-dd')
+            </if>
+        </where>
+    </select>
+
 </mapper>

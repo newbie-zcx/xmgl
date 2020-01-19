@@ -1,7 +1,10 @@
 package com.scsoft.wlyz.discuss.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.scsoft.scpt.annotation.SysLog;
+import com.scsoft.wlyz.discuss.entity.Issue;
 import com.scsoft.wlyz.discuss.model.ReplyModel;
+import com.scsoft.wlyz.discuss.service.IIssueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import com.scsoft.scpt.common.JsonResult;
@@ -43,20 +46,19 @@ public class ReplyController extends BaseController {
     @Autowired
     private IReplyService replyService;
 
+    @Autowired
+    private IIssueService issueService;
+
     /**
      * 跳转到回复表首页
      */
-    @RequiresPermissions("reply:add")
     @RequestMapping("")
     public String index(Model model,Integer issueId, Integer toReplyUserId, String toReplyUserName, HttpServletRequest request) {
         /*议题测试数据，需要修改*/
-        model.addAttribute("issueId", "5");
-        model.addAttribute("issueName", "超级管理员");
-        model.addAttribute("toReplyUserId", 1);
-
-//        model.addAttribute("issueId", issueId);
-//        model.addAttribute("issueName", toReplyUserName);
-//        model.addAttribute("toReplyUserId", toReplyUserId);
+        model.addAttribute("issueId", issueId);
+        Issue issue = issueService.getById(issueId);
+        model.addAttribute("issueName", issue.getCreateName());
+        model.addAttribute("toReplyUserId", issue.getCreateId());
         return PREFIX + "reply_main";
     }
 

@@ -3,6 +3,7 @@ package com.scsoft.wlyz.discuss.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.scsoft.scpt.annotation.SysLog;
+import com.scsoft.scpt.utils.StringUtils;
 import com.scsoft.wlyz.common.handler.SystemCommonHandler;
 import com.scsoft.wlyz.discuss.entity.Issue;
 import com.scsoft.wlyz.discuss.model.IssueModel;
@@ -12,6 +13,7 @@ import com.scsoft.wlyz.system.service.IDepartService;
 import com.scsoft.wlyz.discuss.service.IIssueService;
 import com.scsoft.wlyz.system.service.IUserService;
 import com.scsoft.wlyz.system.service.impl.UserServiceImpl;
+import io.swagger.models.auth.In;
 import org.springframework.web.bind.annotation.*;
 import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;
@@ -24,9 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import com.scsoft.scpt.base.controller.BaseController;
 
@@ -163,11 +163,10 @@ public class IssueController extends BaseController {
    /**
      * 详情
      */
-    @RequestMapping(value = "/detail")
-    public Object toDetail(Integer issueId, Model model, HttpServletRequest request) {
-        int a=1;
-        model.addAttribute("issue",issueService.getById(issueId));
-        return PREFIX + "discussissue_view";
+    @RequestMapping(value = "/detail/{issueId}")
+    @ResponseBody
+    public Object toDetail(@PathVariable("issueId") Integer issueId, Model model, HttpServletRequest request) {
+        return issueService.getById(issueId);
     }
 
     /**
@@ -178,6 +177,28 @@ public class IssueController extends BaseController {
     @ResponseBody
     public PageResult<Issue> list(Integer page, Integer limit, Issue issue,String condition, Model model,HttpServletRequest request) {
                return issueService.listPage(page,limit,issue);
+    }
+
+    @RequestMapping(value = "/search")
+    @ResponseBody
+    public PageResult<Issue> search(Integer page, Integer limit, Issue issue, String timeRange, String condition, Model model,HttpServletRequest request){
+        Map<String, Object> paramMap = new HashMap<>();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if(StringUtils.isNotBlank(issue.getTitle())){
+            queryWrapper.like("TITLE", issue.getTitle());
+        }
+        if(StringUtils.isNotBlank(issue.getIssueType())){
+            queryWrapper.eq("ISSUE_TYPE", issue.getIssueType());
+        }
+        if(StringUtils.isNotBlank(issue.getCreateName())){
+            queryWrapper.eq("create_name", issue.getCreateName());
+        }
+        if(StringUtils.isNotBlank(timeRange)){
+            String[] array = timeRange.split(" - ");
+            queryWrapper.ge("CREATE_TIME", array[0]);
+            queryWrapper.le("CREATE_TIME", array[1]);
+        }
+        return issueService.listPageByMap(page, limit, queryWrapper);
     }
 
 /*    *//**
@@ -276,6 +297,7 @@ public class IssueController extends BaseController {
         }
         return JsonResult.error("删除失败");
     }
+
 
 }
 
