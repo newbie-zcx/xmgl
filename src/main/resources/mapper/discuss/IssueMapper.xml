@@ -45,4 +45,8 @@
         </where>
     </select>
 
+    <select id="hostIdList" resultType="integer">
+        SELECT y.id  FROM yz_issue y left join yz_reply r on y.id = r.ISSUE_ID group by y.id having count(r.id) > 5
+    </select>
+
 </mapper>

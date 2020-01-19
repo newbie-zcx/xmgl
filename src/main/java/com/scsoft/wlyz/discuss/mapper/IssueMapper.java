@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scsoft.wlyz.discuss.entity.Issue;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,4 +20,6 @@ import java.util.Map;
 public interface IssueMapper extends BaseMapper<Issue> {
 
     IPage<Issue> listPageByMap(IPage<Issue> page, QueryWrapper queryWrapper);
+
+    List<Integer> hostIdList();
 }

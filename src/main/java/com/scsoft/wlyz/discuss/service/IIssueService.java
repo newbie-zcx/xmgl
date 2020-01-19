@@ -38,5 +38,7 @@ public interface IIssueService extends IService<Issue> {
     boolean saveModel(IssueModel issue);
 
     PageResult<Issue> listPageByMap(Integer page, Integer limit, QueryWrapper queryWrapper);
+
+    PageResult<Issue> listHostPage(Integer page, Integer limit, Issue issue);
 }
 

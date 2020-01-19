@@ -72,7 +72,7 @@ public class IssueHostController extends BaseController {
     @RequiresPermissions("issueHost:view")
     @ResponseBody
     public PageResult<Issue> listHost(Integer page, Integer limit, Issue issue,String condition, Model model,HttpServletRequest request) {
-        return issueService.listPage(page,limit,issue);
+        return issueService.listHostPage(page,limit,issue);
     }
 
     /**

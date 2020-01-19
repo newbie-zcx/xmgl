@@ -115,4 +115,17 @@ public class IssueServiceImpl extends ServiceImpl<IssueMapper, Issue> implements
         IPage iPage = issueMapper.selectPage(issuePage, queryWrapper);
         return new PageResult<Issue>(iPage.getRecords(), iPage.getTotal());
     }
+
+    @Override
+    public PageResult<Issue> listHostPage(Integer page, Integer limit, Issue issue) {
+        List<Integer> ids = this.issueMapper.hostIdList();
+        if(null == ids){
+            return new PageResult<>();
+        }
+        Page<Issue> issuePage = new Page<Issue>(page, limit);
+        QueryWrapper<Issue> ew = new QueryWrapper<Issue>();
+        ew.in("ID", ids);
+        IPage iPage = issueMapper.selectPage(issuePage,ew);
+        return new PageResult<Issue>(iPage.getRecords(), iPage.getTotal());
+    }
 }
