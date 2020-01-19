@@ -6,6 +6,7 @@ import com.scsoft.scpt.annotation.SysLog;
 import com.scsoft.scpt.base.controller.BaseController;
 import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;
+import com.scsoft.scpt.utils.StringUtils;
 import com.scsoft.wlyz.common.handler.SystemCommonHandler;
 import com.scsoft.wlyz.discuss.entity.Issue;
 import com.scsoft.wlyz.discuss.model.IssueModel;
@@ -27,7 +28,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -71,7 +74,9 @@ public class IssueIstopController extends BaseController {
     @RequiresPermissions("issueIstop:view")
     @ResponseBody
     public PageResult<Issue> listHost(Integer page, Integer limit, Issue issue,String condition, Model model,HttpServletRequest request) {
-        return issueService.listPage(page,limit,issue);
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("ISSUE_TYPE", 2);
+        return issueService.listPageByMap(page, limit, queryWrapper);
     }
 
     /**

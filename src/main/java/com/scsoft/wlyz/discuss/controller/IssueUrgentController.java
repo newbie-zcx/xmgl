@@ -71,7 +71,9 @@ public class IssueUrgentController extends BaseController {
     @RequiresPermissions("issueUrgent:view")
     @ResponseBody
     public PageResult<Issue> listHost(Integer page, Integer limit, Issue issue,String condition, Model model,HttpServletRequest request) {
-        return issueService.listPage(page,limit,issue);
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("ISSUE_TYPE", 3);
+        return issueService.listPageByMap(page, limit, queryWrapper);
     }
 
     /**
