@@ -1,148 +1,154 @@
 <!DOCTYPE html>
-
-<html>
+<html class="bg-white">
 <head>
-    <title></title>
+    <title>discussisue</title>
     <% include("../../../layout/cssPart.html"){} %>
+    <link href="/static/assets/css/discussissue.css" rel="stylesheet" />
 </head>
 <body>
-
-<!-- 页面加载loading -->
 <% include("../../../layout/loading.html"){} %>
+<!-- 表格顶部操作列 -->
+<script type="text/html" id="issue-toolbar">
+    <span style="font-size: 20px;font-weight: bold;">最新议题</span>
+    <div class="layui-btn-container" style="display: inline-block;margin-left: 40px;">
+        <button id="emergency" class="normalButton">紧急</button>
+        <button id="setTop" class="normalButton">置顶</button>
+        <button id="hottest" class="normalButton">最热</button>
+        <button id="choiceness" class="normalButton">精选</button>
+    </div>
+    <div class="layui-btn-container" style="display: inline-block;float: right;">
+        <button class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe654;</i>新增</button>
+    </div>
+</script>
 
-<!-- 正文开始 -->
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-card-body">
-            <div class="layui-form toolbar">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label w-auto">搜索：</label>
-                        <div class="layui-input-inline mr0">
-                            <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+            <div class="layui-row">
+<!--  左侧表格-->
+                <div class="layui-col-xs12 layui-col-md8" style="border: 1px solid #e6e6e6;background:#f2f2f2;padding: 15px 0;">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto">议题：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="issues" class="layui-input" type="text" placeholder="输入关键字"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">提议人：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input name="title" id="proponent" placeholder="请输入责任领导" type="text" class="layui-input"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">时间：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input type="text" class="layui-input" id="timeRange" placeholder="请选择时间范围">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">标题：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="title" id="title" placeholder="请输入议题标题" type="text" class="layui-input"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">内容：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="content" id="content" placeholder="请输入议题内容" type="text" class="layui-input"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">类型：</label>
-                        <div class="layui-input-inline mr0">
-                            <!--<input name="issueType" id="issueType" placeholder="请输入议题类型" type="text" class="layui-input"/>-->
-                            <#dict_tag id="issueType" name="issueType" defaultVal="" dictCode="issueType"/>
-                        </div>
-                    </div>
-
-                    <div class="layui-inline">
-                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <table class="layui-table" id="issueTable" lay-filter="issueTable"></table>
                     </div>
                 </div>
-            </div>
+<!-- 右侧列表-->
+                <div class="layui-col-xs6 layui-col-md4 rightDiv">
+<!-- 紧急议题-->
+                    <div style="height: 33%;" class="rightEmergencyIssues">
+                        <div class="rightEmergencyIssuesTitle">
+                            <span style="font-size: 20px;font-weight: bold;color: #F03D5E;"> <img src="/static/assets/images/emergency.png" alt=""> 紧急议题</span>
+                            <span style="color:#454545;margin-left: 5px;">需优先处理</span>
+                            <button class="layui-btn layui-btn-xs more" style="">更多></button>
+                        </div>
+<!-- 在这里循环 紧急议题 数据-->
+                        <div class="rightEmergencyIssuesList" style="background: #fff;">
+                            <div class="emergencyTitle">
+                                <a href="#">黄河沿岸生态保护修复的方案</a>
+                            </div>
+                            <div class="userInformation">
+                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
+                                <span style="margin-left: 20px;">12-30 15:30</span>
+                                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
+                            </div>
+                        </div>
 
-            <!-- 表格顶部操作列 -->
-            <script type="text/html" id="issue-toolbar">
-                <div class="layui-btn-container">
-                    <%if(shiro.hasPermission("issue:add")){ %>
-                    <button id="btn1Add"  class="layui-btn  layui-btn-sm" lay-event="add">
-                        <i class="layui-icon">&#xe654;</i>添加
-                    </button>
-                    <% } %>
-                    <%if(shiro.hasPermission("issue:delete")){ %>
-                    <button id="btnDel" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">
-                        <i class="layui-icon">&#xe640;</i>删除
-                    </button>
-                    <% } %>
-                    <button id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" >
-                        <i class="layui-icon">&#xe67d;</i>导出
-                    </button>
-                </div>
-            </script>
-
-            <table class="layui-table" id="issueTable" lay-filter="issueTable"></table>
+                        <div class="rightEmergencyIssuesList" style="background: #fff;">
+                            <div class="emergencyTitle">
+                                <a href="#">黄河沿岸生态保护修复的方案</a>
+                            </div>
+                            <div class="userInformation">
+                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
+                                <span style="margin-left: 20px;">12-30 15:30</span>
+                                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
+                            </div>
+                        </div>
+                    </div>
+<!--置顶议题 -->
+                    <div style="height: 33%;" class="rightSetTopIssue">
+                        <div class="rightSetTopIssueTitle">
+                            <span style="font-size: 20px;font-weight: bold;color: #4BBC87;"> <img src="/static/assets/images/settop.png" alt="" style="vertical-align: text-top;"> 置顶议题</span>
+                            <span style="color:#454545;margin-left: 5px;">已被置顶</span>
+                            <button class="layui-btn layui-btn-xs more" style="">更多></button>
+                        </div>
+<!-- 在这里循环 置顶议题 数据-->
+                        <div class="rightSetTopIssueList" style="background: #fff;">
+                            <div class="setTopTitle">
+                                <a href="#">黄河沿岸生态保护修复的方案</a>
+                            </div>
+                            <div class="userInformation">
+                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
+                                <span style="margin-left: 20px;">12-30 15:30</span>
+                                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
+                            </div>
+                        </div>
+                        <div class="rightSetTopIssueList" style="background: #fff;">
+                            <div class="setTopTitle">
+                                <a href="#">黄河沿岸生态保护修复的方案</a>
+                            </div>
+                            <div class="userInformation">
+                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
+                                <span style="margin-left: 20px;">12-30 15:30</span>
+                                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
+                            </div>
+                        </div>
+                    </div>
+<!--最热议题 -->
+                    <div style="height: 33%;" class="rightHottestIssue">
+                        <div class="rightHottestIssueTitle">
+                            <span style="font-size: 20px;font-weight: bold;color: #4BBC87;"> <img src="/static/assets/images/settop.png" alt="" style="vertical-align: text-top;"> 最热议题</span>
+                            <span style="color:#454545;margin-left: 5px;">已成为最热</span>
+                            <button class="layui-btn layui-btn-xs more" style="">更多></button>
+                        </div>
+<!-- 在这个 div 循环 最热议题 数据-->
+                        <div class="rightHottestIssueList" style="background: #fff;">
+                            <div class="hottestTitle">
+                                <a href="#">黄河沿岸生态保护修复的方案</a>
+                            </div>
+                            <div class="userInformation">
+                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
+                                <span style="margin-left: 20px;">12-30 15:30</span>
+                                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
+                            </div>
+                        </div>
+                        <div class="rightHottestIssueList" style="background: #fff;">
+                            <div class="hottestTitle">
+                                <a href="#">黄河沿岸生态保护修复的方案</a>
+                            </div>
+                            <div class="userInformation">
+                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
+                                <span style="margin-left: 20px;">12-30 15:30</span>
+                                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
+                            </div>
+                        </div>
+                    </div>
         </div>
-
+            </div>
+        </div>
     </div>
 </div>
-<div class="layui-col-xs6 layui-col-md4 rightDiv">
-    <!-- 紧急议题-->
-    <div style="height: 33%;" class="rightEmergencyIssues">
-        <div class="rightEmergencyIssuesTitle">
-            <span style="font-size: 20px;font-weight: bold;color: #F03D5E;"> <img src="/static/assets/images/emergency.png" alt=""> 紧急议题</span>
-            <span style="color:#454545;margin-left: 5px;">需优先处理</span>
-            <button class="layui-btn layui-btn-xs more" style="">更多></button>
-        </div>
-        <% for(urgentIssue in urgentIssues) { %>
-        <div class="rightEmergencyIssuesList" style="background: #fff;">
-            <div class="emergencyTitle">
-                <a href="#">${urgentIssue.title}</a>
-            </div>
-            <div class="userInformation">
-                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：${urgentIssue.createName}</span>
-                <span style="margin-left: 20px;">${urgentIssue.createDate}</span>
-                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
-            </div>
-        </div>
-        <% } %>
-
-    <!--置顶议题 -->
-    <div style="height: 33%;" class="rightSetTopIssue">
-        <div class="rightSetTopIssueTitle">
-            <span style="font-size: 20px;font-weight: bold;color: #4BBC87;"> <img src="/static/assets/images/settop.png" alt="" style="vertical-align: text-top;"> 置顶议题</span>
-            <span style="color:#454545;margin-left: 5px;">已被置顶</span>
-            <button class="layui-btn layui-btn-xs more" style="">更多></button>
-        </div>
-        <!-- 在这里循环 置顶议题 数据-->
-        <% for(istopIssue in istopIssues) { %>
-        <div class="rightSetTopIssueList" style="background: #fff;">
-            <div class="setTopTitle">
-                <a href="#">${istopIssue.title}</a>
-            </div>
-            <div class="userInformation">
-                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：${istopIssue.createName}</span>
-                <span style="margin-left: 20px;">${istopIssue.createDate}</span>
-                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
-            </div>
-        </div>
-        <% } %>
-
-    <!--最热议题 -->
-    <div style="height: 33%;" class="rightHottestIssue">
-        <div class="rightHottestIssueTitle">
-            <span style="font-size: 20px;font-weight: bold;color: #4BBC87;"> <img src="/static/assets/images/settop.png" alt="" style="vertical-align: text-top;"> 最热议题</span>
-            <span style="color:#454545;margin-left: 5px;">已成为最热</span>
-            <button class="layui-btn layui-btn-xs more" style="">更多></button>
-        </div>
-        <!-- 在这个 div 循环 最热议题 数据-->
-        <% for(hostIssue in hostIssues) { %>
-        <div class="rightSetTopIssueList" style="background: #fff;">
-            <div class="setTopTitle">
-                <a href="#">${hostIssue.title}</a>
-            </div>
-            <div class="userInformation">
-                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：${hostIssue.createName}</span>
-                <span style="margin-left: 20px;">${hostIssue.createDate}</span>
-                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
-            </div>
-        </div>
-        <% } %>
-    </div>
-    </div>
-    </div>
-</div>
-
-<div id="view"></div>
-
-
-
 <!-- 表格操作列 -->
 <script type="text/html" id="tableBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="view">查看</a>
@@ -153,35 +159,24 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     <% } %>
     <!--<a class="layui-btn layui-btn-xs" lay-event="auth">权限分配</a>-->
-
-
 </script>
 
-
-
-
-
-
-<!-- js部分 -->
+    <!-- js部分 -->
 <% include("../../../layout/jsPart.html"){} %>
-<!--<script>
-    layui.use('element', function(){
-        var element = layui.element();
-    });
-</script>-->
 <script>
-
-
-    layui.use(['layer', 'form', 'table', 'util', 'admin'], function () {
+    layui.use(['layer', 'form', 'table', 'util','element','laydate'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
         var util = layui.util;
-        var admin = layui.admin;
+        var element = layui.element;
+        var laydate = layui.laydate;
 
-
-
+        laydate.render({
+            elem: '#timeRange'
+            ,range: true
+        });
 
         //渲染表格
         table.render({
@@ -189,6 +184,24 @@
             title:"",
             url: '/discuss/issue/list',
             toolbar: '#issue-toolbar',
+            defaultToolbar: false,
+            where: $('form').serialize(),
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {type: 'numbers', title:'序号'},
+                {title: '议题', field: 'title', align: 'center', valign: 'middle'},
+                {title: '发起人', field: 'content', align: 'center', valign: 'middle'},
+                {title: '提议时间', field: 'issueType', align: 'center', valign: 'middle'},
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+        //渲染表格
+        table.render({
+            elem: '#demo',
+            title:"",
+            url: '/discuss/issue/list',
+            toolbar: '',
             where: $('form').serialize(),
             page: true,
             cols: [[
@@ -200,68 +213,10 @@
                 {title: '创建人姓名', field: 'createName', align: 'center', valign: 'middle', sort: true},
                 {title: '创建时间', field: 'createDate', align: 'center', valign: 'middle', sort: true},
 
-               /* {field: 'orgType',align: 'center', sort: true, width:140,
-                    templet: function (d) {
-                        if (d.orgType=="1"){
-                            return "区域";
-                        } else if (d.orgType=="2"){
-                            return "职能部门";
-                        }
-                    },
-                    title: '机构类型'},
-                    { field: 'createDate', width:180, sort: true, templet: function (d) {
-                    return util.toDateString(d.createDate);
-                      },align:'center', title: '创建时间'},
-                    */
                 {align: 'center', toolbar: '#tableBar', title: '操作'}
+
             ]]
         });
-
-        //头工具栏事件
-        table.on('toolbar(issueTable)', function(obj){
-            var checkStatus = table.checkStatus(obj.config.id);
-            switch(obj.event){
-                case 'add':
-                    showAddModel();
-                    break;
-                case 'del':
-                    if (checkStatus.data.length == 0) {
-                        layer.msg('请选择要删除的数据', {icon: 2});
-                    } else {
-                        var data = checkStatus.data;
-                        var id_str="";
-                        for (var i=0;i<data.length;i++){
-                            id_str +=data[i].id+",";
-                        }
-                        id_str = id_str.substr(0, id_str.length-1);
-                        layer.confirm('真的删除么', function(index){
-                            layer.load(2);
-                            $.post('issue/batchDelete', {
-                                departIds: id_str
-                            }, function (data) {
-                                layer.closeAll('loading');
-                                if (data.code == 200) {
-                                    layer.msg(data.msg, {icon: 1});
-                                    obj.del();
-                                    // table.reload('Table');
-                                } else {
-                                    layer.msg(data.msg, {icon: 2});
-                                }
-                            });
-                        });
-                    }
-                    break;
-                case 'export':
-                    if (checkStatus.data.length == 0) {
-                        layer.msg('请选择要导出的数据', {icon: 2});
-                    } else {
-                        table.exportFile(ins1.config.id, checkStatus.data, 'xls');
-                    }
-                    break;
-            };
-        });
-
-
         // 搜索按钮点击事件
         $('#btnSearch').click(function () {
             table.reload('roleTable', {where: $('form').serialize()});
@@ -279,74 +234,8 @@
             }
         });
 
-        // 删除
-        function doDelete(obj) {
-            top.layer.confirm('确定要删除吗？', function (index) {
-                top.layer.close(index);
-                layer.load(2);
-                $.post('issue/delete', {
-                    issueId: obj.data.id
-                }, function (data) {
-                    layer.closeAll('loading');
-                    if (data.code == 200) {
-                        layer.msg(data.msg, {icon: 1});
-                        obj.del();
-                    } else {
-                        layer.msg(data.msg, {icon: 2});
-                    }
-                });
-            });
-        }
-
-        // 显示编辑弹窗
-        function showEditModel(data) {
-            admin.putTempData('t_issue', data);
-            admin.putTempData('formOk', false);
-            top.layui.admin.open({
-                type: 2,
-                title: '修改',
-                area: ['350px', '380px'],
-                content: '/discuss/issue/issueupdate',
-                end: function () {
-                    admin.getTempData('formOk') && table.reload('Table');  // 成功刷新表格
-                }
-            });
-        }
-
-        // 显示编辑弹窗
-        function showAddModel(data) {
-            top.layui.admin.open({
-                type: 2,
-                title: '添加',
-                area: ['650px', '880px'],
-                content: '/discuss/issue/issueadd',
-                end: function () {
-                    admin.getTempData('formOk') && table.reload('roleTable');  // 成功刷新表格
-                }
-            });
-        }
-
-        // 查看
-        function showViewModel(issueId) {
-            top.layui.admin.open({
-                type: 2,
-                title: '查看',
-                area: ['650px', '880px'],
-                content: '/discuss/issue/detail/view/' + issueId
-            });
-        }
-        /* // 导出excel
-                $('#btnExp').click(function () {
-                    var checkRows = table.checkStatus('issueTable');
-                    if (checkRows.data.length == 0) {
-                        layer.msg('请选择要导出的数据', {icon: 2});
-                    } else {
-                        table.exportFile(ins1.config.id, checkRows.data, 'xls');
-                    }
-                });*/
     });
-
 </script>
-</body>
 
+</body>
 </html>

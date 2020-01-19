@@ -1,0 +1,51 @@
+.layui-table-tool,.layui-table-body {
+    background: #fff;
+}
+.layui-table-view .layui-table td, .layui-table-view .layui-table th {
+    border: none;
+}
+.layui-table-tool-temp {
+    padding-right: 0;
+}
+.normalButton {
+    padding: 1px 10px;
+    font-size: 14px;
+    color: #454545;
+    background: #efefef;
+    border: 1px solid  #cecdcd;
+}
+.normalButton:hover {
+    cursor: pointer;
+    background: #dedede;
+}
+.normalButton:not(:first-child) {
+    margin-left: -3px;
+}
+button.more {
+    border-radius: 10px;color: #fff;padding: 0 10px;float: right;
+}
+.rightDiv {
+    margin-left: 2%;
+    border: 1px solid #e6e6e6;
+    width: 30%;
+    background: #f2f2f2;
+    padding: 20px 0 0;
+}
+.rightEmergencyIssuesTitle,.rightSetTopIssueTitle,.rightHottestIssueTitle {
+    margin: 0 20px 15px;
+}
+.rightSetTopIssueTitle,.rightHottestIssueTitle {
+    margin-top: 25px;
+}
+.rightEmergencyIssuesList,.rightSetTopIssueList,.rightHottestIssueList {
+    background: #fff;
+    padding: 8px 22px;
+    line-height: 30px;
+}
+.emergencyTitle a,.setTopTitle a,.hottestTitle a {
+    font-size: 15px;
+    font-weight: bolder;
+}
+.userInformation {
+    color:#454545;
+}
