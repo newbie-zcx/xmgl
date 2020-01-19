@@ -46,7 +46,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/discuss/issueFile")
-public class IssueFileController extends BaseController {
+public class  IssueFileController extends BaseController {
    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private String PREFIX = "module/discuss/issueFile/";
@@ -105,7 +105,6 @@ public class IssueFileController extends BaseController {
     }
 
     /**
-     *
      * 获取议题附件关系表列表
      */
     @RequestMapping(value = "/list/{issueId}")
@@ -198,5 +197,4 @@ public class IssueFileController extends BaseController {
         }
         return JsonResult.error("删除失败");
     }
-
 }

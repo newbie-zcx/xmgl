@@ -3,39 +3,36 @@ package com.scsoft.wlyz.discuss.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.scsoft.scpt.annotation.SysLog;
+import com.scsoft.scpt.base.controller.BaseController;
+import com.scsoft.scpt.common.JsonResult;
+import com.scsoft.scpt.common.PageResult;
 import com.scsoft.wlyz.common.handler.SystemCommonHandler;
 import com.scsoft.wlyz.discuss.entity.Issue;
 import com.scsoft.wlyz.discuss.model.IssueModel;
+import com.scsoft.wlyz.discuss.service.IIssueService;
 import com.scsoft.wlyz.system.entity.Depart;
 import com.scsoft.wlyz.system.entity.User;
 import com.scsoft.wlyz.system.service.IDepartService;
-import com.scsoft.wlyz.discuss.service.IIssueService;
 import com.scsoft.wlyz.system.service.IUserService;
-import com.scsoft.wlyz.system.service.impl.UserServiceImpl;
-import org.springframework.web.bind.annotation.*;
-import com.scsoft.scpt.common.JsonResult;
-import com.scsoft.scpt.common.PageResult;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import com.scsoft.scpt.base.controller.BaseController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
  * <p>
- *  前端控制器
+ *  前端控制器  置顶议题
  * </p>
  * @author chengshangshu
  * @CreateDate 2020-01-09
@@ -45,8 +42,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 
 @Controller
-@RequestMapping("/discuss/issue")
-public class IssueController extends BaseController {
+@RequestMapping("/discuss/issueIstop")
+public class IssueIstopController extends BaseController {
    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private String PREFIX = "/module/discuss/issue/";
@@ -60,50 +57,21 @@ public class IssueController extends BaseController {
     /**
      * 跳转到首页
      */
-    @RequiresPermissions("issue:view")
+    @RequiresPermissions("issueIstop:view")
     @RequestMapping("")
     public String index(Model model,HttpServletRequest request) {
-        Issue issue=new Issue();
-
-        //获取紧急议题
-        List<Issue> urgentIssue=issueService.selectList(issue);
-        List<Issue> urgentIssues=new ArrayList<Issue>();
-
-        for (Issue issue1: urgentIssue) {
-            if(urgentIssues.size()==2){
-                break;
-            }
-            urgentIssues.add(issue1);
-        }
-        model.addAttribute("urgentIssues",urgentIssues);
+        return PREFIX + "discussissue_istop";
+    }
 
 
-        //获取最热议题
-        List<Issue> hostIssue=issueService.selectList(issue);
-        List<Issue> hostIssues=new ArrayList<Issue>();
-
-        for (Issue issue1: hostIssue) {
-            if(hostIssues.size()==2){
-                break;
-            }
-            hostIssues.add(issue1);
-        }
-        model.addAttribute("hostIssues",hostIssues);
-
-
-        //获取置顶议题
-        List<Issue>  istopIssue=issueService.selectList(issue);
-        List<Issue> istopIssues=new ArrayList<Issue>();
-
-        for (Issue issue1: istopIssue) {
-            if(istopIssues.size()==2){
-                break;
-            }
-            istopIssues.add(issue1);
-        }
-        model.addAttribute("istopIssues",istopIssues);
-
-        return PREFIX + "discussissue";
+    /**
+     * 获取最热列表
+     */
+    @RequestMapping(value = "/list")
+    @RequiresPermissions("issueIstop:view")
+    @ResponseBody
+    public PageResult<Issue> listHost(Integer page, Integer limit, Issue issue,String condition, Model model,HttpServletRequest request) {
+        return issueService.listPage(page,limit,issue);
     }
 
     /**
@@ -170,35 +138,10 @@ public class IssueController extends BaseController {
         return PREFIX + "discussissue_view";
     }
 
-    /**
-     * 获取列表
-     */
-    @RequestMapping(value = "/list")
-    @RequiresPermissions("issue:view")
-    @ResponseBody
-    public PageResult<Issue> list(Integer page, Integer limit, Issue issue,String condition, Model model,HttpServletRequest request) {
-               return issueService.listPage(page,limit,issue);
-    }
 
-/*    *//**
-     * 跳转到最热首页
-     *//*
-    @RequiresPermissions("issueHost:view")
-    @RequestMapping("")
-    public String indexHost(Model model,HttpServletRequest request) {
 
-        return PREFIX + "discussissue_host";
-    }*/
 
-    /**
-     * 获取最热列表
-     */
-    @RequestMapping(value = "/list/host")
-    @RequiresPermissions("issueHost:view")
-    @ResponseBody
-    public PageResult<Issue> listHost(Integer page, Integer limit, Issue issue,String condition, Model model,HttpServletRequest request) {
-        return issueService.listPage(page,limit,issue);
-    }
+
 
 /**
      * 新增

@@ -19,7 +19,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label w-auto">搜索：</label>
                         <div class="layui-input-inline mr0">
-                            <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                            <input id="edtSearch" class="layui-input" type="text" placeholder="紧急"/>
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -72,74 +72,9 @@
 
     </div>
 </div>
-<div class="layui-col-xs6 layui-col-md4 rightDiv">
-    <!-- 紧急议题-->
-    <div style="height: 33%;" class="rightEmergencyIssues">
-        <div class="rightEmergencyIssuesTitle">
-            <span style="font-size: 20px;font-weight: bold;color: #F03D5E;"> <img src="/static/assets/images/emergency.png" alt=""> 紧急议题</span>
-            <span style="color:#454545;margin-left: 5px;">需优先处理</span>
-            <button class="layui-btn layui-btn-xs more" style="">更多></button>
-        </div>
-        <% for(urgentIssue in urgentIssues) { %>
-        <div class="rightEmergencyIssuesList" style="background: #fff;">
-            <div class="emergencyTitle">
-                <a href="#">${urgentIssue.title}</a>
-            </div>
-            <div class="userInformation">
-                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：${urgentIssue.createName}</span>
-                <span style="margin-left: 20px;">${urgentIssue.createDate}</span>
-                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
-            </div>
-        </div>
-        <% } %>
 
-    <!--置顶议题 -->
-    <div style="height: 33%;" class="rightSetTopIssue">
-        <div class="rightSetTopIssueTitle">
-            <span style="font-size: 20px;font-weight: bold;color: #4BBC87;"> <img src="/static/assets/images/settop.png" alt="" style="vertical-align: text-top;"> 置顶议题</span>
-            <span style="color:#454545;margin-left: 5px;">已被置顶</span>
-            <button class="layui-btn layui-btn-xs more" style="">更多></button>
-        </div>
-        <!-- 在这里循环 置顶议题 数据-->
-        <% for(istopIssue in istopIssues) { %>
-        <div class="rightSetTopIssueList" style="background: #fff;">
-            <div class="setTopTitle">
-                <a href="#">${istopIssue.title}</a>
-            </div>
-            <div class="userInformation">
-                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：${istopIssue.createName}</span>
-                <span style="margin-left: 20px;">${istopIssue.createDate}</span>
-                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
-            </div>
-        </div>
-        <% } %>
 
-    <!--最热议题 -->
-    <div style="height: 33%;" class="rightHottestIssue">
-        <div class="rightHottestIssueTitle">
-            <span style="font-size: 20px;font-weight: bold;color: #4BBC87;"> <img src="/static/assets/images/settop.png" alt="" style="vertical-align: text-top;"> 最热议题</span>
-            <span style="color:#454545;margin-left: 5px;">已成为最热</span>
-            <button class="layui-btn layui-btn-xs more" style="">更多></button>
-        </div>
-        <!-- 在这个 div 循环 最热议题 数据-->
-        <% for(hostIssue in hostIssues) { %>
-        <div class="rightSetTopIssueList" style="background: #fff;">
-            <div class="setTopTitle">
-                <a href="#">${hostIssue.title}</a>
-            </div>
-            <div class="userInformation">
-                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：${hostIssue.createName}</span>
-                <span style="margin-left: 20px;">${hostIssue.createDate}</span>
-                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
-            </div>
-        </div>
-        <% } %>
-    </div>
-    </div>
-    </div>
-</div>
 
-<div id="view"></div>
 
 
 
@@ -187,7 +122,7 @@
         table.render({
             elem: '#issueTable',
             title:"",
-            url: '/discuss/issue/list',
+            url: '/discuss/issueUrgent/list',
             toolbar: '#issue-toolbar',
             where: $('form').serialize(),
             page: true,
