@@ -64,28 +64,19 @@
                             <button class="layui-btn layui-btn-xs more" style="">更多></button>
                         </div>
 <!-- 在这里循环 紧急议题 数据-->
+                        <% for(urgentIssue in urgentIssues) { %>
                         <div class="rightEmergencyIssuesList" style="background: #fff;">
                             <div class="emergencyTitle">
-                                <a href="#">黄河沿岸生态保护修复的方案</a>
+                                <a href="#">${urgentIssue.title}</a>
                             </div>
                             <div class="userInformation">
-                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
-                                <span style="margin-left: 20px;">12-30 15:30</span>
+                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：${urgentIssue.createName}</span>
+                                <span style="margin-left: 20px;">${urgentIssue.createDate}</span>
                                 <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
                             </div>
                         </div>
-
-                        <div class="rightEmergencyIssuesList" style="background: #fff;">
-                            <div class="emergencyTitle">
-                                <a href="#">黄河沿岸生态保护修复的方案</a>
-                            </div>
-                            <div class="userInformation">
-                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
-                                <span style="margin-left: 20px;">12-30 15:30</span>
-                                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
-                            </div>
-                        </div>
-                    </div>
+                        <% } %>
+                        <
 <!--置顶议题 -->
                     <div style="height: 33%;" class="rightSetTopIssue">
                         <div class="rightSetTopIssueTitle">
@@ -94,27 +85,18 @@
                             <button class="layui-btn layui-btn-xs more" style="">更多></button>
                         </div>
 <!-- 在这里循环 置顶议题 数据-->
-                        <div class="rightSetTopIssueList" style="background: #fff;">
-                            <div class="setTopTitle">
-                                <a href="#">黄河沿岸生态保护修复的方案</a>
+                        <% for(istopIssue in istopIssues) { %>
+                        <div class="rightEmergencyIssuesList" style="background: #fff;">
+                            <div class="emergencyTitle">
+                                <a href="#">${istopIssue.title}</a>
                             </div>
                             <div class="userInformation">
-                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
-                                <span style="margin-left: 20px;">12-30 15:30</span>
+                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：${istopIssue.createName}</span>
+                                <span style="margin-left: 20px;">${istopIssue.createDate}</span>
                                 <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
                             </div>
                         </div>
-                        <div class="rightSetTopIssueList" style="background: #fff;">
-                            <div class="setTopTitle">
-                                <a href="#">黄河沿岸生态保护修复的方案</a>
-                            </div>
-                            <div class="userInformation">
-                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
-                                <span style="margin-left: 20px;">12-30 15:30</span>
-                                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
-                            </div>
-                        </div>
-                    </div>
+                        <% } %>
 <!--最热议题 -->
                     <div style="height: 33%;" class="rightHottestIssue">
                         <div class="rightHottestIssueTitle">
@@ -123,27 +105,21 @@
                             <button class="layui-btn layui-btn-xs more" style="">更多></button>
                         </div>
 <!-- 在这个 div 循环 最热议题 数据-->
-                        <div class="rightHottestIssueList" style="background: #fff;">
-                            <div class="hottestTitle">
-                                <a href="#">黄河沿岸生态保护修复的方案</a>
+                        <% for(hostIssue in hostIssues) { %>
+                        <div class="rightEmergencyIssuesList" style="background: #fff;">
+                            <div class="emergencyTitle">
+                                <a href="#">${hostIssue.title}</a>
                             </div>
                             <div class="userInformation">
-                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
-                                <span style="margin-left: 20px;">12-30 15:30</span>
+                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：${hostIssue.createName}</span>
+                                <span style="margin-left: 20px;">${hostIssue.createDate}</span>
                                 <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
                             </div>
                         </div>
-                        <div class="rightHottestIssueList" style="background: #fff;">
-                            <div class="hottestTitle">
-                                <a href="#">黄河沿岸生态保护修复的方案</a>
-                            </div>
-                            <div class="userInformation">
-                                <span><img src="/static/assets/images/touxiang.png" alt="" style="margin-right: 5px;">提议人：张新新</span>
-                                <span style="margin-left: 20px;">12-30 15:30</span>
-                                <span style="float: right;"><img src="/static/assets/images/yue.png" alt="" style="margin-right: 3px;">166</span>
-                            </div>
-                        </div>
+                        <% } %>
                     </div>
+        </div>
+            </div>
         </div>
             </div>
         </div>
@@ -191,32 +167,12 @@
                 {type: 'checkbox'},
                 {type: 'numbers', title:'序号'},
                 {title: '议题', field: 'title', align: 'center', valign: 'middle'},
-                {title: '发起人', field: 'content', align: 'center', valign: 'middle'},
-                {title: '提议时间', field: 'issueType', align: 'center', valign: 'middle'},
+                {title: '发起人', field: 'createName', align: 'center', valign: 'middle'},
+                {title: '提议时间', field: 'createDate', align: 'center', valign: 'middle'},
                 {align: 'center', toolbar: '#tableBar', title: '操作'}
             ]]
         });
-        //渲染表格
-        table.render({
-            elem: '#demo',
-            title:"",
-            url: '/discuss/issue/list',
-            toolbar: '',
-            where: $('form').serialize(),
-            page: true,
-            cols: [[
-                {type: 'numbers', title:'序号'},
-                {type: 'checkbox'},
-                {title: '标题', field: 'title', align: 'center', valign: 'middle', sort: true},
-                {title: '内容', field: 'content', align: 'center', valign: 'middle', sort: true},
-                {title: '类型', field: 'issueType', align: 'center', valign: 'middle', sort: true},
-                {title: '创建人姓名', field: 'createName', align: 'center', valign: 'middle', sort: true},
-                {title: '创建时间', field: 'createDate', align: 'center', valign: 'middle', sort: true},
 
-                {align: 'center', toolbar: '#tableBar', title: '操作'}
-
-            ]]
-        });
         // 搜索按钮点击事件
         $('#btnSearch').click(function () {
             table.reload('roleTable', {where: $('form').serialize()});
