@@ -182,10 +182,11 @@
             var formSelects = layui.formSelects;
             var dataValue ="";
 
-            var issueShiroType="";
+            var issueShiroType="全部";
 
             form.on('select(shiroType)', function(data){
                 issueShiroType = data.value;
+                console.log("issueShiroType "+issueShiroType);
                 if(data.value == '部分'){
                     $("#userList").show();
                 }
