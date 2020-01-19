@@ -120,7 +120,7 @@ public class IssueServiceImpl extends ServiceImpl<IssueMapper, Issue> implements
     public PageResult<Issue> listHostPage(Integer page, Integer limit, Issue issue) {
         List<Integer> ids = this.issueMapper.hostIdList();
         if(null == ids){
-            return new PageResult<>();
+            return new PageResult<Issue>();
         }
         Page<Issue> issuePage = new Page<Issue>(page, limit);
         QueryWrapper<Issue> ew = new QueryWrapper<Issue>();
