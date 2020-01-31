@@ -54,10 +54,12 @@ public class DetailController extends BaseController {
 
     /**
      * 跳转到疫情上报详情首页
+     * type 0当日上报 1当日未上报
      */
     @RequiresPermissions("detail:view")
     @RequestMapping("todaydetail")
     public String todaydetail(Model model,String type, HttpServletRequest request) {
+        model.addAttribute("type",type);
         return PREFIX + "detail";
     }
     /**
@@ -65,8 +67,7 @@ public class DetailController extends BaseController {
      */
     @RequestMapping("/detailadd")
     public String toAdd(Model model,HttpServletRequest request) {
-        model.addAttribute("1","1");
-        return PREFIX + "detail_add.html";
+        return PREFIX + "detail_add";
     }
 
     /**
@@ -75,7 +76,7 @@ public class DetailController extends BaseController {
     @RequestMapping("/detailupdate")
      @RequiresPermissions("detail:update")
     public String toUpdate(Model model,HttpServletRequest request) {
-        return PREFIX + "detail_edit.html";
+        return PREFIX + "detail_edit";
     }
 
 
