@@ -100,6 +100,8 @@ public class User extends BaseEntity {
      */
     @TableField(exist = false)
     private List<Role> roles;
-   // user_type
+
+
+    // user_type
 
 }

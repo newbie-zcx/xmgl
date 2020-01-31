@@ -1,9 +1,15 @@
 package com.scsoft.xgsb.yqsb.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.scsoft.scpt.annotation.SysLog;
 import com.scsoft.scpt.base.controller.BaseController;
 import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;
+import com.scsoft.xgsb.common.handler.SystemCommonHandler;
+import com.scsoft.xgsb.common.redis.RedisUtil;
+import com.scsoft.xgsb.system.entity.Depart;
+import com.scsoft.xgsb.system.entity.User;
+import com.scsoft.xgsb.system.service.IDepartService;
 import com.scsoft.xgsb.yqsb.entity.Detail;
 import com.scsoft.xgsb.yqsb.service.IDetailService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -42,6 +48,12 @@ public class DetailController extends BaseController {
 
     @Autowired
     private IDetailService detailService;
+    @Autowired
+    private IDepartService departService;
+    @Autowired
+    private RedisUtil redisUtil;
+
+
 
     /**
      * 跳转到疫情上报详情首页
@@ -67,6 +79,25 @@ public class DetailController extends BaseController {
      */
     @RequestMapping("/detailadd")
     public String toAdd(Model model,HttpServletRequest request) {
+        User user= SystemCommonHandler.getLoginUser();
+        List<Depart> departList=departService.getByUserId(user.getId());
+        if(redisUtil.hasKey("yqsb:detail:"+user.getId())){
+            String detailObj = (String) redisUtil.get("yqsb:detail:" + user.getId());
+            Detail detail=JSONObject.parseObject(detailObj,Detail.class);
+            model.addAttribute("detail",detail);
+        }else{
+            Detail detail=new Detail();
+            detail.setUserName(user.getRealName());
+            detail.setUserDepart(departList.get(0).getDepartName());
+            detail.setOutState("0");
+            detail.setWhFz("0");
+            detail.setHdXznsz("0");
+            detail.setFsgm("0");
+            detail.setJsfsgm("0");
+            detail.setStatus(0);
+            detail.setJtyx("1");
+            model.addAttribute("detail",detail);
+        }
         return PREFIX + "detail_add";
     }
 
@@ -108,7 +139,9 @@ public class DetailController extends BaseController {
     @RequiresPermissions("detail:add")
     @SysLog(operationType="add操作:",operationName="添加疫情上报详情")
     public JsonResult add(Detail detail) {
+        User user= SystemCommonHandler.getLoginUser();
         if (detailService.save(detail)) {
+            redisUtil.set("yqsb:detail:" + user.getId(),detail);
                 return JsonResult.ok("添加成功");
         } else {
             return JsonResult.error("添加失败");
