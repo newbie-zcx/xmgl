@@ -3,8 +3,6 @@ package com.scsoft.xgsb.common.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.scsoft.xgsb.common.filter.JwtAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -142,18 +140,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return new HttpMessageConverters(converter);
     }*/
 
-    @Bean
-    public FilterRegistrationBean contextFilterRegistrationBean() {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setFilter(this.JwtFilter());
-        registrationBean.addUrlPatterns("/api/*");
-        registrationBean.setName("JwtAuthenticationFilter");
-        registrationBean.setOrder(Integer.MAX_VALUE-4);
-        return registrationBean;
-    }
 
-    @Bean
-    public JwtAuthenticationFilter JwtFilter() {
-        return new JwtAuthenticationFilter();
-    }
 }

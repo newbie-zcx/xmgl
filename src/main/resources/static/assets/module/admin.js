@@ -10,7 +10,7 @@ layui.define(["layer"], function(f) {
 	var d = "admin-side-nav";
 	var c = "theme-admin";
 	var m = {
-		defaultTheme: "theme-admin",
+		defaultTheme: "theme-cyan",
 		tableName: "scsoft",
 		// 设置侧栏折叠
 		flexible: function(n) {

@@ -2,7 +2,6 @@ package com.scsoft.xgsb.common.config;
 
 import cn.hutool.core.codec.Base64;
 import com.scsoft.xgsb.common.filter.CustomRolesAuthorizationFilter;
-import com.scsoft.xgsb.common.filter.JwtAuthenticationFilter;
 import com.scsoft.xgsb.common.filter.MyLoginFilter;
 import com.scsoft.xgsb.common.shiro.RetryLimitCredentialsMatcher;
 import com.scsoft.xgsb.common.shiro.UserRealm;
@@ -61,7 +60,6 @@ public class ShiroConfiguration {
         Map<String, Filter> filtersMap = new LinkedHashMap<String, Filter>();
 //        filtersMap.put("roles", rolesAuthorizationFilter());
         filtersMap.put("myLoginFilter", new MyLoginFilter());
-        filtersMap.put("authcToken", jwtAuthenticationFilter());
 
 //        //限制同一帐号同时在线的个数。
 //        filtersMap.put("kickout", kickoutSessionControlFilter());
@@ -317,10 +315,5 @@ public class ShiroConfiguration {
     @Bean
     public CustomRolesAuthorizationFilter rolesAuthorizationFilter() {
         return new CustomRolesAuthorizationFilter();
-    }
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(){
-        JwtAuthenticationFilter jwt=new JwtAuthenticationFilter();
-        return jwt;
     }
 }
