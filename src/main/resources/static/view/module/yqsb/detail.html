@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>疫情上报详情</title>
+    <% include("../../layout/cssPart.html"){} %>
+</head>
+<body>
+
+<!-- 页面加载loading -->
+<% include("../../layout/loading.html"){} %>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">搜索：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">姓名：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="userName" id="userName" placeholder="请输入姓名" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">部门：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="userDepart" id="userDepart" placeholder="请输入部门" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">外出状态 0 在老家、1、在郑州、2、外出：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="outState" id="outState" placeholder="请输入外出状态 0 在老家、1、在郑州、2、外出" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">是否接触武汉反郑：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="whFz" id="whFz" placeholder="请输入是否接触武汉反郑" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">接触详情：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="whDetail" id="whDetail" placeholder="请输入接触详情" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">接触日期：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="whDate" id="whDate" placeholder="请输入接触日期" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">是否在信阳、周口、商丘、驻马店、南阳活动：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="hdXznsz" id="hdXznsz" placeholder="请输入是否在信阳、周口、商丘、驻马店、南阳活动" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="fsgm" id="fsgm" placeholder="请输入是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">家属是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="jsfsgm" id="jsfsgm" placeholder="请输入家属是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">所在地：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="address" id="address" placeholder="请输入所在地" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">个人状态是否良好 0是1否：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="status" id="status" placeholder="请输入个人状态是否良好 0是1否" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">交通是否影响，0、正常、1、封路 2、交通管制、3无法反郑：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="jtyx" id="jtyx" placeholder="请输入交通是否影响，0、正常、1、封路 2、交通管制、3无法反郑" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">解封时间：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="jfDate" id="jfDate" placeholder="请输入解封时间" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 表格顶部操作列 -->
+            <script type="text/html" id="detail-toolbar">
+                <div class="layui-btn-container">
+                    <%if(shiro.hasPermission("detail:add")){ %>
+                    <button id="btn1Add"  class="layui-btn  layui-btn-sm" lay-event="add">
+                        <i class="layui-icon">&#xe654;</i>添加
+                    </button>
+                    <% } %>
+                    <%if(shiro.hasPermission("detail:delete")){ %>
+                    <button id="btnDel" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">
+                        <i class="layui-icon">&#xe640;</i>删除
+                    </button>
+                    <% } %>
+                    <button id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" >
+                        <i class="layui-icon">&#xe67d;</i>导出
+                    </button>
+                </div>
+            </script>
+            <table class="layui-table" id="detailTable" lay-filter="detailTable"></table>
+
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="view">查看</a>
+    <%if(shiro.hasPermission("detail:update")){ %>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <% } %>
+    <%if(shiro.hasPermission("detail:delete")){ %>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <% } %>
+    <!--<a class="layui-btn layui-btn-xs" lay-event="auth">权限分配</a>-->
+</script>
+
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        //渲染表格
+        table.render({
+            elem: '#detailTable',
+            title:"疫情上报详情",
+            url: '/yqsb/detail/list',
+            toolbar: '#detail-toolbar',
+            where: $('form').serialize(),
+            page: true,
+            cols: [[
+                {type: 'numbers', title:'序号'},
+                {type: 'checkbox'},
+                {title: '姓名', field: 'userName', align: 'center', valign: 'middle', sort: true},
+                {title: '部门', field: 'userDepart', align: 'center', valign: 'middle', sort: true},
+                {title: '外出状态 0 在老家、1、在郑州、2、外出', field: 'outState', align: 'center', valign: 'middle', sort: true},
+                {title: '是否接触武汉反郑', field: 'whFz', align: 'center', valign: 'middle', sort: true},
+                {title: '接触详情', field: 'whDetail', align: 'center', valign: 'middle', sort: true},
+                {title: '接触日期', field: 'whDate', align: 'center', valign: 'middle', sort: true},
+                {title: '是否在信阳、周口、商丘、驻马店、南阳活动', field: 'hdXznsz', align: 'center', valign: 'middle', sort: true},
+                {title: '是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕', field: 'fsgm', align: 'center', valign: 'middle', sort: true},
+                {title: '家属是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕', field: 'jsfsgm', align: 'center', valign: 'middle', sort: true},
+                {title: '所在地', field: 'address', align: 'center', valign: 'middle', sort: true},
+                {title: '个人状态是否良好 0是1否', field: 'status', align: 'center', valign: 'middle', sort: true},
+                {title: '交通是否影响，0、正常、1、封路 2、交通管制、3无法反郑', field: 'jtyx', align: 'center', valign: 'middle', sort: true},
+                {title: '解封时间', field: 'jfDate', align: 'center', valign: 'middle', sort: true},
+               /* {field: 'orgType',align: 'center', sort: true, width:140,
+                    templet: function (d) {
+                        if (d.orgType=="1"){
+                            return "区域";
+                        } else if (d.orgType=="2"){
+                            return "职能部门";
+                        }
+                    },
+                    title: '机构类型'},
+                    { field: 'createDate', width:180, sort: true, templet: function (d) {
+                    return util.toDateString(d.createDate);
+                      },align:'center', title: '创建时间'},
+                    */
+                {align: 'center', toolbar: '#tableBar', title: '操作'}
+            ]]
+        });
+
+
+        //头工具栏事件
+        table.on('toolbar(detailTable)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'add':
+                    showAddModel();
+                    break;
+                case 'del':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要删除的数据', {icon: 2});
+                    } else {
+                        var data = checkStatus.data;
+                        var id_str="";
+                        for (var i=0;i<data.length;i++){
+                            id_str +=data[i].id+",";
+                        }
+                        id_str = id_str.substr(0, id_str.length-1);
+                        layer.confirm('真的删除么', function(index){
+                            layer.load(2);
+                            $.post('detail/batchDelete', {
+                                departIds: id_str
+                            }, function (data) {
+                                layer.closeAll('loading');
+                                if (data.code == 200) {
+                                    layer.msg(data.msg, {icon: 1});
+                                    obj.del();
+                                    // table.reload('疫情上报详情Table');
+                                } else {
+                                    layer.msg(data.msg, {icon: 2});
+                                }
+                            });
+                        });
+                    }
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table.exportFile(ins1.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            };
+        });
+
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            table.reload('roleTable', {where: $('form').serialize()});
+        });
+
+        // 工具条点击事件
+        table.on('tool(detailTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') { //修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } else if (obj.event === 'view') {  //查看
+                showViewModel(obj.data.id);
+            }
+        });
+
+        // 删除
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post('detail/delete', {
+                    detailId: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+
+        // 显示编辑弹窗
+        function showEditModel(data) {
+            admin.putTempData('t_detail', data);
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                title: '修改疫情上报详情',
+                area: ['350px', '380px'],
+                content: '/yqsb/detail/detailupdate',
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('疫情上报详情Table');  // 成功刷新表格
+                }
+            });
+        }
+
+        // 显示编辑弹窗
+        function showAddModel(data) {
+            top.layui.admin.open({
+                type: 2,
+                title: '添加疫情上报详情',
+                area: ['350px', '380px'],
+                content: '/yqsb/detail/detailadd',
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('roleTable');  // 成功刷新表格
+                }
+            });
+        }
+
+        // 查看
+        function showViewModel(detailId) {
+            top.layui.admin.open({
+                type: 2,
+                title: '查看',
+                area: ['380px', '455px'],
+                content: 'detail/detail/' + detailId
+            });
+        }
+        /* // 导出excel
+                $('#btnExp').click(function () {
+                    var checkRows = table.checkStatus('detailTable');
+                    if (checkRows.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table.exportFile(ins1.config.id, checkRows.data, 'xls');
+                    }
+                });*/
+    });
+
+</script>
+</body>
+
+</html>
