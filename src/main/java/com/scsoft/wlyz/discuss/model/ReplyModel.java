@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.discuss.model;
+package com.scsoft.xgsb.discuss.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;

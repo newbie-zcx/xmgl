@@ -1,5 +1,5 @@
-package com.scsoft.wlyz.common.utils;/*
-package com.scsoft.wlyz.api;
+package com.scsoft.xgsb.common.utils;/*
+package com.scsoft.xgsb.api;
 
 import com.sun.org.apache.xml.internal.security.algorithms.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;

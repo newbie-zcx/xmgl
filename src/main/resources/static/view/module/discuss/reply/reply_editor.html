@@ -118,7 +118,7 @@
                 if(code == '200'){
                     for(var i=0; i<res.data.length; i++){
                         var dataValue = res.data[i];
-                        var url = "http://127.0.0.1:8088/upload/wlyz/"+dataValue.filename;
+                        var url = "http://127.0.0.1:8088/upload/xgsb/"+dataValue.filename;
                         url = encodeURIComponent(url);
                         var windowShow = 'http://127.0.0.1:8012/onlinePreview?url='+url;
                         var windowShowBlank = "<a class='btn btn-default' id='"+dataValue.id+"' target='_blank' href="+windowShow+">"+dataValue.sourceName+"</a>";

@@ -1,7 +1,7 @@
-package com.scsoft.wlyz.generator.service;
+package com.scsoft.xgsb.generator.service;
 
-import com.scsoft.wlyz.generator.entity.TableInfo;
-import com.scsoft.wlyz.generator.utils.Query;
+import com.scsoft.xgsb.generator.entity.TableInfo;
+import com.scsoft.xgsb.generator.utils.Query;
 import com.scsoft.scpt.common.PageResult;
 
 /**

@@ -1,11 +1,11 @@
-package com.scsoft.wlyz.generator.controller;
+package com.scsoft.xgsb.generator.controller;
 
 import com.baomidou.mybatisplus.extension.toolkit.SqlRunner;
-import com.scsoft.wlyz.generator.engine.base.GeneratorConfig;
-import com.scsoft.wlyz.generator.entity.TableInfo;
-import com.scsoft.wlyz.generator.modle.GenConfig;
-import com.scsoft.wlyz.generator.service.IGeneratorService;
-import com.scsoft.wlyz.generator.utils.Query;
+import com.scsoft.xgsb.generator.engine.base.GeneratorConfig;
+import com.scsoft.xgsb.generator.entity.TableInfo;
+import com.scsoft.xgsb.generator.modle.GenConfig;
+import com.scsoft.xgsb.generator.service.IGeneratorService;
+import com.scsoft.xgsb.generator.utils.Query;
 import com.scsoft.scpt.base.controller.BaseController;
 import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;

@@ -1,17 +1,17 @@
-package com.scsoft.wlyz.system.service.impl;
+package com.scsoft.xgsb.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.scsoft.wlyz.common.shiro.EndecryptUtil;
-import com.scsoft.wlyz.system.entity.Role;
-import com.scsoft.wlyz.system.entity.User;
-import com.scsoft.wlyz.system.entity.UserDepart;
-import com.scsoft.wlyz.system.entity.UserRole;
-import com.scsoft.wlyz.system.mapper.UserDepartMapper;
-import com.scsoft.wlyz.system.mapper.UserMapper;
-import com.scsoft.wlyz.system.mapper.UserRoleMapper;
-import com.scsoft.wlyz.system.service.IUserService;
+import com.scsoft.xgsb.common.shiro.EndecryptUtil;
+import com.scsoft.xgsb.system.entity.Role;
+import com.scsoft.xgsb.system.entity.User;
+import com.scsoft.xgsb.system.entity.UserDepart;
+import com.scsoft.xgsb.system.entity.UserRole;
+import com.scsoft.xgsb.system.mapper.UserDepartMapper;
+import com.scsoft.xgsb.system.mapper.UserMapper;
+import com.scsoft.xgsb.system.mapper.UserRoleMapper;
+import com.scsoft.xgsb.system.service.IUserService;
 import com.scsoft.scpt.common.PageResult;
 import com.scsoft.scpt.exception.BusinessException;
 import com.scsoft.scpt.exception.ParameterException;

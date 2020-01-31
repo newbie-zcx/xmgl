@@ -1,7 +1,7 @@
-package com.scsoft.wlyz.syslog.service;
+package com.scsoft.xgsb.syslog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.scsoft.wlyz.syslog.entity.SysLoginRecord;
+import com.scsoft.xgsb.syslog.entity.SysLoginRecord;
 import com.scsoft.scpt.common.PageResult;
 
 /**

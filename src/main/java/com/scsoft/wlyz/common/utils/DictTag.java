@@ -1,5 +1,5 @@
-package com.scsoft.wlyz.common.utils;/*
-package com.scsoft.wlyz.common.utils;
+package com.scsoft.xgsb.common.utils;/*
+package com.scsoft.xgsb.common.utils;
 
 import org.beetl.core.GeneralVarTagBinding;
 

@@ -1,9 +1,9 @@
-package com.scsoft.wlyz.system.service.impl;
+package com.scsoft.xgsb.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.scsoft.wlyz.system.entity.UserOnline;
-import com.scsoft.wlyz.system.mapper.UserOnlineMapper;
-import com.scsoft.wlyz.system.service.IUserOnlineService;
+import com.scsoft.xgsb.system.entity.UserOnline;
+import com.scsoft.xgsb.system.mapper.UserOnlineMapper;
+import com.scsoft.xgsb.system.service.IUserOnlineService;
 import org.springframework.stereotype.Service;
 
 /**

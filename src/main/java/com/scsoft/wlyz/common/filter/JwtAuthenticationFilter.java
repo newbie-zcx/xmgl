@@ -1,8 +1,8 @@
-package com.scsoft.wlyz.common.filter;
+package com.scsoft.xgsb.common.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scsoft.wlyz.common.utils.TokenUtil;
+import com.scsoft.xgsb.common.utils.TokenUtil;
 import com.scsoft.scpt.utils.WebUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;

@@ -1,10 +1,10 @@
-package com.scsoft.wlyz.discuss.service;
+package com.scsoft.xgsb.discuss.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.scsoft.scpt.common.PageResult;
-import com.scsoft.wlyz.discuss.entity.Issue;
-import com.scsoft.wlyz.discuss.model.IssueModel;
+import com.scsoft.xgsb.discuss.entity.Issue;
+import com.scsoft.xgsb.discuss.model.IssueModel;
 
 import java.util.List;
 import java.util.Map;

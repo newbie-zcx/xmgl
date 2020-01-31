@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.discuss.controller;
+package com.scsoft.xgsb.discuss.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -6,14 +6,14 @@ import com.scsoft.scpt.annotation.SysLog;
 import com.scsoft.scpt.base.controller.BaseController;
 import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;
-import com.scsoft.wlyz.common.handler.SystemCommonHandler;
-import com.scsoft.wlyz.discuss.entity.Issue;
-import com.scsoft.wlyz.discuss.model.IssueModel;
-import com.scsoft.wlyz.discuss.service.IIssueService;
-import com.scsoft.wlyz.system.entity.Depart;
-import com.scsoft.wlyz.system.entity.User;
-import com.scsoft.wlyz.system.service.IDepartService;
-import com.scsoft.wlyz.system.service.IUserService;
+import com.scsoft.xgsb.common.handler.SystemCommonHandler;
+import com.scsoft.xgsb.discuss.entity.Issue;
+import com.scsoft.xgsb.discuss.model.IssueModel;
+import com.scsoft.xgsb.discuss.service.IIssueService;
+import com.scsoft.xgsb.system.entity.Depart;
+import com.scsoft.xgsb.system.entity.User;
+import com.scsoft.xgsb.system.service.IDepartService;
+import com.scsoft.xgsb.system.service.IUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

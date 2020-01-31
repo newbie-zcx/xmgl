@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.config;
+package com.scsoft.xgsb.common.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

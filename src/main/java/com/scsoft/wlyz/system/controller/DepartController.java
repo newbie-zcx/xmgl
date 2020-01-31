@@ -1,12 +1,12 @@
-package com.scsoft.wlyz.system.controller;
+package com.scsoft.xgsb.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.scsoft.wlyz.common.handler.SystemCommonHandler;
-import com.scsoft.wlyz.system.entity.Depart;
-import com.scsoft.wlyz.system.service.IDepartService;
-import com.scsoft.wlyz.system.service.IUserService;
+import com.scsoft.xgsb.common.handler.SystemCommonHandler;
+import com.scsoft.xgsb.system.entity.Depart;
+import com.scsoft.xgsb.system.service.IDepartService;
+import com.scsoft.xgsb.system.service.IUserService;
 import com.scsoft.scpt.annotation.SysLog;
 import com.scsoft.scpt.base.controller.BaseController;
 import com.scsoft.scpt.base.enitity.Dtree;

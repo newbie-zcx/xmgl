@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.scsoft.wlyz.system.mapper.DictGroupMapper">
+<mapper namespace="com.scsoft.xgsb.system.mapper.DictGroupMapper">
 
     <!-- 开启二级缓存 -->
    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.scsoft.wlyz.system.entity.DictGroup">
+    <resultMap id="BaseResultMap" type="com.scsoft.xgsb.system.entity.DictGroup">
         <id column="id" property="id" />
     <result column="create_id" property="createId" />
     <result column="create_name" property="createName" />
@@ -39,7 +39,7 @@
             and g.id = #{dictGroupId}
         </if>
     </select>
-    <resultMap id="dictgroupmap" type="com.scsoft.wlyz.system.entity.DictGroup">
+    <resultMap id="dictgroupmap" type="com.scsoft.xgsb.system.entity.DictGroup">
         <id column="id" property="id" />
         <result column="gcreate_id" property="createId" />
         <result column="gcreate_name" property="createName" />
@@ -51,8 +51,8 @@
         <result column="gupdate_name" property="updateName" />
         <result column="gremark" property="remark" />
         <result column="gis_del" property="isDel" />
-        <collection property="dicts"  ofType="com.scsoft.wlyz.system.entity.Dict">
-       <!--select="com.scsoft.wlyz.system.mapper.DictMapper.findById"-->
+        <collection property="dicts"  ofType="com.scsoft.xgsb.system.entity.Dict">
+       <!--select="com.scsoft.xgsb.system.mapper.DictMapper.findById"-->
             <id column="did" property="id" />
             <result column="create_id" property="createId" />
             <result column="create_name" property="createName" />

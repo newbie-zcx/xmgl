@@ -1,10 +1,10 @@
-package com.scsoft.wlyz.generator.engine.base;
+package com.scsoft.xgsb.generator.engine.base;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.scsoft.wlyz.generator.modle.DataBaseConfig;
-import com.scsoft.wlyz.generator.modle.DbTypeDriver;
-import com.scsoft.wlyz.generator.modle.GenConfig;
+import com.scsoft.xgsb.generator.modle.DataBaseConfig;
+import com.scsoft.xgsb.generator.modle.DbTypeDriver;
+import com.scsoft.xgsb.generator.modle.GenConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 

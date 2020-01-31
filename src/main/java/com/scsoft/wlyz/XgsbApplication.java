@@ -1,4 +1,4 @@
-package com.scsoft.wlyz;
+package com.scsoft.xgsb;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
  */
 @SpringBootApplication
 @CrossOrigin
-public class WlyzProcessApplication extends SpringBootServletInitializer {
-    private final static Logger logger = LoggerFactory.getLogger(WlyzProcessApplication.class);
+public class XgsbApplication extends SpringBootServletInitializer {
+    private final static Logger logger = LoggerFactory.getLogger(XgsbApplication.class);
     public static void main(String[] args) {
-        SpringApplication.run(WlyzProcessApplication.class, args);
+        SpringApplication.run(XgsbApplication.class, args);
         logger.info("============服务启动完成!=============");
     }
    /**

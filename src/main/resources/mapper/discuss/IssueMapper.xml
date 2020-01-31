@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.scsoft.wlyz.discuss.mapper.IssueMapper">
+<mapper namespace="com.scsoft.xgsb.discuss.mapper.IssueMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.scsoft.wlyz.discuss.entity.Issue">
+    <resultMap id="BaseResultMap" type="com.scsoft.xgsb.discuss.entity.Issue">
         <id column="ID" property="id" />
         <result column="TITLE" property="title" />
         <result column="CONTENT" property="content" />

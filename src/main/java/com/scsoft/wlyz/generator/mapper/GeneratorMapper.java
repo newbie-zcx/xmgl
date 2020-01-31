@@ -1,9 +1,9 @@
-package com.scsoft.wlyz.generator.mapper;
+package com.scsoft.xgsb.generator.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
-import com.scsoft.wlyz.generator.entity.TableInfo;
+import com.scsoft.xgsb.generator.entity.TableInfo;
 import com.scsoft.scpt.annotation.MyBatisDao;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

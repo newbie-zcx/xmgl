@@ -1,7 +1,7 @@
-package com.scsoft.wlyz.syslog.controller;
+package com.scsoft.xgsb.syslog.controller;
 
-import com.scsoft.wlyz.syslog.entity.SysLoginRecord;
-import com.scsoft.wlyz.syslog.service.ISysLoginRecordService;
+import com.scsoft.xgsb.syslog.entity.SysLoginRecord;
+import com.scsoft.xgsb.syslog.service.ISysLoginRecordService;
 import com.scsoft.scpt.base.controller.BaseController;
 import com.scsoft.scpt.common.PageResult;
 import org.apache.commons.lang3.StringUtils;

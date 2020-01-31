@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.redis;
+package com.scsoft.xgsb.common.redis;
 
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,11 @@
-package com.scsoft.wlyz.common.shiro;
+package com.scsoft.xgsb.common.shiro;
 
-import com.scsoft.wlyz.system.entity.Authority;
-import com.scsoft.wlyz.system.entity.Role;
-import com.scsoft.wlyz.system.entity.User;
-import com.scsoft.wlyz.system.service.IAuthorityService;
-import com.scsoft.wlyz.system.service.IRoleService;
-import com.scsoft.wlyz.system.service.IUserService;
+import com.scsoft.xgsb.system.entity.Authority;
+import com.scsoft.xgsb.system.entity.Role;
+import com.scsoft.xgsb.system.entity.User;
+import com.scsoft.xgsb.system.service.IAuthorityService;
+import com.scsoft.xgsb.system.service.IRoleService;
+import com.scsoft.xgsb.system.service.IUserService;
 import com.scsoft.scpt.utils.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;

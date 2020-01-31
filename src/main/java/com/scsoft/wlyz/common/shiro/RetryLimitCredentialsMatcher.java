@@ -1,6 +1,6 @@
-package com.scsoft.wlyz.common.shiro;
+package com.scsoft.xgsb.common.shiro;
 
-import com.scsoft.wlyz.common.redis.RedisUtil;
+import com.scsoft.xgsb.common.redis.RedisUtil;
 import com.scsoft.scpt.constant.UserConstants;
 import com.scsoft.scpt.utils.StringUtils;
 import org.apache.shiro.authc.AuthenticationInfo;

@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.file.entity;
+package com.scsoft.xgsb.file.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

@@ -1,12 +1,12 @@
-package com.scsoft.wlyz.system.service.impl;
+package com.scsoft.xgsb.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.scsoft.wlyz.system.entity.Authority;
-import com.scsoft.wlyz.system.entity.RoleAuthority;
-import com.scsoft.wlyz.system.mapper.AuthorityMapper;
-import com.scsoft.wlyz.system.mapper.RoleAuthorityMapper;
-import com.scsoft.wlyz.system.service.IAuthorityService;
+import com.scsoft.xgsb.system.entity.Authority;
+import com.scsoft.xgsb.system.entity.RoleAuthority;
+import com.scsoft.xgsb.system.mapper.AuthorityMapper;
+import com.scsoft.xgsb.system.mapper.RoleAuthorityMapper;
+import com.scsoft.xgsb.system.service.IAuthorityService;
 import com.scsoft.scpt.exception.BusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

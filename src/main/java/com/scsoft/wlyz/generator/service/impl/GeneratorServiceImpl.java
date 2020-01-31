@@ -1,12 +1,12 @@
-package com.scsoft.wlyz.generator.service.impl;
+package com.scsoft.xgsb.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IOUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.scsoft.wlyz.generator.entity.TableInfo;
-import com.scsoft.wlyz.generator.mapper.GeneratorMapper;
-import com.scsoft.wlyz.generator.service.IGeneratorService;
-import com.scsoft.wlyz.generator.utils.Query;
+import com.scsoft.xgsb.generator.entity.TableInfo;
+import com.scsoft.xgsb.generator.mapper.GeneratorMapper;
+import com.scsoft.xgsb.generator.service.IGeneratorService;
+import com.scsoft.xgsb.generator.utils.Query;
 import com.scsoft.scpt.common.PageResult;
 import com.scsoft.scpt.utils.StringUtils;
 import org.apache.ibatis.session.RowBounds;

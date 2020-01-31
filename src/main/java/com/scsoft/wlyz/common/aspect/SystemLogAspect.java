@@ -1,8 +1,8 @@
-package com.scsoft.wlyz.common.aspect;
+package com.scsoft.xgsb.common.aspect;
 
-import com.scsoft.wlyz.syslog.entity.SysLog;
-import com.scsoft.wlyz.syslog.service.ISysLogService;
-import com.scsoft.wlyz.system.entity.User;
+import com.scsoft.xgsb.syslog.entity.SysLog;
+import com.scsoft.xgsb.syslog.service.ISysLogService;
+import com.scsoft.xgsb.system.entity.User;
 import com.scsoft.scpt.utils.WebUtil;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;

@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.generator.entity;
+package com.scsoft.xgsb.generator.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

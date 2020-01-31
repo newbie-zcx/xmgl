@@ -1,13 +1,13 @@
-package com.scsoft.wlyz.system.controller;
+package com.scsoft.xgsb.system.controller;
 
-import com.scsoft.wlyz.common.handler.SystemCommonHandler;
-import com.scsoft.wlyz.common.shiro.EndecryptUtil;
-import com.scsoft.wlyz.system.entity.Depart;
-import com.scsoft.wlyz.system.entity.Role;
-import com.scsoft.wlyz.system.entity.User;
-import com.scsoft.wlyz.system.service.IDepartService;
-import com.scsoft.wlyz.system.service.IRoleService;
-import com.scsoft.wlyz.system.service.IUserService;
+import com.scsoft.xgsb.common.handler.SystemCommonHandler;
+import com.scsoft.xgsb.common.shiro.EndecryptUtil;
+import com.scsoft.xgsb.system.entity.Depart;
+import com.scsoft.xgsb.system.entity.Role;
+import com.scsoft.xgsb.system.entity.User;
+import com.scsoft.xgsb.system.service.IDepartService;
+import com.scsoft.xgsb.system.service.IRoleService;
+import com.scsoft.xgsb.system.service.IUserService;
 import com.scsoft.scpt.annotation.SysLog;
 import com.scsoft.scpt.base.controller.BaseController;
 import com.scsoft.scpt.common.JsonResult;

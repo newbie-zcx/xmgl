@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.tag;
+package com.scsoft.xgsb.common.tag;
 
 import org.beetl.core.GeneralVarTagBinding;
 import org.springframework.context.annotation.Scope;

@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.exception;
+package com.scsoft.xgsb.common.exception;
 
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;

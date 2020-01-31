@@ -1,9 +1,9 @@
-package com.scsoft.wlyz.syslog.service.impl;
+package com.scsoft.xgsb.syslog.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.scsoft.wlyz.syslog.entity.SysLog;
-import com.scsoft.wlyz.syslog.mapper.SysLogMapper;
-import com.scsoft.wlyz.syslog.service.ISysLogService;
+import com.scsoft.xgsb.syslog.entity.SysLog;
+import com.scsoft.xgsb.syslog.mapper.SysLogMapper;
+import com.scsoft.xgsb.syslog.service.ISysLogService;
 import org.springframework.stereotype.Service;
 
 /**

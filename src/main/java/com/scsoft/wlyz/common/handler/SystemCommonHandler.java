@@ -1,6 +1,6 @@
-package com.scsoft.wlyz.common.handler;
+package com.scsoft.xgsb.common.handler;
 
-import com.scsoft.wlyz.system.entity.User;
+import com.scsoft.xgsb.system.entity.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -19,7 +19,7 @@ public class SystemCommonHandler {
     public static final String SYSTEM_DICT = "system:dict:";
     public static final String FILE_VIEW = "/system/file/view?fileId=";
     public static final String DOWNLOAD_FILE = "/system/file/downloadFile/";
-    @Value("${wlyz.version}")
+    @Value("${xgsb.version}")
     public static final String version="v1.0";
     public static final String NEW_PATH = "/api/"+version+"/dynamic/newView?editorId=";
     public static Subject getSubject()

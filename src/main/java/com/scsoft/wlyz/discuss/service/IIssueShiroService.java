@@ -1,6 +1,6 @@
-package com.scsoft.wlyz.discuss.service;
+package com.scsoft.xgsb.discuss.service;
 
-import com.scsoft.wlyz.discuss.entity.IssueShiro;
+import com.scsoft.xgsb.discuss.entity.IssueShiro;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.scsoft.scpt.common.PageResult;
 

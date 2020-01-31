@@ -1,7 +1,7 @@
-package com.scsoft.wlyz.common.shiro;
+package com.scsoft.xgsb.common.shiro;
 
 import com.alibaba.fastjson.JSON;
-import com.scsoft.wlyz.system.entity.User;
+import com.scsoft.xgsb.system.entity.User;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.session.Session;

@@ -1,8 +1,8 @@
-package com.scsoft.wlyz.syslog.mapper;
+package com.scsoft.xgsb.syslog.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.scsoft.wlyz.syslog.entity.SysLoginRecord;
+import com.scsoft.xgsb.syslog.entity.SysLoginRecord;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

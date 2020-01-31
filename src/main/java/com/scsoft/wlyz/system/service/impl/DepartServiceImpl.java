@@ -1,11 +1,11 @@
-package com.scsoft.wlyz.system.service.impl;
+package com.scsoft.xgsb.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.scsoft.wlyz.system.entity.Depart;
-import com.scsoft.wlyz.system.mapper.DepartMapper;
-import com.scsoft.wlyz.system.service.IDepartService;
+import com.scsoft.xgsb.system.entity.Depart;
+import com.scsoft.xgsb.system.mapper.DepartMapper;
+import com.scsoft.xgsb.system.service.IDepartService;
 
 import org.springframework.stereotype.Service;
 

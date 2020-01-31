@@ -1,11 +1,11 @@
-package com.scsoft.wlyz.common.config;
+package com.scsoft.xgsb.common.config;
 
 import cn.hutool.core.codec.Base64;
-import com.scsoft.wlyz.common.filter.CustomRolesAuthorizationFilter;
-import com.scsoft.wlyz.common.filter.JwtAuthenticationFilter;
-import com.scsoft.wlyz.common.filter.MyLoginFilter;
-import com.scsoft.wlyz.common.shiro.RetryLimitCredentialsMatcher;
-import com.scsoft.wlyz.common.shiro.UserRealm;
+import com.scsoft.xgsb.common.filter.CustomRolesAuthorizationFilter;
+import com.scsoft.xgsb.common.filter.JwtAuthenticationFilter;
+import com.scsoft.xgsb.common.filter.MyLoginFilter;
+import com.scsoft.xgsb.common.shiro.RetryLimitCredentialsMatcher;
+import com.scsoft.xgsb.common.shiro.UserRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -73,7 +73,7 @@ public class ShiroConfiguration {
         //配置记住我或认证通过可以访问的地址
         filterChainDefinitionManager.put("/static/assets/**",  "anon");
         // 配置静态映射文件过滤
-        filterChainDefinitionManager.put("/upload/wlyz/**", "anon");
+        filterChainDefinitionManager.put("/upload/xgsb/**", "anon");
         filterChainDefinitionManager.put("/view/login.html", "anon");
 //        filterChainDefinitionManager.put("/api/**", "authcToken");
         filterChainDefinitionManager.put("/system/file/**", "anon");

@@ -1,12 +1,12 @@
-package com.scsoft.wlyz.discuss.service.impl;
+package com.scsoft.xgsb.discuss.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scsoft.scpt.common.PageResult;
 import org.springframework.stereotype.Service;
-import com.scsoft.wlyz.discuss.entity.IssueFile;
-import com.scsoft.wlyz.discuss.mapper.IssueFileMapper;
-import com.scsoft.wlyz.discuss.service.IIssueFileService;
+import com.scsoft.xgsb.discuss.entity.IssueFile;
+import com.scsoft.xgsb.discuss.mapper.IssueFileMapper;
+import com.scsoft.xgsb.discuss.service.IIssueFileService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 

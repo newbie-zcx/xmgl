@@ -1,7 +1,7 @@
-package com.scsoft.wlyz.syslog.service;
+package com.scsoft.xgsb.syslog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.scsoft.wlyz.syslog.entity.SysLog;
+import com.scsoft.xgsb.syslog.entity.SysLog;
 
 /**
  * @Description: 系统日志表 服务类

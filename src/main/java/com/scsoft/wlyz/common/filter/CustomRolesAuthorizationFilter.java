@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.filter;
+package com.scsoft.xgsb.common.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.scsoft.scpt.common.JsonResult;

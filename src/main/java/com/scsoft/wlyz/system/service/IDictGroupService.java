@@ -1,8 +1,8 @@
-package com.scsoft.wlyz.system.service;
+package com.scsoft.xgsb.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.scsoft.wlyz.system.entity.DictGroup;
+import com.scsoft.xgsb.system.entity.DictGroup;
 import com.scsoft.scpt.common.PageResult;
 
 /**

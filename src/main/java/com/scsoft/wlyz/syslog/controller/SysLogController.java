@@ -1,11 +1,11 @@
-package com.scsoft.wlyz.syslog.controller;
+package com.scsoft.xgsb.syslog.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.scsoft.wlyz.syslog.entity.SysLog;
-import com.scsoft.wlyz.syslog.service.impl.SysLogServiceImpl;
+import com.scsoft.xgsb.syslog.entity.SysLog;
+import com.scsoft.xgsb.syslog.service.impl.SysLogServiceImpl;
 import com.scsoft.scpt.base.controller.BaseController;
 import com.scsoft.scpt.common.PageResult;
 import org.apache.commons.lang3.StringUtils;

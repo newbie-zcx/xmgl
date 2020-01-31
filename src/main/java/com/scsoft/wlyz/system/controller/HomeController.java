@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.system.controller;
+package com.scsoft.xgsb.system.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

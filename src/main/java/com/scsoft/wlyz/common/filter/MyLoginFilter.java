@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.filter;
+package com.scsoft.xgsb.common.filter;
 
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;

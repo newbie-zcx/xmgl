@@ -10,9 +10,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.scsoft</groupId>
-    <artifactId>wlyz</artifactId>
+    <artifactId>xgsb</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>wlyz</name>
+    <name>xgsb</name>
     <description>河南省生态环境厅政协委员网络议政服务平台</description>
 
     <properties>
@@ -153,17 +153,6 @@
         </dependency>
 
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>${jjwt.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.7.0</version>
-        </dependency>
-        <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>1.4</version>
@@ -190,10 +179,15 @@
         </dependency>
     </dependencies>
     <repositories>
-        <repository>
+       <!-- <repository>
             <id>my_maven_repo</id>
             <name>Repository</name>
-            <url>http://192.168.15.206:9400/nexus/repository/maven-public/</url>
+            <url>http://maven.dzzw.scsoft.com.cn:13130/repository/maven-public/</url>
+        </repository>-->
+        <repository>
+            <id>nexus-aliyun</id>
+            <name>Nexus aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
         </repository>
     </repositories>
     <build>

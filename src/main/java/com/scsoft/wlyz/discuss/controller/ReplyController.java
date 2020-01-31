@@ -1,18 +1,18 @@
-package com.scsoft.wlyz.discuss.controller;
+package com.scsoft.xgsb.discuss.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.scsoft.scpt.annotation.SysLog;
-import com.scsoft.wlyz.discuss.entity.Issue;
-import com.scsoft.wlyz.discuss.model.ReplyModel;
-import com.scsoft.wlyz.discuss.service.IIssueService;
+import com.scsoft.xgsb.discuss.entity.Issue;
+import com.scsoft.xgsb.discuss.model.ReplyModel;
+import com.scsoft.xgsb.discuss.service.IIssueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.scsoft.wlyz.discuss.service.IReplyService;
-import com.scsoft.wlyz.discuss.entity.Reply;
+import com.scsoft.xgsb.discuss.service.IReplyService;
+import com.scsoft.xgsb.discuss.entity.Reply;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

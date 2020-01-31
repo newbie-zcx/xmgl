@@ -1,7 +1,7 @@
-package com.scsoft.wlyz.system.mapper;
+package com.scsoft.xgsb.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.scsoft.wlyz.system.entity.RoleAuthority;
+import com.scsoft.xgsb.system.entity.RoleAuthority;
 import com.scsoft.scpt.annotation.MyBatisDao;
 import org.apache.ibatis.annotations.Param;
 

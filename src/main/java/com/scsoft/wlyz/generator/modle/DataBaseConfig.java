@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.generator.modle;
+package com.scsoft.xgsb.generator.modle;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

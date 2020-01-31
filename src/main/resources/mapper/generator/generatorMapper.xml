@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.scsoft.wlyz.generator.mapper.GeneratorMapper">
-	<resultMap type="com.scsoft.wlyz.generator.entity.TableInfo" id="TableInfoResult">
+<mapper namespace="com.scsoft.xgsb.generator.mapper.GeneratorMapper">
+	<resultMap type="com.scsoft.xgsb.generator.entity.TableInfo" id="TableInfoResult">
 		<result property="tableName"   column="table_name"      />
 		<result property="comments" column="table_comment"   />
 		<result property="createTime"  column="create_time"     />

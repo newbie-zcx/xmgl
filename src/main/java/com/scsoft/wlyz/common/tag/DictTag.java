@@ -1,7 +1,7 @@
-package com.scsoft.wlyz.common.tag;
+package com.scsoft.xgsb.common.tag;
 
-import com.scsoft.wlyz.system.entity.Dict;
-import com.scsoft.wlyz.system.service.IDictService;
+import com.scsoft.xgsb.system.entity.Dict;
+import com.scsoft.xgsb.system.service.IDictService;
 import org.apache.commons.lang3.StringUtils;
 import org.beetl.core.GeneralVarTagBinding;
 import org.springframework.beans.factory.annotation.Autowired;

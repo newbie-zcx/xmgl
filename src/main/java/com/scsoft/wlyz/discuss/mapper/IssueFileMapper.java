@@ -1,6 +1,6 @@
-package com.scsoft.wlyz.discuss.mapper;
+package com.scsoft.xgsb.discuss.mapper;
 
-import com.scsoft.wlyz.discuss.entity.IssueFile;
+import com.scsoft.xgsb.discuss.entity.IssueFile;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

@@ -1,7 +1,7 @@
-package com.scsoft.wlyz.file.mapper;
+package com.scsoft.xgsb.file.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.scsoft.wlyz.file.entity.FileInfo;
+import com.scsoft.xgsb.file.entity.FileInfo;
 
 /**
  * <p>

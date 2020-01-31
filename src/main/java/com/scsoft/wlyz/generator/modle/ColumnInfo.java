@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.generator.modle;
+package com.scsoft.xgsb.generator.modle;
 /**
  * 数据库表列信息
  */

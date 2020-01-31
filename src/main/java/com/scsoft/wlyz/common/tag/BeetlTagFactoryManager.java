@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.tag;
+package com.scsoft.xgsb.common.tag;
 
 import org.beetl.core.Tag;
 import org.beetl.core.TagFactory;

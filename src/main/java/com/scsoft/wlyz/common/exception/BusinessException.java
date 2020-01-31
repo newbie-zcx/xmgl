@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.exception;
+package com.scsoft.xgsb.common.exception;
 
 /**
  * 业务异常

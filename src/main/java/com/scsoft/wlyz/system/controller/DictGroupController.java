@@ -1,9 +1,9 @@
-package com.scsoft.wlyz.system.controller;
+package com.scsoft.xgsb.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.scsoft.wlyz.system.entity.Dict;
-import com.scsoft.wlyz.system.entity.DictGroup;
-import com.scsoft.wlyz.system.service.IDictGroupService;
+import com.scsoft.xgsb.system.entity.Dict;
+import com.scsoft.xgsb.system.entity.DictGroup;
+import com.scsoft.xgsb.system.service.IDictGroupService;
 import com.scsoft.scpt.annotation.SysLog;
 import com.scsoft.scpt.base.controller.BaseController;
 import com.scsoft.scpt.common.JsonResult;

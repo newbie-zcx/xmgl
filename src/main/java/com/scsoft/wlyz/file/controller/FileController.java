@@ -1,10 +1,10 @@
-package com.scsoft.wlyz.file.controller;
+package com.scsoft.xgsb.file.controller;
 
 import com.scsoft.scpt.common.PageResult;
-import com.scsoft.wlyz.common.exception.BusinessException;
-import com.scsoft.wlyz.common.utils.FileUtils;
-import com.scsoft.wlyz.file.entity.FileInfo;
-import com.scsoft.wlyz.file.service.IFileService;
+import com.scsoft.xgsb.common.exception.BusinessException;
+import com.scsoft.xgsb.common.utils.FileUtils;
+import com.scsoft.xgsb.file.entity.FileInfo;
+import com.scsoft.xgsb.file.service.IFileService;
 import com.scsoft.scpt.base.controller.BaseController;
 import com.scsoft.scpt.common.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;

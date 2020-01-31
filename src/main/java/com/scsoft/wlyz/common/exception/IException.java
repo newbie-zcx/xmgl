@@ -1,6 +1,6 @@
-package com.scsoft.wlyz.common.exception;
+package com.scsoft.xgsb.common.exception;
 
-import com.scsoft.wlyz.common.utils.HttpStatus;
+import com.scsoft.xgsb.common.utils.HttpStatus;
 
 /**
  * 自定义异常基类

@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.utils;
+package com.scsoft.xgsb.common.utils;
 
 import org.apache.commons.codec.binary.Base64;
 

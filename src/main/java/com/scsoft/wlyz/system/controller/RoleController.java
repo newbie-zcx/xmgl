@@ -1,9 +1,9 @@
-package com.scsoft.wlyz.system.controller;
+package com.scsoft.xgsb.system.controller;
 
-import com.scsoft.wlyz.system.entity.Authority;
-import com.scsoft.wlyz.system.entity.Role;
-import com.scsoft.wlyz.system.service.IAuthorityService;
-import com.scsoft.wlyz.system.service.IRoleService;
+import com.scsoft.xgsb.system.entity.Authority;
+import com.scsoft.xgsb.system.entity.Role;
+import com.scsoft.xgsb.system.service.IAuthorityService;
+import com.scsoft.xgsb.system.service.IRoleService;
 import com.scsoft.scpt.annotation.SysLog;
 import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;

@@ -1,6 +1,6 @@
-package com.scsoft.wlyz.common.utils;
+package com.scsoft.xgsb.common.utils;
 
-import com.scsoft.wlyz.common.redis.RedisUtil;
+import com.scsoft.xgsb.common.redis.RedisUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

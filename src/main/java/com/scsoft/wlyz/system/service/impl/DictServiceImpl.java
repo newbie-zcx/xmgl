@@ -1,16 +1,16 @@
-package com.scsoft.wlyz.system.service.impl;
+package com.scsoft.xgsb.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.scsoft.wlyz.common.handler.SystemCommonHandler;
-import com.scsoft.wlyz.common.redis.RedisUtil;
-import com.scsoft.wlyz.system.entity.Dict;
-import com.scsoft.wlyz.system.entity.DictGroup;
-import com.scsoft.wlyz.system.mapper.DictGroupMapper;
-import com.scsoft.wlyz.system.mapper.DictMapper;
-import com.scsoft.wlyz.system.service.IDictService;
+import com.scsoft.xgsb.common.handler.SystemCommonHandler;
+import com.scsoft.xgsb.common.redis.RedisUtil;
+import com.scsoft.xgsb.system.entity.Dict;
+import com.scsoft.xgsb.system.entity.DictGroup;
+import com.scsoft.xgsb.system.mapper.DictGroupMapper;
+import com.scsoft.xgsb.system.mapper.DictMapper;
+import com.scsoft.xgsb.system.service.IDictService;
 import com.scsoft.scpt.common.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;

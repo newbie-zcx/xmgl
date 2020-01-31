@@ -1,9 +1,9 @@
-package com.scsoft.wlyz.discuss.service;
+package com.scsoft.xgsb.discuss.service;
 
 import com.scsoft.scpt.common.PageResult;
-import com.scsoft.wlyz.discuss.entity.Reply;
+import com.scsoft.xgsb.discuss.entity.Reply;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.scsoft.wlyz.discuss.model.ReplyModel;
+import com.scsoft.xgsb.discuss.model.ReplyModel;
 
 import java.util.List;
 

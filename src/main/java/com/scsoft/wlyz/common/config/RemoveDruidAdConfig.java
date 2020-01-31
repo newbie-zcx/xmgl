@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.config;
+package com.scsoft.xgsb.common.config;
 
 /**
  * @title: RemoveDruidAdConfig

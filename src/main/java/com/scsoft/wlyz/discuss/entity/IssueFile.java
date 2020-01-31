@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.discuss.entity;
+package com.scsoft.xgsb.discuss.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;

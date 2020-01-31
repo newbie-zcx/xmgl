@@ -1,11 +1,11 @@
-package com.scsoft.wlyz.common.config;
+package com.scsoft.xgsb.common.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor;
-import com.scsoft.wlyz.common.handler.MyMetaObjectHandler;
+import com.scsoft.xgsb.common.handler.MyMetaObjectHandler;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Configuration
 @EnableTransactionManagement
-@MapperScan(basePackages = "com.scsoft.wlyz.*.mapper")
+@MapperScan(basePackages = "com.scsoft.xgsb.*.mapper")
 public class MybatisPlusConfig {
     /**
      * 注入sql注入器

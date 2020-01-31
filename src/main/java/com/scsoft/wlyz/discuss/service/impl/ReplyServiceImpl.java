@@ -1,19 +1,19 @@
-package com.scsoft.wlyz.discuss.service.impl;
+package com.scsoft.xgsb.discuss.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scsoft.scpt.common.PageResult;
-import com.scsoft.wlyz.common.handler.SystemCommonHandler;
-import com.scsoft.wlyz.discuss.entity.ReplyFile;
-import com.scsoft.wlyz.discuss.mapper.ReplyFileMapper;
-import com.scsoft.wlyz.discuss.model.ReplyModel;
-import com.scsoft.wlyz.system.entity.User;
+import com.scsoft.xgsb.common.handler.SystemCommonHandler;
+import com.scsoft.xgsb.discuss.entity.ReplyFile;
+import com.scsoft.xgsb.discuss.mapper.ReplyFileMapper;
+import com.scsoft.xgsb.discuss.model.ReplyModel;
+import com.scsoft.xgsb.system.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import com.scsoft.wlyz.discuss.entity.Reply;
-import com.scsoft.wlyz.discuss.mapper.ReplyMapper;
-import com.scsoft.wlyz.discuss.service.IReplyService;
+import com.scsoft.xgsb.discuss.entity.Reply;
+import com.scsoft.xgsb.discuss.mapper.ReplyMapper;
+import com.scsoft.xgsb.discuss.service.IReplyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,9 +1,9 @@
-package com.scsoft.wlyz.common.config;
+package com.scsoft.xgsb.common.config;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.scsoft.wlyz.common.filter.JwtAuthenticationFilter;
+import com.scsoft.xgsb.common.filter.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
@@ -43,7 +43,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-        registry.addResourceHandler("/upload/wlyz/**").addResourceLocations("file:///D://upload/wlyz/");
+        registry.addResourceHandler("/upload/xgsb/**").addResourceLocations("file:///D://upload/xgsb/");
     }
 
     /* 视图跳转控制器 */

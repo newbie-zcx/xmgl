@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.shiro;
+package com.scsoft.xgsb.common.shiro;
 
 import com.scsoft.scpt.utils.CommonUtil;
 import org.apache.commons.codec.binary.Hex;

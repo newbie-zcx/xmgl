@@ -6,7 +6,7 @@
  * 版权所有，侵权必究！
  */
 
-package com.scsoft.wlyz.generator.utils;
+package com.scsoft.xgsb.generator.utils;
 
 
 import java.util.LinkedHashMap;

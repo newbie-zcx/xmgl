@@ -1,10 +1,10 @@
-package com.scsoft.wlyz.discuss.mapper;
+package com.scsoft.xgsb.discuss.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.scsoft.wlyz.discuss.entity.Issue;
+import com.scsoft.xgsb.discuss.entity.Issue;
 
 import java.util.List;
 import java.util.Map;

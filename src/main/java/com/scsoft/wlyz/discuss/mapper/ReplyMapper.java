@@ -1,8 +1,8 @@
-package com.scsoft.wlyz.discuss.mapper;
+package com.scsoft.xgsb.discuss.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.scsoft.wlyz.discuss.entity.Reply;
+import com.scsoft.xgsb.discuss.entity.Reply;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;

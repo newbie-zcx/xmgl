@@ -1,7 +1,7 @@
-package com.scsoft.wlyz.syslog.mapper;
+package com.scsoft.xgsb.syslog.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.scsoft.wlyz.syslog.entity.SysLog;
+import com.scsoft.xgsb.syslog.entity.SysLog;
 
 /**
  * @Description: 系统日志表 Mapper 接口

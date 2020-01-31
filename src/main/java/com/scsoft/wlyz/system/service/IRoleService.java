@@ -1,7 +1,7 @@
-package com.scsoft.wlyz.system.service;
+package com.scsoft.xgsb.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.scsoft.wlyz.system.entity.Role;
+import com.scsoft.xgsb.system.entity.Role;
 
 import java.util.List;
 

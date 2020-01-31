@@ -1,15 +1,15 @@
-package com.scsoft.wlyz.file.service.impl;
+package com.scsoft.xgsb.file.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.scsoft.wlyz.common.exception.BusinessException;
-import com.scsoft.wlyz.common.utils.FavFTPUtil;
-import com.scsoft.wlyz.common.utils.FileUtils;
-import com.scsoft.wlyz.file.entity.FileInfo;
-import com.scsoft.wlyz.file.mapper.FileMapper;
-import com.scsoft.wlyz.file.service.IFileService;
+import com.scsoft.xgsb.common.exception.BusinessException;
+import com.scsoft.xgsb.common.utils.FavFTPUtil;
+import com.scsoft.xgsb.common.utils.FileUtils;
+import com.scsoft.xgsb.file.entity.FileInfo;
+import com.scsoft.xgsb.file.mapper.FileMapper;
+import com.scsoft.xgsb.file.service.IFileService;
 import com.scsoft.scpt.common.PageResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

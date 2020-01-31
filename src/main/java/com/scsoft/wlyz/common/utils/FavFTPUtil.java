@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.utils;
+package com.scsoft.xgsb.common.utils;
 
 import com.scsoft.scpt.utils.DateUtil;
 import org.apache.commons.net.ftp.FTPClient;

@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.generator.engine.base;
+package com.scsoft.xgsb.generator.engine.base;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;

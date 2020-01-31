@@ -1,8 +1,8 @@
-package com.scsoft.wlyz.common.aspect;
+package com.scsoft.xgsb.common.aspect;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.scsoft.wlyz.system.entity.Role;
-import com.scsoft.wlyz.system.entity.User;
+import com.scsoft.xgsb.system.entity.Role;
+import com.scsoft.xgsb.system.entity.User;
 import com.scsoft.scpt.annotation.DataScope;
 import com.scsoft.scpt.base.enitity.BaseEntity;
 import org.apache.shiro.SecurityUtils;

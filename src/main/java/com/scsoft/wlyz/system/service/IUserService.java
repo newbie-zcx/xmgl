@@ -1,8 +1,8 @@
-package com.scsoft.wlyz.system.service;
+package com.scsoft.xgsb.system.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.scsoft.wlyz.system.entity.User;
+import com.scsoft.xgsb.system.entity.User;
 import com.scsoft.scpt.common.PageResult;
 import com.scsoft.scpt.exception.BusinessException;
 import com.scsoft.scpt.exception.ParameterException;

@@ -1,8 +1,8 @@
-package com.scsoft.wlyz.file.service;
+package com.scsoft.xgsb.file.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.scsoft.wlyz.file.entity.FileInfo;
+import com.scsoft.xgsb.file.entity.FileInfo;
 import com.scsoft.scpt.common.PageResult;
 import org.springframework.web.multipart.MultipartFile;
 

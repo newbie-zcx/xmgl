@@ -1,8 +1,8 @@
-package com.scsoft.wlyz.common.handler;
+package com.scsoft.xgsb.common.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.scsoft.wlyz.common.redis.RedisUtil;
-import com.scsoft.wlyz.system.entity.User;
+import com.scsoft.xgsb.common.redis.RedisUtil;
+import com.scsoft.xgsb.system.entity.User;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;

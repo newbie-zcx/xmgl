@@ -1,4 +1,4 @@
-package com.scsoft.wlyz.common.shiro;
+package com.scsoft.xgsb.common.shiro;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;

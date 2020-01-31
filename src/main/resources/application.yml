@@ -9,7 +9,7 @@ server:
 ##################  spring配置  ###################
 spring:
   application:
-    name: wlyz
+    name: xgsb
   profiles:
     active: dev
   datasource:
@@ -50,7 +50,7 @@ spring:
       stat-view-servlet:
         url-pattern: /druid/*
         reset-enable: false
-      aop-patterns: com.scsoft.wlyz.*.service.*
+      aop-patterns: com.scsoft.xgsb.*.service.*
 
 
   redis:
@@ -106,7 +106,7 @@ spring:
   ################### mybatis-plus #########################
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
-  typeAliasesPackage: com.scsoft.wlyz.*.entity
+  typeAliasesPackage: com.scsoft.xgsb.*.entity
   #  type-enums-package: com.xyz.bigcorn.admin.**.entity.enums
   # type-handlers-package: com.baomidou.mybatisplus.samples.quickstart.handler
   configuration:
@@ -127,7 +127,7 @@ mybatis-plus:
 logging:
   level:
     com.baomidou.mybatisplus: DEBUG
-    com.scsoft.wlyz: DEBUG
+    com.scsoft.xgsb: DEBUG
 
 beetlsql:
   enabled: false
@@ -149,7 +149,7 @@ file:
     password: Scsoft
     basePath: D://upload/swmoftp
   localtion:  #配置默认文件保存位置
-    windows: D://upload/wlyz
-    linux: /opt/upload/wlyz/
+    windows: D://upload/xgsb
+    linux: /opt/upload/xgsb/
   maxFileSize: 10240KB #单个文件最大KB/MB
   maxRequestSize: 102400KB   #设置总上传数据总大小

@@ -1,6 +1,6 @@
-package com.scsoft.wlyz.common.config;
+package com.scsoft.xgsb.common.config;
 
-import com.scsoft.wlyz.common.shiro.ShiroExt;
+import com.scsoft.xgsb.common.shiro.ShiroExt;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.TagFactory;
 import org.beetl.core.resource.ClasspathResourceLoader;

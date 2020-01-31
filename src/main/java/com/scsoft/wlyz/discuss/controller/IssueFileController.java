@@ -1,19 +1,19 @@
-package com.scsoft.wlyz.discuss.controller;
+package com.scsoft.xgsb.discuss.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scsoft.scpt.annotation.SysLog;
-import com.scsoft.wlyz.file.entity.FileInfo;
-import com.scsoft.wlyz.file.service.IFileService;
+import com.scsoft.xgsb.file.entity.FileInfo;
+import com.scsoft.xgsb.file.service.IFileService;
 import org.springframework.web.bind.annotation.*;
 import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.scsoft.wlyz.discuss.service.IIssueFileService;
-import com.scsoft.wlyz.discuss.entity.IssueFile;
+import com.scsoft.xgsb.discuss.service.IIssueFileService;
+import com.scsoft.xgsb.discuss.entity.IssueFile;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;

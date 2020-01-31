@@ -1,11 +1,11 @@
-package com.scsoft.wlyz.syslog.service.impl;
+package com.scsoft.xgsb.syslog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.scsoft.wlyz.syslog.entity.SysLoginRecord;
-import com.scsoft.wlyz.syslog.mapper.SysLoginRecordMapper;
-import com.scsoft.wlyz.syslog.service.ISysLoginRecordService;
+import com.scsoft.xgsb.syslog.entity.SysLoginRecord;
+import com.scsoft.xgsb.syslog.mapper.SysLoginRecordMapper;
+import com.scsoft.xgsb.syslog.service.ISysLoginRecordService;
 import com.scsoft.scpt.common.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
