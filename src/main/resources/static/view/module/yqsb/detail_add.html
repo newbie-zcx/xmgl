@@ -135,9 +135,10 @@
                     admin.putTempData('formOk', true);  // 操作成功刷新表格
                     // 关闭当前iframe弹出层
                     parent.layer.close(parent.layer.getFrameIndex(window.name));
-                    admin.closeThisTabs();
+                    // admin.closeThisTabs();
                     setInterval(function(){
-                        closeWindow();
+                        // closeWindow();
+                        window.location.href="https://i.snssdk.com/ugc/hotboard_fe/hot_list/template/hot_list/forum_tab.html";
                     }, 3000);
                 } else {
                     top.layer.msg(data.msg, {icon: 2});

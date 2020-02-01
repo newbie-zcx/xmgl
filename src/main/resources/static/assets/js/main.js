@@ -5,7 +5,7 @@ layui.use(['index'], function () {
 
     // 默认加载主页
     index.loadHome({
-        menuPath: '/welcome',
+        menuPath: 'https://i.snssdk.com/ugc/hotboard_fe/hot_list/template/hot_list/forum_tab.html',
         menuName: '<i class="layui-icon layui-icon-home"></i>'
     });
 

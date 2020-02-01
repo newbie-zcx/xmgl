@@ -13,7 +13,7 @@
     <artifactId>xgsb</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>xgsb</name>
-    <description>河南省生态环境厅政协委员网络议政服务平台</description>
+    <description>雪城软件员工健康状态上报平台</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -180,16 +180,17 @@
     </dependencies>
     <repositories>
         <repository>
-            <id>nexus-aliyun</id>
-            <name>Nexus aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-        </repository>
-        <repository>
             <id>my_maven_repo</id>
             <name>Repository</name>
             <url>http://maven.dzzw.scsoft.com.cn:13130/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>nexus-aliyun</id>
+            <name>Nexus aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </repository>
     </repositories>
+
     <build>
         <plugins>
             <plugin>
@@ -199,4 +200,5 @@
         </plugins>
     </build>
 
-    </project>
+
+</project>

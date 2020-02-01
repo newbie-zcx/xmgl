@@ -35,7 +35,7 @@ public class DepartServiceImpl extends ServiceImpl<DepartMapper, Depart> impleme
     }
     @Override
     public List<Depart> getByPId(int pid) {
-        return departMapper.selectList(new QueryWrapper<Depart>().eq("parent_id",pid));
+        return departMapper.selectList(new QueryWrapper<Depart>().eq("parent_id",pid).orderByAsc("org_code"));
     }
 
     @Override
