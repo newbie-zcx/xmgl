@@ -17,12 +17,6 @@
             <div class="layui-form toolbar">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label w-auto">搜索：</label>
-                        <div class="layui-input-inline mr0">
-                            <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
                         <label class="layui-form-label">姓名：</label>
                         <div class="layui-input-inline mr0">
                             <input name="userName" id="userName" placeholder="请输入姓名" type="text" class="layui-input"/>
@@ -35,69 +29,29 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">外出状态 0 在老家、1、在郑州、2、外出：</label>
+                        <label class="layui-form-label">外出状态:</label>
                         <div class="layui-input-inline mr0">
-                            <input name="outState" id="outState" placeholder="请输入外出状态 0 在老家、1、在郑州、2、外出" type="text" class="layui-input"/>
+                            <#dict_tag id="outState" name="outState" defaultVal="" dictCode="out_state" lay-verify="required"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 100px">重点区域活动：</label>
+                        <div class="layui-input-inline mr0">
+                            <#dict_tag id="hdXznsz" name="hdXznsz" defaultVal="" dictCode="hd_xznsz"/>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">是否接触武汉反郑：</label>
+                        <label class="layui-form-label">发烧感冒：</label>
                         <div class="layui-input-inline mr0">
-                            <input name="whFz" id="whFz" placeholder="请输入是否接触武汉反郑" type="text" class="layui-input"/>
+                            <#dict_tag id="fsgm" name="fsgm" defaultVal="" dictCode="fsgm"/>
                         </div>
                     </div>
+
                     <div class="layui-inline">
-                        <label class="layui-form-label">接触详情：</label>
+                        <label class="layui-form-label">交通影响：</label>
                         <div class="layui-input-inline mr0">
-                            <input name="whDetail" id="whDetail" placeholder="请输入接触详情" type="text" class="layui-input"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">接触日期：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="whDate" id="whDate" placeholder="请输入接触日期" type="text" class="layui-input"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">是否在信阳、周口、商丘、驻马店、南阳活动：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="hdXznsz" id="hdXznsz" placeholder="请输入是否在信阳、周口、商丘、驻马店、南阳活动" type="text" class="layui-input"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="fsgm" id="fsgm" placeholder="请输入是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕" type="text" class="layui-input"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">家属是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="jsfsgm" id="jsfsgm" placeholder="请输入家属是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕" type="text" class="layui-input"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">所在地：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="address" id="address" placeholder="请输入所在地" type="text" class="layui-input"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">个人状态是否良好 0是1否：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="status" id="status" placeholder="请输入个人状态是否良好 0是1否" type="text" class="layui-input"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">交通是否影响，0、正常、1、封路 2、交通管制、3无法反郑：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="jtyx" id="jtyx" placeholder="请输入交通是否影响，0、正常、1、封路 2、交通管制、3无法反郑" type="text" class="layui-input"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">解封时间：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="jfDate" id="jfDate" placeholder="请输入解封时间" type="text" class="layui-input"/>
+                            <#dict_tag id="jtyx" name="jtyx" defaultVal="" dictCode="jtyx"/>
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -194,19 +148,19 @@
                 {title: '重点区域活动',width:140, field: 'hdXznsz', align: 'center', valign: 'middle', sort: true,
                     templet: function (d) {
                         if (d.hdXznsz=="0"){
-                            return "其他";
-                        } else if (d.hdXznsz=="1"){
-                            return "南阳";
-                        } else if (d.hdXznsz=="2"){
                             return "信阳";
-                        } else if (d.hdXznsz=="3"){
+                        } else if (d.hdXznsz=="1"){
                             return "周口";
-                        } else if (d.hdXznsz=="4"){
-                            return "驻马店";
-                        } else if (d.hdXznsz=="5"){
+                        } else if (d.hdXznsz=="2"){
                             return "商丘";
-                        } else if (d.hdXznsz=="6"){
+                        } else if (d.hdXznsz=="3"){
+                            return "驻马店";
+                        } else if (d.hdXznsz=="4"){
+                            return "南阳";
+                        } else if (d.hdXznsz=="5"){
                             return "安阳";
+                        } else if (d.hdXznsz=="6"){
+                            return "其他";
                         }else{
                             return "其他";
                         }
@@ -322,7 +276,14 @@
 
         // 搜索按钮点击事件
         $('#btnSearch').click(function () {
-            table.reload('roleTable', {where: $('form').serialize()});
+            var userName=$('#userName').val();//获取姓名
+            var userDepart=$('#userDepart').val();//获取部门
+            var outState=$('#outState').val();//获取外出状态
+            var hdXznsz=$('#hdXznsz').val();//重点区域
+            var fsgm=$('#fsgm').val();//获取发烧感冒
+            var jtyx=$('#jtyx').val();//获取姓名
+
+            table.reload('detailTable', {where:{userName:userName,userDepart:userDepart,outState:outState,hdXznsz:hdXznsz,fsgm:fsgm,jtyx:jtyx}});
         });
 
         // 工具条点击事件

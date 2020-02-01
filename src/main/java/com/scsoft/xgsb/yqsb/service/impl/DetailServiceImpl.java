@@ -9,6 +9,7 @@ import com.scsoft.scpt.utils.DateUtil;
 import com.scsoft.xgsb.yqsb.entity.Detail;
 import com.scsoft.xgsb.yqsb.mapper.DetailMapper;
 import com.scsoft.xgsb.yqsb.service.IDetailService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,6 +36,24 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
     public PageResult<Detail> listPage(int pageNum, int pageSize, Detail detail) {
        Page<Detail> page = new Page<Detail>(pageNum, pageSize);
          QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
+        if (StringUtils.isNotBlank(detail.getUserName())) {//获取姓名
+            ew.like("user_name", detail.getUserName());
+        }
+        if (!StringUtils.isBlank(detail.getUserDepart())) {//获取部门
+            ew.like("user_depart", detail.getUserDepart());
+        }
+        if (StringUtils.isNotBlank(detail.getOutState())) {//获取外出状态
+            ew.eq("out_state", detail.getOutState());
+        }
+        if (!StringUtils.isBlank(detail.getHdXznsz())) {//获取重点活动区域
+            ew.eq("hd_xznsz", detail.getHdXznsz());
+        }
+        if (StringUtils.isNotBlank(detail.getFsgm())) {//是否感冒发烧
+            ew.eq("fsgm", detail.getFsgm());
+        }
+        if (!StringUtils.isBlank(detail.getJtyx())) {//获取交通影响
+            ew.eq("jtyx", detail.getJtyx());
+        }
          IPage iPage = detailMapper.selectPage(page,ew);
           return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
     }
@@ -44,6 +63,24 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
         QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
         if (type.equals("0")){
             ew.gt("create_date", DateUtil.getNowDate()+" 00:00:00");
+            if (StringUtils.isNotBlank(detail.getUserName())) {//获取姓名
+                ew.like("user_name", detail.getUserName());
+            }
+            if (!StringUtils.isBlank(detail.getUserDepart())) {//获取部门
+                ew.like("user_depart", detail.getUserDepart());
+            }
+            if (StringUtils.isNotBlank(detail.getOutState())) {//获取外出状态
+                ew.eq("out_state", detail.getOutState());
+            }
+            if (!StringUtils.isBlank(detail.getHdXznsz())) {//获取重点活动区域
+                ew.eq("hd_xznsz", detail.getHdXznsz());
+            }
+            if (StringUtils.isNotBlank(detail.getFsgm())) {//是否感冒发烧
+                ew.eq("fsgm", detail.getFsgm());
+            }
+            if (!StringUtils.isBlank(detail.getJtyx())) {//获取交通影响
+                ew.eq("jtyx", detail.getJtyx());
+            }
             IPage iPage = detailMapper.selectPage(page,ew);
             return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
         }else{
