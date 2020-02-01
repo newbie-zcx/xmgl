@@ -14,91 +14,95 @@
     <div class="layui-form-item">
         <label class="layui-form-label">姓名</label>
         <div class="layui-input-block">
-            <input name="userName" id="userName" placeholder="请输入姓名" value=${detail.userName} type="text" class="layui-input"
+            <input name="userName" id="userName" placeholder="请输入姓名" value="${detail.userName}" type="text" class="layui-input"
                    lay-verify="required" required/>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">部门</label>
         <div class="layui-input-block">
-            <input name="userDepart" id="userDepart" placeholder="请输入部门" value=${detail.userDepart} type="text" class="layui-input"
+            <input name="userDepart" id="userDepart" placeholder="请输入部门" value="${detail.userDepart}" type="text" class="layui-input"
                    lay-verify="required" required/>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">所在地</label>
         <div class="layui-input-block">
-            <input name="address" id="address" placeholder="请输入所在地" value=${detail.address!}  type="text" class="layui-input"
+            <input name="address" id="address" placeholder="请输入所在地" value="${detail.address!}"  type="text" class="layui-input"
                    lay-verify="required" required/>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">外出状态</label>
         <div class="layui-input-block">
-            <input name="outState" id="outState" value=${detail.outState} placeholder="请输入外出状态 0 在老家、1、在郑州、2、外出" type="text" class="layui-input"
-                   lay-verify="required" required/>
+            <#dict_tag id="outState" name="outState" defaultVal="" dictCode="out_state" value="${detail.outState}" lay-verify="required"/>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">是否接触武汉反郑</label>
+        <label class="layui-form-label">接触武汉反乡</label>
         <div class="layui-input-block">
-            <input name="whFz" id="whFz" placeholder="请输入是否接触武汉反郑" value=${detail.whFz} type="text" class="layui-input"
-                   lay-verify="required" required/>
+            <#dict_tag id="whFz" name="whFz" defaultVal="" dictCode="wh_fz"/>
+<!--            <input name="whFz" id="whFz" placeholder="请输入是否接触武汉反郑" value=${detail.whFz} type="text" class="layui-input"-->
+<!--                   lay-verify="required" required/>-->
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">接触详情</label>
         <div class="layui-input-block">
-            <input name="whDetail" id="whDetail" placeholder="请输入接触详情" type="text" value=${detail.whDetail!} class="layui-input"/>
+            <input name="whDetail" id="whDetail" placeholder="请输入接触详情" type="text" value="${detail.whDetail!}" class="layui-input"/>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">接触日期</label>
         <div class="layui-input-block">
-            <input name="whDate" id="whDate" placeholder="请输入接触日期" type="text" value=${detail.whDate!} class="layui-input"/>
+            <input name="whDate" id="whDate" placeholder="请输入接触日期" type="text" value="${detail.whDate!}" class="layui-input"/>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">重点区域活动</label>
         <div class="layui-input-block">
-            <input name="hdXznsz" id="hdXznsz" placeholder="请输入是否在信阳、周口、商丘、驻马店、南阳活动" value=${detail.hdXznsz} type="text" class="layui-input"
-                   lay-verify="required" required/>
+            <#dict_tag id="hdXznsz" name="hdXznsz" defaultVal="" dictCode="hd_xznsz"/>
+<!--            <input name="hdXznsz" id="hdXznsz" placeholder="请输入是否在信阳、周口、商丘、驻马店、南阳活动" value=${detail.hdXznsz} type="text" class="layui-input"-->
+<!--                   lay-verify="required" required/>-->
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">是否有症状</label>
         <div class="layui-input-block">
-            <input name="fsgm" id="fsgm" placeholder="请输入是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕" type="text" value=${detail.fsgm} class="layui-input"
-                   lay-verify="required" required/>
+            <#dict_tag id="fsgm" name="fsgm" defaultVal="" dictCode="fsgm"/>
+<!--            <input name="fsgm" id="fsgm" placeholder="请输入是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕" type="text" value=${detail.fsgm} class="layui-input"-->
+<!--                   lay-verify="required" required/>-->
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">家属是否有症状</label>
         <div class="layui-input-block">
-            <input name="jsfsgm" id="jsfsgm" placeholder="请输入家属是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕" value=${detail.jsfsgm} type="text" class="layui-input"
-                   lay-verify="required" required/>
+            <#dict_tag id="fsgm" name="fsgm" defaultVal="" dictCode="fsgm"/>
+<!--            <input name="jsfsgm" id="jsfsgm" placeholder="请输入家属是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕" value=${detail.jsfsgm} type="text" class="layui-input"-->
+<!--                   lay-verify="required" required/>-->
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">个人状态是否良好 0是1否</label>
         <div class="layui-input-block">
-            <input name="status" id="status" placeholder="请输入个人状态是否良好 0是1否" type="text" value=${detail.status} class="layui-input"
-                   lay-verify="required" required/>
+            <#dict_tag id="status" name="status" defaultVal="" dictCode="status"/>
+<!--            <input name="status" id="status" placeholder="请输入个人状态是否良好 0是1否" type="text" value=${detail.status} class="layui-input"-->
+<!--                   lay-verify="required" required/>-->
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">交通是否影响</label>
         <div class="layui-input-block">
-            <input name="jtyx" id="jtyx" placeholder="请输入交通是否影响，0、正常、1、封路 2、交通管制、3无法反郑" value=${detail.jtyx} type="text" class="layui-input"
-                   lay-verify="required" required/>
+            <#dict_tag id="jtyx" name="jtyx" defaultVal="" dictCode="jtyx"/>
+<!--            <input name="jtyx" id="jtyx" placeholder="请输入交通是否影响，0、正常、1、封路 2、交通管制、3无法反郑" value=${detail.jtyx} type="text" class="layui-input"-->
+<!--                   lay-verify="required" required/>-->
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">解封时间</label>
         <div class="layui-input-block">
-            <input name="jfDate" id="jfDate" placeholder="请输入解封时间" value=${detail.jfDate!} type="text" class="layui-input"
-                   />
+            <input type="text" class="layui-input" name="jfDate" id="jfDate" placeholder="请输入解封时间" value="${detail.jfDate!}"  lay-verify="required" required>
         </div>
     </div>
 
@@ -112,11 +116,12 @@
 <!-- js部分 -->
 <% include("../../layout/jsPart.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'admin'], function () {
+    layui.use(['layer', 'form','laydate', 'admin'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var admin = layui.admin;
+        var laydate = layui.laydate;
 
         var url = 'add';
         // 回显数据
@@ -138,6 +143,21 @@
                 }
             });
             return false;
+        });
+
+
+
+        laydate.render({
+            elem: '#jfDate',
+            type:'datetime',
+            value  :new Date(),                    //初始值
+            fommat:'yyyy-MM-dd'
+        });
+        laydate.render({
+            elem: '#whDate',
+            type:'datetime',
+            value  :new Date(),                    //初始值
+            fommat:'yyyy-MM-dd'
         });
 
     });

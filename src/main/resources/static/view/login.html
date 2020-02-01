@@ -46,13 +46,13 @@
                                class="layui-input">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-row inline-block">
-                        <div class="layui-col-xs7">
-                            <div id="captcha"></div>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="layui-form-item">-->
+<!--                    <div class="layui-row inline-block">-->
+<!--                        <div class="layui-col-xs7">-->
+<!--                            <div id="captcha"></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="layui-form-item">
                     <a href="javascript:;" class="layui-link">记住密码
                         <input type="checkbox" name="rememe" lay-verify="required"  checked  lay-text="ON|OFF" lay-skin="switch" title="记住密码" >
@@ -75,7 +75,7 @@
 <script type="text/javascript" src="/static/assets/libs/layui/layui.js"></script>
 <script type="text/javascript" src="/static/assets/libs/jigsaw/jigsaw.js"></script>
 <script>
-    var codeflag = false;
+    var codeflag = true;
     layui.config({
         base: 'module/'
     }).use(['form'], function () {
