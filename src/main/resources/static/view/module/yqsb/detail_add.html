@@ -10,7 +10,6 @@
 
 <form id="detailForm" lay-filter="detailForm" class="layui-form model-form">
 
-
     <div class="layui-form-item">
         <label class="layui-form-label">姓名</label>
         <div class="layui-input-block">
@@ -102,13 +101,11 @@
     <div class="layui-form-item">
         <label class="layui-form-label">解封时间</label>
         <div class="layui-input-block">
-            <input type="text" class="layui-input" name="jfDate" id="jfDate" placeholder="请输入解封时间" value="${detail.jfDate!}"  lay-verify="required" required>
+            <input type="text" class="layui-input" name="jfDate" id="jfDate" placeholder="请输入解封时间" value="${detail.jfDate!}" >
         </div>
     </div>
-
-
     <div class="layui-form-item text-right">
-        <button class="layui-btn" lay-filter="formSubmit" lay-submit>保存</button>
+        <button class="layui-btn" lay-filter="formSubmit" lay-submit>上报</button>
         <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
     </div>
 </form>
@@ -163,13 +160,13 @@
         laydate.render({
             elem: '#jfDate',
             type:'datetime',
-            value  :new Date(),                    //初始值
+            //value  :new Date(),                    //初始值
             fommat:'yyyy-MM-dd'
         });
         laydate.render({
             elem: '#whDate',
             type:'datetime',
-            value  :new Date(),                    //初始值
+            //value  :new Date(),                    //初始值
             fommat:'yyyy-MM-dd'
         });
 
