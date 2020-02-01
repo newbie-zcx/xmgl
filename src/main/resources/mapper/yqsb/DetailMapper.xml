@@ -41,4 +41,13 @@
         id, user_name, user_depart, out_state, wh_fz, wh_detail, wh_date, hd_xznsz, fsgm, jsfsgm, address, status, jtyx, jf_date
     </sql>
 
+
+    <select id="todayNosb" resultType="com.scsoft.xgsb.yqsb.entity.Detail">
+        select n.depart_name user_depart,n.real_name user_name from
+          (select d.depart_name,u.real_name from sys_user u,sys_depart d,sys_user_depart ud
+            where u.id=ud.user_id and d.id=ud.depart_id) n
+        where n.real_name not in
+           (select user_name from xg_detail where create_date>DATE_FORMAT(CURDATE(),'%Y-%m-%d %H:%i:%s'))
+           ${ew.customSqlSegment}
+    </select>
 </mapper>

@@ -38,6 +38,23 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
          IPage iPage = detailMapper.selectPage(page,ew);
           return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
     }
+    @Override
+    public PageResult<Detail> listPage(int pageNum, int pageSize, Detail detail,String type) {
+        Page<Detail> page = new Page<Detail>(pageNum, pageSize);
+        QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
+        if (type.equals("0")){
+            ew.gt("create_date", DateUtil.getNowDate()+" 00:00:00");
+            IPage iPage = detailMapper.selectPage(page,ew);
+            return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
+        }else{
+            ew.select("user_name","user_depart");
+            IPage iPage = detailMapper.todayNosb(page,ew);
+            return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
+        }
+
+    }
+
+
 
     @Override
     public List<Detail> selectList(Detail detail) {
@@ -49,7 +66,7 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
     public Detail tijiao(Detail detail){
         QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
         ew.eq("user_name",detail.getUserName());
-        ew.gt("create_date", DateUtil.getNowDate()+"00:00:00");
+        ew.gt("create_date", DateUtil.getNowDate()+" 00:00:00");
         List<Detail> list=detailMapper.selectList(ew);
         if (list.size()>0){
             return list.get(0);

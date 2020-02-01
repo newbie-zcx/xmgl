@@ -72,7 +72,11 @@ public class DetailController extends BaseController {
     @RequestMapping("todaydetail")
     public String todaydetail(Model model,String type, HttpServletRequest request) {
         model.addAttribute("type",type);
-        return PREFIX + "detail";
+        if (type.equals("0")){
+            return PREFIX + "todaydetail";
+        }else{
+            return PREFIX + "notodaydetail";
+        }
     }
     /**
      * 跳转到添加疫情上报详情
@@ -130,6 +134,15 @@ public class DetailController extends BaseController {
         return detailService.listPage(page,limit,detail);
     }
 
+    /**
+     * 获取疫情上报详情列表
+     */
+    @RequestMapping(value = "/todaylist")
+    @RequiresPermissions("detail:view")
+    @ResponseBody
+    public PageResult<Detail> todaylist(Integer page, Integer limit,String type, Detail detail,String condition, Model model,HttpServletRequest request) {
+        return detailService.listPage(page,limit,detail,type);
+    }
 
 /**
      * 新增疫情上报详情
