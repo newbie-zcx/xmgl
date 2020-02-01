@@ -31,5 +31,10 @@ public interface IDetailService extends IService<Detail> {
       *  逻辑删除
       */
     Boolean logicDelete(Detail detail);
+
+    /**
+     *  是否重复提交
+     */
+    Detail tijiao(Detail detail);
 }
 

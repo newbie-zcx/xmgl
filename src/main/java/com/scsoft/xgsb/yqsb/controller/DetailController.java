@@ -140,9 +140,10 @@ public class DetailController extends BaseController {
     @SysLog(operationType="add操作:",operationName="添加疫情上报详情")
     public JsonResult add(Detail detail) {
         User user= SystemCommonHandler.getLoginUser();
-        if (detailService.save(detail)) {
+        Detail detail1=detailService.tijiao(detail);
+        if (detailService.save(detail1)) {
             redisUtil.set("yqsb:detail:" + user.getId(),detail);
-                return JsonResult.ok("添加成功");
+                return JsonResult.ok("添加成功,请勿重复提交");
         } else {
             return JsonResult.error("添加失败");
         }

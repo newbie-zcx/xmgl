@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.scsoft.scpt.common.PageResult;
+import com.scsoft.scpt.utils.DateUtil;
 import com.scsoft.xgsb.yqsb.entity.Detail;
 import com.scsoft.xgsb.yqsb.mapper.DetailMapper;
 import com.scsoft.xgsb.yqsb.service.IDetailService;
@@ -44,6 +45,18 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
         return detailMapper.selectList(ew);
 
      }
+    @Override
+    public Detail tijiao(Detail detail){
+        QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
+        ew.eq("user_name",detail.getUserName());
+        ew.gt("create_date", DateUtil.getNowDate()+"00:00:00");
+        List<Detail> list=detailMapper.selectList(ew);
+        if (list.size()>0){
+            return list.get(0);
+        }else{
+            return detail;
+        }
+    }
 
 
     /**
