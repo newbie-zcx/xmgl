@@ -54,7 +54,7 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
         if (list.size()>0){
             return list.get(0);
         }else{
-            return detail;
+            return null;
         }
     }
 

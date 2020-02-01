@@ -141,7 +141,10 @@ public class DetailController extends BaseController {
     public JsonResult add(Detail detail) {
         User user= SystemCommonHandler.getLoginUser();
         Detail detail1=detailService.tijiao(detail);
-        if (detailService.save(detail1)) {
+        if (detail1!=null){
+            detail.setId(detail1.getId());
+        }
+        if (detailService.saveOrUpdate(detail)) {
             redisUtil.set("yqsb:detail:" + user.getId(),detail);
                 return JsonResult.ok("添加成功,请勿重复提交");
         } else {
