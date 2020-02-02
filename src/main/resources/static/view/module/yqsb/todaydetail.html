@@ -122,7 +122,7 @@
                 {title: '部门', field: 'userDepart', width:100, align: 'center', valign: 'middle', sort: true},
                 {title: '姓名', field: 'userName', width:100,align: 'center', valign: 'middle', sort: true},
                 {title: '所在地', field: 'address',width:200, align: 'center', valign: 'middle', sort: true},
-                {title: '外出状态', width:90,field: 'outState', align: 'center', valign: 'middle', sort: true,
+                {title: '外出状态', width:100,field: 'outState', align: 'center', valign: 'middle', sort: true,
                     templet: function (d) {
                         if (d.outState=="0"){
                             return "在老家";
@@ -135,19 +135,23 @@
                         }
                     }
                 },
-                {title: '接触武汉反乡', field: 'whFz',width:130, align: 'center', valign: 'middle', sort: true,
+                {title: '接触情况', field: 'whFz',width:130, align: 'center', valign: 'middle', sort: true,
                     templet: function (d) {
                         if (d.whFz=="0"){
-                            return "是";
+                            return "无接触";
                         } else if (d.whFz=="1"){
-                            return "否";
-                        }else{
+                            return "接触武汉人员";
+                        } else if (d.whFz=="2"){
+                            return "接触确诊病例";
+                        } else if (d.whFz=="3"){
+                            return "接触疑似病例";
+                        } else{
                             return "其他";
                         }
                     }
                 },
-                {title: '接触详情', field: 'whDetail',width:200, align: 'center', valign: 'middle', sort: true},
-                {title: '重点区域活动',width:140, field: 'hdXznsz', align: 'center', valign: 'middle', sort: true,
+                // {title: '接触详情', field: 'whDetail',width:200, align: 'center', valign: 'middle', sort: true},
+                {title: '活动区域',width:120, field: 'hdXznsz', align: 'center', valign: 'middle', sort: true,
                     templet: function (d) {
                         if (d.hdXznsz=="0"){
                             return "郑州";
@@ -164,7 +168,7 @@
                         } else if (d.hdXznsz=="6"){
                             return "周口";
                         } else if (d.hdXznsz=="7"){
-                            return "其他";
+                            return "其他区域";
                         }else{
                             return "其他";
                         }
@@ -182,6 +186,14 @@
                             return "咳嗽";
                         } else if (d.fsgm=="4"){
                             return "干呕";
+                        } else if (d.fsgm=="5"){
+                            return "上火";
+                        } else if (d.fsgm=="6"){
+                            return "流鼻涕";
+                        } else if (d.fsgm=="7"){
+                            return "头痛";
+                        } else if (d.fsgm=="8"){
+                            return "拉肚子";
                         }else{
                             return "其他";
                         }
@@ -199,18 +211,30 @@
                             return "咳嗽";
                         } else if (d.jsfsgm=="4"){
                             return "干呕";
+                        } else if (d.jsfsgm=="5"){
+                            return "上火";
+                        } else if (d.jsfsgm=="6"){
+                            return "流鼻涕";
+                        } else if (d.jsfsgm=="7"){
+                            return "头痛";
+                        } else if (d.jsfsgm=="8"){
+                            return "拉肚子";
                         }else{
                             return "其他";
                         }
                     }
                 },
-                {title: '个人状态是否良好', field: 'status', width:150,align: 'center', valign: 'middle', sort: true,
+                {title: '确诊情况', field: 'status', width:150,align: 'center', valign: 'middle', sort: true,
                     templet: function (d) {
                         if (d.status=="0"){
-                            return "是";
+                            return "(县区)无确诊";
                         } else if (d.status=="1"){
-                            return "否";
-                        }else{
+                            return "(县区)有(乡镇办事处)无";
+                        } else if (d.status=="2") {
+                            return "(乡镇办事处)有，(村社区)无";
+                        }else if (d.status=="3"){
+                                return "村、社区有";
+                        } else{
                             return "其他";
                         }
                     }
@@ -228,7 +252,8 @@
                         }
                     }
                 },
-                {title: '解封时间', width:150,field: 'jfDate', align: 'center', valign: 'middle', sort: true}
+                {title: '解封时间', width:150,field: 'jfDate', align: 'center', valign: 'middle', sort: true},
+                {title: '上报时间', width:150,field: 'createDate', align: 'center', valign: 'middle', sort: true}
                /* {field: 'orgType',align: 'center', sort: true, width:140,
                     templet: function (d) {
                         if (d.orgType=="1"){

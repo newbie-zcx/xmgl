@@ -2,111 +2,126 @@
 <html class="bg-white">
 
 <head>
-    <title>添加疫情上报详情</title>
+    <title>健康状况上报</title>
     <% include("../../layout/cssPart.html"){} %>
 </head>
-
+<style>
+    .layui-required:after{
+        content:"*";
+        color:red;
+        position: absolute;
+        top:5px;
+        left:15px;
+    }
+</style>
 <body>
 
 <form id="detailForm" lay-filter="detailForm" class="layui-form model-form">
-
+    <blockquote class="layui-elem-quote" style="margin-top:-15px">
+        雪城软件员工健康状况上报
+    </blockquote>
     <div class="layui-form-item">
-        <label class="layui-form-label">姓名</label>
+        <label class="layui-form-label required">姓名<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
-            <input name="userName" id="userName" placeholder="请输入姓名" value="${detail.userName}" type="text" class="layui-input"
-                   lay-verify="required" required/>
+            <input name="userName" id="userName"  lay-verType="tips" placeholder="请输入姓名" value="${detail.userName}" type="text" class="layui-input"
+                   lay-verify="required" />
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">部门</label>
+        <label class="layui-form-label required">部门<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
             <input name="userDepart" id="userDepart" placeholder="请输入部门" value="${detail.userDepart}" type="text" class="layui-input"
-                   lay-verify="required" required/>
+                   lay-verify="required"  lay-verType="tips"/>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">所在地</label>
+        <label class="layui-form-label required">所在地<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
             <input name="address" id="address" placeholder="请输入所在地" value="${detail.address!}"  type="text" class="layui-input"
-                   lay-verify="required" required/>
+                   lay-verify="required"  lay-verType="tips"/>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">外出状态</label>
+<!--        -->
+        <label class="layui-form-label required">外出状态<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
             <#dict_tag id="outState" name="outState" defaultVal="" dictCode="out_state" value="${detail.outState}" lay-verify="required"/>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">接触武汉反乡</label>
+        <label class="layui-form-label required">接触情况<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
-            <#dict_tag id="whFz" name="whFz" defaultVal="1" dictCode="wh_fz"/>
+            <#dict_tag id="whFz" name="whFz" lay-filter="whfz" defaultVal="0" dictCode="wh_fz" value="${detail.outState}" lay-verify="required"/>
 <!--            <input name="whFz" id="whFz" placeholder="请输入是否接触武汉反郑" value=${detail.whFz} type="text" class="layui-input"-->
 <!--                   lay-verify="required" required/>-->
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item" id="jcxq" style="display: none;">
         <label class="layui-form-label">接触详情</label>
         <div class="layui-input-block">
             <input name="whDetail" id="whDetail" placeholder="请输入接触详情" type="text" value="${detail.whDetail!}" class="layui-input"/>
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item" id="jcrq" style="display: none;">
         <label class="layui-form-label">接触日期</label>
         <div class="layui-input-block">
             <input name="whDate" id="whDate" placeholder="请输入接触日期" type="text" value="${detail.whDate!}" class="layui-input"/>
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">重点区域活动</label>
+    <div class="layui-form-item ">
+        <label class="layui-form-label required">活动区域<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
-            <#dict_tag id="hdXznsz" name="hdXznsz" defaultVal="" value="${detail.hdXznsz}" dictCode="hd_xznsz"/>
+            <#dict_tag id="hdXznsz" name="hdXznsz" defaultVal="" value="${detail.hdXznsz}" dictCode="hd_xznsz" lay-verify="required"/>
 <!--            <input name="hdXznsz" id="hdXznsz" placeholder="请输入是否在信阳、周口、商丘、驻马店、南阳活动" value=${detail.hdXznsz} type="text" class="layui-input"-->
 <!--                   lay-verify="required" required/>-->
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">是否有症状</label>
+        <label class="layui-form-label required">健康状况<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
-            <#dict_tag id="fsgm" name="fsgm" defaultVal="" value="${detail.fsgm}" dictCode="fsgm"/>
+            <#dict_tag id="fsgm" name="fsgm" defaultVal="" value="${detail.fsgm}" dictCode="fsgm" lay-verify="required"/>
 <!--            <input name="fsgm" id="fsgm" placeholder="请输入是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕" type="text" value=${detail.fsgm} class="layui-input"-->
 <!--                   lay-verify="required" required/>-->
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">家属是否有症状</label>
+    <div class="layui-form-item ">
+        <label class="layui-form-label required">家属状况<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
-            <#dict_tag id="fsgm" name="fsgm" defaultVal="" value="${detail.jsfsgm}" dictCode="fsgm"/>
+            <#dict_tag id="fsgm" name="fsgm" defaultVal="" value="${detail.jsfsgm}" dictCode="fsgm" lay-verify="required"/>
 <!--            <input name="jsfsgm" id="jsfsgm" placeholder="请输入家属是否发烧感冒咳嗽 0、正常、1发烧、2、感冒 3、咳嗽4、干呕" value=${detail.jsfsgm} type="text" class="layui-input"-->
 <!--                   lay-verify="required" required/>-->
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">个人状态是否良好</label>
+        <label class="layui-form-label required">确诊情况<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
-            <#dict_tag id="status" name="status" defaultVal="0" dictCode="status"/>
+            <#dict_tag id="status" name="status" defaultVal="0" dictCode="status"  value="${detail.status}" lay-verify="required"/>
 <!--            <input name="status" id="status" placeholder="请输入个人状态是否良好 0是1否" type="text" value=${detail.status} class="layui-input"-->
 <!--                   lay-verify="required" required/>-->
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">交通是否影响</label>
+        <label class="layui-form-label required">交通影响<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
-            <#dict_tag id="jtyx" name="jtyx" defaultVal="" value="${detail.jtyx}" dictCode="jtyx"/>
+            <#dict_tag id="jtyx" name="jtyx" lay-filter="jtyx" defaultVal="" value="${detail.jtyx}" dictCode="jtyx" lay-verify="required"/>
 <!--            <input name="jtyx" id="jtyx" placeholder="请输入交通是否影响，0、正常、1、封路 2、交通管制、3无法反郑" value=${detail.jtyx} type="text" class="layui-input"-->
 <!--                   lay-verify="required" required/>-->
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item" id="jiefeng" style="display: none;">
         <label class="layui-form-label">解封时间</label>
         <div class="layui-input-block">
             <input type="text" class="layui-input" name="jfDate" id="jfDate" placeholder="请输入解封时间" value="${detail.jfDate!}" >
         </div>
     </div>
     <div class="layui-form-item text-right">
-        <button class="layui-btn" lay-filter="formSubmit" lay-submit>上报</button>
-        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <label>疫情统计:</label>
+        <a href="https://i.snssdk.com/ugc/hotboard_fe/hot_list/template/hot_list/forum_tab.html">[头条]</a>
+        <a  href="https://voice.baidu.com/act/newpneumonia/newpneumonia/?from=osari_pc_1">[百度]</a>
+        <a  href="https://ncov.dxy.cn/ncovh5/view/pneumonia_peopleapp?from=timeline&isappinstalled=0">[丁香园]</a>
+        <a href="http://news.163.com/special/epidemic/">[网易]</a>
+        <button class="layui-btn" lay-filter="formSubmit" lay-submit>我要上报</button>
     </div>
 </form>
 
@@ -146,7 +161,22 @@
             });
             return false;
         });
-
+        form.on('select(whfz)', function(data){
+            if(data.value == 0){
+                $("#jcxq").hide();
+                $("#jcrq").hide();
+            }else{
+                $("#jcxq").show();
+                $("#jcrq").show();
+            }
+        });
+        form.on('select(jtyx)', function(data){
+            if(data.value == 0){
+                $("#jiefeng").hide();
+            }else{
+                $("#jiefeng").show();
+            }
+        });
         function closeWindow() {
             var userAgent = navigator.userAgent;
             if (userAgent.indexOf("Firefox") != -1 || userAgent.indexOf("Chrome") != -1) {
@@ -160,13 +190,13 @@
 
         laydate.render({
             elem: '#jfDate',
-            type:'datetime',
+            type:'date',
             //value  :new Date(),                    //初始值
             fommat:'yyyy-MM-dd'
         });
         laydate.render({
             elem: '#whDate',
-            type:'datetime',
+            type:'date',
             //value  :new Date(),                    //初始值
             fommat:'yyyy-MM-dd'
         });

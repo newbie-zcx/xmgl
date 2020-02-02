@@ -34,6 +34,7 @@ public class DictTag extends GeneralVarTagBinding {
     private String defaultVal;
     private String value;
     private String readonly ;
+    private String layfilter;
 
     private List<Dict> dictList = new ArrayList<Dict>();
     private static final String A = "a";
@@ -46,10 +47,11 @@ public class DictTag extends GeneralVarTagBinding {
          cssclass = (String) getAttributeValue("class");
          dictCode = (String) getAttributeValue("dictCode");
          defaultVal = (String) getAttributeValue("defaultVal");
-         layverify = (String) getAttributeValue("lay-verify");
+         layverify = (String) getAttributeValue("layVerify");
+         layfilter = (String) getAttributeValue("layFilter");
          readonly = (String) getAttributeValue("readonly");
-        value = (String) getAttributeValue("value");
-        dictList =dictService.getByGroupCode(dictCode);
+         value =  getAttributeValue("value")+"";
+         dictList =dictService.getByGroupCode(dictCode);
     }
     @Override
     public void render(){
@@ -71,7 +73,10 @@ public class DictTag extends GeneralVarTagBinding {
         if (StringUtils.isNotBlank(value)){
             sb.append(" value=\""+value+"\"");
         }
-        sb.append(">");
+        if (StringUtils.isNotBlank(layfilter)){
+            sb.append(" lay-filter=\""+layfilter+"\"");
+        }
+        sb.append(" >");
         for (Dict dict:dictList){
             if (dict.getValue().equals(defaultVal)){
                 sb.append("<option value=\""+dict.getValue()+"\" selected=\"selected\">");
