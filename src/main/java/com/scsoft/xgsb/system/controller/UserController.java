@@ -176,7 +176,8 @@ public class UserController extends BaseController {
     @RequestMapping("/updatePsw")
     @SysLog(operationType="update操作:",operationName="修改用户密码")
     public JsonResult updatePsw(String oldPsw, String newPsw) {
-        String finalSecret = EndecryptUtil.encrytMd5(oldPsw, SystemCommonHandler.getLoginUserName()+SystemCommonHandler.getLoginUser().getSalt(), 3);
+        User user=SystemCommonHandler.getLoginUser();
+        String finalSecret = EndecryptUtil.encrytMd5(oldPsw, user.getUserName()+user.getSalt(), 1024);
         if (!finalSecret.equals(SystemCommonHandler.getLoginUser().getPassword())) {
             return JsonResult.error("原密码输入不正确");
         }

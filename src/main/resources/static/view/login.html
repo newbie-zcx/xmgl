@@ -42,7 +42,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label"><i class="layui-icon layui-icon-password"></i></label>
                     <div class="layui-input-block">
-                        <input name="password" type="password" lay-verify="required" placeholder="密码" value=""
+                        <input name="password" id="password" type="password" lay-verify="required" placeholder="密码" value=""
                                class="layui-input">
                     </div>
                 </div>
@@ -82,6 +82,7 @@
         var $ = layui.jquery;
         var form = layui.form;
 
+
         // 表单提交
         form.on('submit(login-submit)', function (obj) {
             if (!codeflag) {
@@ -92,9 +93,21 @@
                 $.post('login', obj.field, function (data) {
                     console.info(obj.field);
                     if (200 == data.code) {
-                        layer.msg('登录成功', {icon: 1, time: 1500}, function () {
-                            location.replace('./');
-                        });
+                        layer.closeAll('loading');
+                        var password=$("#password").val();
+                        if (password=='123456'){
+                            layer.open({
+                                id: "pswForm",
+                                type: 2,
+                                title: "修改密码",
+                                shade: 0,
+                                content: "/view/tpl/tpl-password.html"
+                            })
+                        }else{
+                            layer.msg('登录成功', {icon: 1, time: 1500}, function () {
+                                location.replace('./');
+                            });
+                        }
                     } else {
                         layer.closeAll('loading');
                         layer.msg(data.msg, {icon: 5});
