@@ -115,12 +115,20 @@
             <input type="text" class="layui-input" name="jfDate" id="jfDate" placeholder="请输入解封时间" value="${detail.jfDate!}" >
         </div>
     </div>
-    <div class="layui-form-item text-right">
-        <label>疫情统计:</label>
+    <div class="layui-form-item">
+        <label class="layui-form-label">疫情统计:</label>
         <a href="https://i.snssdk.com/ugc/hotboard_fe/hot_list/template/hot_list/forum_tab.html">[头条]</a>
         <a  href="https://voice.baidu.com/act/newpneumonia/newpneumonia/?from=osari_pc_1">[百度]</a>
         <a  href="https://ncov.dxy.cn/ncovh5/view/pneumonia_peopleapp?from=timeline&isappinstalled=0">[丁香园]</a>
         <a href="http://news.163.com/special/epidemic/">[网易]</a>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">官方消息:</label>
+        <a href="http://www.hnwsjsw.gov.cn/channels/854.shtml">[权威发布]</a>
+        <a  href="http://ygzwdsqd.yyhj.hnzwfw.gov.cn/web/gzbdddyljg.html">[定点医疗机构]</a>
+        <a  href="https://h5.peopleapp.com/txcx/index.html">[同行车次]</a>
+    </div>
+    <div class="layui-form-item text-right">
         <button class="layui-btn" lay-filter="formSubmit" lay-submit>我要上报</button>
     </div>
 </form>
