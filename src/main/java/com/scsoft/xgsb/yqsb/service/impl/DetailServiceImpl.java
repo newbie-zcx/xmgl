@@ -57,6 +57,27 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
          IPage iPage = detailMapper.selectPage(page,ew);
           return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
     }
+
+    @Override
+    public PageResult<Detail> oneselfListPage(int pageNum, int pageSize, Detail detail) {
+        Page<Detail> page = new Page<Detail>(pageNum, pageSize);
+        QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
+       //获取姓名ID
+        ew.eq("create_id", detail.getCreateId());
+        IPage iPage = detailMapper.selectPage(page,ew);
+        return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
+    }
+
+    @Override
+    public PageResult<Detail> departmentListPage(int pageNum, int pageSize, Detail detail) {
+        Page<Detail> page = new Page<Detail>(pageNum, pageSize);
+        QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
+        //获取部门名称
+        ew.like("user_depart", detail.getUserDepart());
+        IPage iPage = detailMapper.selectPage(page,ew);
+        return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
+    }
+
     @Override
     public PageResult<Detail> listPage(int pageNum, int pageSize, Detail detail,String type) {
         Page<Detail> page = new Page<Detail>(pageNum, pageSize);

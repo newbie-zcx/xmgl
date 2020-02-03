@@ -21,6 +21,10 @@ public interface IDetailService extends IService<Detail> {
      * @param detail
      */
     PageResult<Detail> listPage(int pageNum, int pageSize,Detail detail);
+    //本人分页查询
+    PageResult<Detail> oneselfListPage(int pageNum, int pageSize,Detail detail);
+    //部门分页查询
+    PageResult<Detail> departmentListPage(int pageNum, int pageSize,Detail detail);
     /**
      *  分页查询结果集
      * @param detail

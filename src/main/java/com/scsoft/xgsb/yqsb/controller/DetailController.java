@@ -65,6 +65,30 @@ public class DetailController extends BaseController {
     }
 
     /**
+     * 跳转到本人疫情上报详情首页
+     */
+    @RequiresPermissions("detail:view")
+    @RequestMapping("/oneself")
+    public String oneself(Model model, HttpServletRequest request) {
+        User user= SystemCommonHandler.getLoginUser();//获取当前用户
+        model.addAttribute("userId",user.getId());//把ID传到页面
+        return PREFIX + "oneself";
+    }
+
+    /**
+     * 跳转到部门疫情上报详情首页
+     */
+    @RequiresPermissions("detail:view")
+    @RequestMapping("/department")
+    public String department(Model model, HttpServletRequest request) {
+        User user= SystemCommonHandler.getLoginUser();//获取当前用户
+        List<Depart> departList=departService.getByUserId(user.getId());//获取当前部门
+        String userDepart=departList.get(0).getDepartName();//获取部门名称
+        model.addAttribute("userDepart",userDepart);
+        return PREFIX + "department";
+    }
+
+    /**
      * 跳转到疫情上报详情首页
      * type 0当日上报 1当日未上报
      */
@@ -132,6 +156,28 @@ public class DetailController extends BaseController {
     @ResponseBody
     public PageResult<Detail> list(Integer page, Integer limit, Detail detail,String condition, Model model,HttpServletRequest request) {
         return detailService.listPage(page,limit,detail);
+    }
+
+    /**
+     * 获取疫情上报详情列表
+     */
+    @RequestMapping(value = "/oneselfList")
+    @RequiresPermissions("detail:view")
+    @ResponseBody
+    public PageResult<Detail> oneselfList(Integer page, Integer limit,Integer userId, Detail detail,String condition, Model model,HttpServletRequest request) {
+        detail.setCreateId(userId);
+        return detailService.oneselfListPage(page,limit,detail);
+    }
+
+    /**
+     * 获取疫情上报详情列表
+     */
+    @RequestMapping(value = "/departmentList")
+    @RequiresPermissions("detail:view")
+    @ResponseBody
+    public PageResult<Detail> departmentList(Integer page, Integer limit,String userDepart, Detail detail,String condition, Model model,HttpServletRequest request) {
+        detail.setUserDepart(userDepart);
+        return detailService.departmentListPage(page,limit,detail);
     }
 
     /**
