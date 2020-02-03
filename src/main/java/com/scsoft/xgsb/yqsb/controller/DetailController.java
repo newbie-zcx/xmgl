@@ -211,7 +211,7 @@ public class DetailController extends BaseController {
         }
         if (detailService.saveOrUpdate(detail)) {
             redisUtil.set("yqsb:detail:" + user.getId(),detail);
-                return JsonResult.ok("添加成功,请勿重复提交");
+                return JsonResult.ok("添加成功,再次提交为更新操作");
         } else {
             return JsonResult.error("添加失败");
         }
