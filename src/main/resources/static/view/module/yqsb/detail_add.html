@@ -122,6 +122,12 @@
             <input type="text" class="layui-input" name="jfDate" id="jfDate" placeholder="请输入解封时间" value="${detail.jfDate!}" >
         </div>
     </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">上报时间</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input"  id="createTime" value="${date(),dateFormat='yyyy-MM-dd'}" readonly>
+        </div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">疫情统计:</label>
         <a href="https://i.snssdk.com/ugc/hotboard_fe/hot_list/template/hot_list/forum_tab.html">[头条]</a>
