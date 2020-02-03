@@ -23,11 +23,13 @@
 }
 
 .login-body > .layui-card {
-    max-width: 360px;
+    max-width: 400px;
+    width:280px;
     position: absolute;
-    top: 20%;
+    top: 25%;
+    padding: 10px 10px 10px 10px;
     /*bottom: 21%;*/
-    right: 10%;
+    right: 15%;
 }
 
 .login-body .layui-card-header {
@@ -124,11 +126,11 @@
      width: 100%;
  }
 .login-logo .login-logo-pic{
-    width: 66px;
+    width: 330px;
     height: 66px;
     display: inline-block;
     vertical-align:6px;
-    margin-right: 10px;
+    margin-right: -10px;
 }
 .login-logo .login-logo-pic img{
     width: 100%;
