@@ -50,7 +50,7 @@ public class DictTag extends GeneralVarTagBinding {
          layverify = (String) getAttributeValue("layVerify");
          layfilter = (String) getAttributeValue("layFilter");
          readonly = (String) getAttributeValue("readonly");
-         value =  getAttributeValue("value")+"";
+         value =  getAttributeValue("value").toString();
          dictList =dictService.getByGroupCode(dictCode);
     }
     @Override
@@ -70,19 +70,25 @@ public class DictTag extends GeneralVarTagBinding {
         if (StringUtils.isNotBlank(dictCode)){
             sb.append(" dictCode=\""+dictCode+"\"");
         }
-        if (StringUtils.isNotBlank(value)){
-            sb.append(" value=\""+value+"\"");
-        }
         if (StringUtils.isNotBlank(layfilter)){
             sb.append(" lay-filter=\""+layfilter+"\"");
         }
         sb.append(" >");
         for (Dict dict:dictList){
-            if (dict.getValue().equals(defaultVal)){
-                sb.append("<option value=\""+dict.getValue()+"\" selected=\"selected\">");
-            }else {
-                sb.append("<option value=\""+dict.getValue()+"\">");
+            if (StringUtils.isNotBlank(value)){
+                if (dict.getValue().equals(value)){
+                    sb.append("<option value=\""+dict.getValue()+"\" selected=\"selected\">");
+                }else {
+                    sb.append("<option value=\""+dict.getValue()+"\">");
+                }
+            }else{
+                if (dict.getValue().equals(defaultVal)){
+                    sb.append("<option value=\""+dict.getValue()+"\" selected=\"selected\">");
+                }else {
+                    sb.append("<option value=\""+dict.getValue()+"\">");
+                }
             }
+
             sb.append(dict.getLabel());
             sb.append("</option>");
         }
