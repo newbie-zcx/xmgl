@@ -304,7 +304,7 @@
                     if (checkStatus.data.length == 0) {
                         layer.msg('请选择要导出的数据', {icon: 2});
                     } else {
-                        table.exportFile(ins1.config.id, checkStatus.data, 'xls');
+                        table.exportFile(obj.config.id, checkStatus.data, 'xls');
                     }
                     break;
             };
@@ -398,14 +398,14 @@
             fommat:'yyyy-MM-dd'
         });
         // 导出excel
-                $('#btnExp').click(function () {
-                    var checkRows = table.checkStatus('detailTable');
-                    if (checkRows.data.length == 0) {
-                        layer.msg('请选择要导出的数据', {icon: 2});
-                    } else {
-                        table.exportFile(ins1.config.id, checkRows.data, 'xls');
-                    }
-                });
+        //         $('#btnExp').click(function () {
+        //             var checkRows = table.checkStatus('detailTable');
+        //             if (checkRows.data.length == 0) {
+        //                 layer.msg('请选择要导出的数据', {icon: 2});
+        //             } else {
+        //                 table.exportFile(ins1.config.id, checkRows.data, 'xls');
+        //             }
+        //         });
     });
 
 </script>
