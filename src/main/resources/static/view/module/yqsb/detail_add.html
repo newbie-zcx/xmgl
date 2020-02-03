@@ -35,6 +35,13 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label required">手机号<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
+        <div class="layui-input-block">
+            <input name="userPhone" id="userPhone" placeholder="请输入手机号" value="${detail.userPhone}" type="text" class="layui-input"
+                   lay-verify="required"  lay-verType="tips"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label required">所在地<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
             <input name="address" id="address" placeholder="请输入所在地" value="${detail.address!}"  type="text" class="layui-input"

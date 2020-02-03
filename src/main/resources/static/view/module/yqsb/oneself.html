@@ -16,18 +16,7 @@
 
             <div class="layui-form toolbar">
                 <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">姓名：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="userName" id="userName" placeholder="请输入姓名" type="text" class="layui-input"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">部门：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="userDepart" id="userDepart" placeholder="请输入部门" type="text" class="layui-input"/>
-                        </div>
-                    </div>
+
                     <div class="layui-inline">
                         <label class="layui-form-label">外出状态:</label>
                         <div class="layui-input-inline mr0">
@@ -117,9 +106,9 @@
             cols: [[
                 {type: 'numbers', title:'序号'},
                 {type: 'checkbox'},
-
-                {title: '部门', field: 'userDepart', width:100, align: 'center', valign: 'middle', sort: true},
+                {title: '部门', field: 'userDepart', width:150, align: 'center', valign: 'middle', sort: true},
                 {title: '姓名', field: 'userName', width:100,align: 'center', valign: 'middle', sort: true},
+                {title: '上报时间', width:150,field: 'createDate', align: 'center', valign: 'middle', sort: true},
                 {title: '所在地', field: 'address',width:200, align: 'center', valign: 'middle', sort: true},
                 {title: '外出状态', width:100,field: 'outState', align: 'center', valign: 'middle', sort: true,
                     templet: function (d) {
@@ -251,8 +240,7 @@
                         }
                     }
                 },
-                {title: '解封时间', width:150,field: 'jfDate', align: 'center', valign: 'middle', sort: true},
-                {title: '上报时间', width:150,field: 'createDate', align: 'center', valign: 'middle', sort: true}
+                {title: '解封时间', width:150,field: 'jfDate', align: 'center', valign: 'middle', sort: true}
             ]]
         });
 

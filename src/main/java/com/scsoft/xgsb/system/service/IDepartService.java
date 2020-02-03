@@ -18,4 +18,5 @@ public interface IDepartService extends IService<Depart> {
     List<Depart> getByPId(int pid);
     List<Depart> getByPId(List<Depart> pids);
     List<Depart> selectNotInId(int departId);
+    List<Depart> findChridByName(String name);
 }

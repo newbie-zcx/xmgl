@@ -14,10 +14,10 @@
     <div class="layui-card">
         <div class="layui-card-body">
 
+            <input type="hidden" id="ntype" name="ntype" value="${ntype}">
             <div class="layui-form toolbar">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <input type="hidden" id="type" name="type" value="${type}">
                         <label class="layui-form-label">姓名：</label>
                         <div class="layui-input-inline mr0">
                             <input name="userName" id="userName" placeholder="请输入姓名" type="text" class="layui-input"/>
@@ -107,20 +107,22 @@
         var util = layui.util;
         var admin = layui.admin;
         var core = layui.core;
-        var type=$("#type").val();
+        var type=$("#ntype").val();
         //渲染表格
         table.render({
             elem: '#detailTable',
             title:"健康状态上报详情",
-            url: '/yqsb/detail/todaylist?type='+type,
+            url: '/yqsb/detail/todaylist?ntype='+type,
             toolbar: '#detail-toolbar',
             where: $('form').serialize(),
             page: true,
             cols: [[
                 {type: 'numbers', title:'序号'},
                 {type: 'checkbox'},
-                {title: '部门', field: 'userDepart', width:100, align: 'center', valign: 'middle', sort: true},
+                {title: '部门', field: 'userDepart', width:180, align: 'center', valign: 'middle', sort: true},
                 {title: '姓名', field: 'userName', width:100,align: 'center', valign: 'middle', sort: true},
+                {title: '手机号', field: 'userPhone',width:120, align: 'center', valign: 'middle', sort: true},
+                {title: '上报时间', width:180,field: 'createDate', align: 'center', valign: 'middle', sort: true},
                 {title: '所在地', field: 'address',width:200, align: 'center', valign: 'middle', sort: true},
                 {title: '外出状态', width:100,field: 'outState', align: 'center', valign: 'middle', sort: true,
                     templet: function (d) {
@@ -252,8 +254,7 @@
                         }
                     }
                 },
-                {title: '解封时间', width:150,field: 'jfDate', align: 'center', valign: 'middle', sort: true},
-                {title: '上报时间', width:150,field: 'createDate', align: 'center', valign: 'middle', sort: true}
+                {title: '解封时间', width:100,field: 'jfDate', align: 'center', valign: 'middle', sort: true}
                /* {field: 'orgType',align: 'center', sort: true, width:140,
                     templet: function (d) {
                         if (d.orgType=="1"){
@@ -396,7 +397,7 @@
                 content: 'detail/detail/' + detailId
             });
         }
-        /* // 导出excel
+         // 导出excel
                 $('#btnExp').click(function () {
                     var checkRows = table.checkStatus('detailTable');
                     if (checkRows.data.length == 0) {
@@ -404,7 +405,7 @@
                     } else {
                         table.exportFile(ins1.config.id, checkRows.data, 'xls');
                     }
-                });*/
+                });
     });
 
 </script>

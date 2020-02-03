@@ -55,6 +55,12 @@
                         </div>
                     </div>
                     <div class="layui-inline">
+                        <label class="layui-form-label">上报时间：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="createDate" id="createDate" placeholder="输入上报日期" type="text" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
                         <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
                     </div>
                 </div>
@@ -98,13 +104,14 @@
 <!-- js部分 -->
 <% include("../../layout/jsPart.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin','laydate'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
         var util = layui.util;
         var admin = layui.admin;
+        var laydate = layui.laydate;
 
         //渲染表格
         table.render({
@@ -117,9 +124,10 @@
             cols: [[
                 {type: 'numbers', title:'序号'},
                 {type: 'checkbox'},
-
-                {title: '部门', field: 'userDepart', width:100, align: 'center', valign: 'middle', sort: true},
+                {title: '部门', field: 'userDepart', width:170, align: 'center', valign: 'middle', sort: true},
                 {title: '姓名', field: 'userName', width:100,align: 'center', valign: 'middle', sort: true},
+                {title: '手机号', field: 'userPhone',width:120, align: 'center', valign: 'middle', sort: true},
+                {title: '上报时间', width:180,field: 'createDate', align: 'center', valign: 'middle', sort: true},
                 {title: '所在地', field: 'address',width:200, align: 'center', valign: 'middle', sort: true},
                 {title: '外出状态', width:100,field: 'outState', align: 'center', valign: 'middle', sort: true,
                     templet: function (d) {
@@ -251,8 +259,7 @@
                         }
                     }
                 },
-                {title: '解封时间', width:150,field: 'jfDate', align: 'center', valign: 'middle', sort: true},
-                {title: '上报时间', width:150,field: 'createDate', align: 'center', valign: 'middle', sort: true}
+                {title: '解封时间', width:150,field: 'jfDate', align: 'center', valign: 'middle', sort: true}
             ]]
         });
 
@@ -310,8 +317,8 @@
             var hdXznsz=$('#hdXznsz').val();//重点区域
             var fsgm=$('#fsgm').val();//获取发烧感冒
             var jtyx=$('#jtyx').val();//获取姓名
-
-            table.reload('detailTable', {where:{userName:userName,userDepart:userDepart,outState:outState,hdXznsz:hdXznsz,fsgm:fsgm,jtyx:jtyx}});
+            var createDate=$('#createDate').val();//获取姓名
+            table.reload('detailTable', {where:{userName:userName,userDepart:userDepart,outState:outState,hdXznsz:hdXznsz,fsgm:fsgm,jtyx:jtyx,createDate:createDate}});
         });
 
         // 工具条点击事件
@@ -382,7 +389,13 @@
                 content: 'detail/detail/' + detailId
             });
         }
-        /* // 导出excel
+        laydate.render({
+            elem: '#createDate',
+            type:'date',
+            //value  :new Date(),                    //初始值
+            fommat:'yyyy-MM-dd'
+        });
+        // 导出excel
                 $('#btnExp').click(function () {
                     var checkRows = table.checkStatus('detailTable');
                     if (checkRows.data.length == 0) {
@@ -390,7 +403,7 @@
                     } else {
                         table.exportFile(ins1.config.id, checkRows.data, 'xls');
                     }
-                });*/
+                });
     });
 
 </script>

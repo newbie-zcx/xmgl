@@ -12,9 +12,9 @@
 <!-- 正文开始 -->
 <div class="layui-fluid">
     <div class="layui-card">
+        <input type="hidden" id="ntype" name="ntype" value="${ntype}">
         <div class="layui-card-body">
-
-            <div class="layui-form toolbar">
+            <div class="layui-form toolbar" >
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <div class="layui-inline">
@@ -23,14 +23,13 @@
                                 <input name="userDepart" id="userDepart" placeholder="请输入部门" type="text" class="layui-input"/>
                             </div>
                         </div>
-                        <input type="hidden" id="type" name="type" value="${type}">
                         <label class="layui-form-label">姓名：</label>
                         <div class="layui-input-inline mr0">
                             <input name="userName" id="userName" placeholder="请输入姓名" type="text" class="layui-input"/>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button id="btnSearch" lay-filter="btnSubmit" lay-submit class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
                     </div>
                 </div>
             </div>
@@ -70,12 +69,12 @@
         var util = layui.util;
         var admin = layui.admin;
         var core = layui.core;
-        var type=$("#type").val();
+        var type=$("#ntype").val();
         //渲染表格
         table.render({
             elem: '#detailTable',
             title:"疫情上报详情",
-            url: '/yqsb/detail/todaylist?type='+type,
+            url: '/yqsb/detail/todaylist?ntype='+type,
             toolbar: '#detail-toolbar',
             where: $('form').serialize(),
             page: true,
@@ -83,7 +82,8 @@
                 {type: 'numbers', title:'序号'},
                 {type: 'checkbox'},
                 {title: '部门', field: 'userDepart', align: 'center', valign: 'middle', sort: true},
-                {title: '姓名', field: 'userName', align: 'center', valign: 'middle', sort: true}
+                {title: '姓名', field: 'userName', align: 'center', valign: 'middle', sort: true},
+                {title: '电话', field: 'userPhone', align: 'center', valign: 'middle', sort: true}
             ]]
         });
 
@@ -132,10 +132,10 @@
             };
         });
 
-
-        // 搜索按钮点击事件
-        $('#btnSearch').click(function () {
-            table.reload('detailTable', {where: $('form').serialize()});
+        form.on('submit(btnSubmit)', function (data) {
+            //表单数据formData
+            var formData = data.field;
+            table.reload('detailTable', {where: formData});
         });
 
         // 工具条点击事件

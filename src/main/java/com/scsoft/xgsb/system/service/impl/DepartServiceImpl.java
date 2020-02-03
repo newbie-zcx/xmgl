@@ -52,4 +52,10 @@ public class DepartServiceImpl extends ServiceImpl<DepartMapper, Depart> impleme
     public List<Depart> selectNotInId(int departId) {
         return departMapper.selectNotInId(departId);
     }
+    @Override
+    public List<Depart> findChridByName(String name) {
+        QueryWrapper<Depart> query = new QueryWrapper<Depart>().like("description", name);
+        return departMapper.selectList(query);
+    }
+
 }

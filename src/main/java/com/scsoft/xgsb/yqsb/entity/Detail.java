@@ -44,6 +44,11 @@ public class Detail extends BaseEntity {
      */
     @TableField("user_depart")
     private String userDepart;
+    /**
+     * 电话
+     */
+    @TableField("user_phone")
+    private String userPhone;
 
     /**
      * 外出状态 0 在老家、1、在郑州、2、外出

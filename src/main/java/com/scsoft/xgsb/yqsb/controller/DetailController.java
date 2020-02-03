@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -95,7 +96,7 @@ public class DetailController extends BaseController {
     @RequiresPermissions("detail:view")
     @RequestMapping("todaydetail")
     public String todaydetail(Model model,String type, HttpServletRequest request) {
-        model.addAttribute("type",type);
+        model.addAttribute("ntype",type);
         if (type.equals("0")){
             return PREFIX + "todaydetail";
         }else{
@@ -117,6 +118,7 @@ public class DetailController extends BaseController {
             Detail detail=new Detail();
             detail.setUserName(user.getRealName());
             detail.setUserDepart(departList.get(0).getDepartName());
+            detail.setUserPhone(user.getMobilePhone());
             detail.setOutState("0");
             detail.setWhFz("0");
             detail.setHdXznsz("0");
@@ -175,9 +177,13 @@ public class DetailController extends BaseController {
     @RequestMapping(value = "/departmentList")
     @RequiresPermissions("detail:view")
     @ResponseBody
-    public PageResult<Detail> departmentList(Integer page, Integer limit,String userDepart, Detail detail,String condition, Model model,HttpServletRequest request) {
-        detail.setUserDepart(userDepart);
-        return detailService.departmentListPage(page,limit,detail);
+    public PageResult<Detail> departmentList(Integer page, Integer limit,String userDepart,String createDate, Detail detail,String condition, Model model,HttpServletRequest request) {
+        List<Depart> departs=departService.findChridByName(userDepart);
+        List<String> departNames=new ArrayList<>();
+        for (Depart depart:departs){
+            departNames.add(depart.getDepartName());
+        }
+        return detailService.departmentListPage(page,limit,detail,departNames);
     }
 
     /**
@@ -186,8 +192,8 @@ public class DetailController extends BaseController {
     @RequestMapping(value = "/todaylist")
     @RequiresPermissions("detail:view")
     @ResponseBody
-    public PageResult<Detail> todaylist(Integer page, Integer limit,String type, Detail detail,String condition, Model model,HttpServletRequest request) {
-        return detailService.listPage(page,limit,detail,type);
+    public PageResult<Detail> todaylist(Integer page, Integer limit,String ntype, Detail detail,String condition, Model model,HttpServletRequest request) {
+        return detailService.listPage(page,limit,detail,ntype);
     }
 
 /**

@@ -54,6 +54,11 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
         if (!StringUtils.isBlank(detail.getJtyx())) {//获取交通影响
             ew.eq("jtyx", detail.getJtyx());
         }
+        if (null!=detail.getCreateDate()) {//时间排序
+            ew.gt("create_date", DateUtil.getDay(detail.getCreateDate())+" 00:00:00");
+            ew.lt("create_date", DateUtil.getDay(detail.getCreateDate())+" 23:59:00");
+        }
+        ew.orderByDesc("create_Date");
          IPage iPage = detailMapper.selectPage(page,ew);
           return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
     }
@@ -64,16 +69,37 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
         QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
        //获取姓名ID
         ew.eq("create_id", detail.getCreateId());
+        ew.orderByDesc("create_Date");
         IPage iPage = detailMapper.selectPage(page,ew);
         return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
     }
 
     @Override
-    public PageResult<Detail> departmentListPage(int pageNum, int pageSize, Detail detail) {
+    public PageResult<Detail> departmentListPage(int pageNum, int pageSize, Detail detail,List<String> list) {
         Page<Detail> page = new Page<Detail>(pageNum, pageSize);
         QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
         //获取部门名称
-        ew.like("user_depart", detail.getUserDepart());
+        ew.in("user_depart", list);
+        if (StringUtils.isNotBlank(detail.getUserName())) {//获取姓名
+            ew.like("user_name", detail.getUserName());
+        }
+        if (StringUtils.isNotBlank(detail.getOutState())) {//获取外出状态
+            ew.eq("out_state", detail.getOutState());
+        }
+        if (!StringUtils.isBlank(detail.getHdXznsz())) {//获取重点活动区域
+            ew.eq("hd_xznsz", detail.getHdXznsz());
+        }
+        if (StringUtils.isNotBlank(detail.getFsgm())) {//是否感冒发烧
+            ew.eq("fsgm", detail.getFsgm());
+        }
+        if (!StringUtils.isBlank(detail.getJtyx())) {//获取交通影响
+            ew.eq("jtyx", detail.getJtyx());
+        }
+        if (null!=detail.getCreateDate()) {//时间排序
+            ew.gt("create_date", DateUtil.getDay(detail.getCreateDate())+" 00:00:00");
+            ew.lt("create_date", DateUtil.getDay(detail.getCreateDate())+" 23:59:00");
+        }
+        ew.orderByDesc("create_Date");
         IPage iPage = detailMapper.selectPage(page,ew);
         return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
     }
@@ -83,7 +109,6 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
         Page<Detail> page = new Page<Detail>(pageNum, pageSize);
         QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
         if (type.equals("0")){
-            ew.gt("create_date", DateUtil.getNowDate()+" 00:00:00");
             if (StringUtils.isNotBlank(detail.getUserName())) {//获取姓名
                 ew.like("user_name", detail.getUserName());
             }
@@ -102,10 +127,21 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
             if (!StringUtils.isBlank(detail.getJtyx())) {//获取交通影响
                 ew.eq("jtyx", detail.getJtyx());
             }
+            if (null!=detail.getCreateDate()) {//时间排序
+                ew.gt("create_date", DateUtil.getDay(detail.getCreateDate())+" 00:00:00");
+                ew.lt("create_date", DateUtil.getDay(detail.getCreateDate())+" 23:59:00");
+            }
+            ew.gt("create_date", DateUtil.getNowDate()+" 00:00:00");
+            ew.orderByDesc("create_Date");
             IPage iPage = detailMapper.selectPage(page,ew);
             return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
         }else{
-            ew.select("user_name","user_depart");
+            if (StringUtils.isNotBlank(detail.getUserName())) {//获取姓名
+                ew.like("a.user_name", detail.getUserName());
+            }
+            if (!StringUtils.isBlank(detail.getUserDepart())) {//获取部门
+                ew.like("a.user_depart", detail.getUserDepart());
+            }
             IPage iPage = detailMapper.todayNosb(page,ew);
             return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
         }
@@ -117,6 +153,7 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
     @Override
     public List<Detail> selectList(Detail detail) {
         QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
+        ew.orderByDesc("create_Date");
         return detailMapper.selectList(ew);
 
      }
