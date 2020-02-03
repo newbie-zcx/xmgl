@@ -50,7 +50,7 @@ public class DictTag extends GeneralVarTagBinding {
          layverify = (String) getAttributeValue("layVerify");
          layfilter = (String) getAttributeValue("layFilter");
          readonly = (String) getAttributeValue("readonly");
-         value =  getAttributeValue("value").toString();
+         value =  getAttributeValue("value")+"";
          dictList =dictService.getByGroupCode(dictCode);
     }
     @Override
