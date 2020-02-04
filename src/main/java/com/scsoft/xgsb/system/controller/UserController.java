@@ -121,9 +121,6 @@ public class UserController extends BaseController {
     @SysLog(operationType="update操作:",operationName="修改用户")
     public JsonResult update(User user, String roleId) {
         user.setRoles(getRoles(roleId));
-        if (StringUtils.isBlank(user.getPassword())){
-            user.setPassword("123456");
-        }
         if (userService.update(user)) {
             return JsonResult.ok("修改成功");
         } else {
