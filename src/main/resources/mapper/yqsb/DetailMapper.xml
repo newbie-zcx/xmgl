@@ -46,15 +46,29 @@
 
 
     <select id="todayNosb" resultType="com.scsoft.xgsb.yqsb.entity.Detail">
-              select a.*,xg.user_phone from
-		    (select n.depart_name user_depart,n.real_name user_name from
-          (select d.depart_name,u.real_name from
-					   sys_user u,sys_depart d,sys_user_depart ud
-             where u.id=ud.user_id and d.id=ud.depart_id
-					 ) n
-           where n.real_name
-					 not in(select user_name from xg_detail where create_date>DATE_FORMAT(CURDATE(),'%Y-%m-%d %H:%i:%s'))
-			   ) a LEFT JOIN  xg_detail xg ON xg.user_name=a.user_name
-		 ${ew.customSqlSegment}
+        SELECT * FROM
+            (
+            SELECT
+                n.depart_name user_depart,
+                n.real_name user_name,
+                n.mobile_phone user_phone
+            FROM
+                (
+                SELECT
+                    d.depart_name,
+                    u.real_name,
+                    u.mobile_phone
+                FROM
+                    sys_user u,
+                    sys_depart d,
+                    sys_user_depart ud
+                WHERE
+                    u.id = ud.user_id
+                    AND d.id = ud.depart_id
+                ) n
+            WHERE
+            n.real_name NOT IN ( SELECT user_name FROM xg_detail WHERE create_date > DATE_FORMAT( CURDATE(), '%Y-%m-%d %H:%i:%s' ) )
+            ) a
+	      ${ew.customSqlSegment}
     </select>
 </mapper>

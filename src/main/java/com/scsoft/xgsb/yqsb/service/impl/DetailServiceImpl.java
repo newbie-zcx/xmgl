@@ -143,10 +143,10 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
             return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());
         }else{
             if (StringUtils.isNotBlank(detail.getUserName())) {//获取姓名
-                ew.like("a.user_name", detail.getUserName());
+                ew.like("user_name", detail.getUserName());
             }
             if (!StringUtils.isBlank(detail.getUserDepart())) {//获取部门
-                ew.like("a.user_depart", detail.getUserDepart());
+                ew.like("user_depart", detail.getUserDepart());
             }
             IPage iPage = detailMapper.todayNosb(page,ew);
             return new PageResult<Detail>(iPage.getRecords(), iPage.getTotal());

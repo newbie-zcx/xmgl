@@ -56,6 +56,13 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <!--        -->
+        <label class="layui-form-label required">出行情况<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
+        <div class="layui-input-block">
+            <input name="cxqk" id="cxqk" placeholder="请输入出行情况" type="text" value="${detail.cxqk!}" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label required">接触情况<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
             <#dict_tag id="whFz" name="whFz" lay-filter="whfz" dictCode="wh_fz" value="${detail.whFz}" lay-verify="required"/>
@@ -106,6 +113,20 @@
             <#dict_tag id="status" name="status" defaultVal="0" dictCode="status"  value="${detail.status}" lay-verify="required"/>
 <!--            <input name="status" id="status" placeholder="请输入个人状态是否良好 0是1否" type="text" value=${detail.status} class="layui-input"-->
 <!--                   lay-verify="required" required/>-->
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <!--        -->
+        <label class="layui-form-label required">是否隔离<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
+        <div class="layui-input-block">
+            <input name="sfgl" id="sfgl" placeholder="请输入是否隔离" type="text" value="${detail.sfgl!}" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <!--        -->
+        <label class="layui-form-label required">隔离天数<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
+        <div class="layui-input-block">
+            <input name="glts" id="glts" placeholder="请输入隔离天数" type="text" value="${detail.glts!}" class="layui-input"/>
         </div>
     </div>
     <div class="layui-form-item">
