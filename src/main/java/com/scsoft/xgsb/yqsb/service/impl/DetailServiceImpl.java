@@ -33,7 +33,7 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
      * @return PageResult
      */
     @Override
-    public PageResult<Detail> listPage(int pageNum, int pageSize, Detail detail) {
+    public PageResult<Detail> listPage(int pageNum, int pageSize, Detail detail,String createDate) {
        Page<Detail> page = new Page<Detail>(pageNum, pageSize);
          QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
         if (StringUtils.isNotBlank(detail.getUserName())) {//获取姓名
@@ -54,9 +54,14 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
         if (!StringUtils.isBlank(detail.getJtyx())) {//获取交通影响
             ew.eq("jtyx", detail.getJtyx());
         }
-        if (null!=detail.getCreateDate()) {//时间排序
-            ew.gt("create_date", DateUtil.getDay(detail.getCreateDate())+" 00:00:00");
-            ew.lt("create_date", DateUtil.getDay(detail.getCreateDate())+" 23:59:00");
+        if (createDate==null){
+            ew.gt("create_date", DateUtil.getNowDate()+" 00:00:00");
+            ew.lt("create_date", DateUtil.getNowDate()+" 23:59:00");
+        }
+
+        if (!StringUtils.isBlank(createDate)) {//时间排序
+            ew.gt("create_date", createDate+" 00:00:00");
+            ew.lt("create_date", createDate+" 23:59:00");
         }
         ew.orderByDesc("create_Date");
          IPage iPage = detailMapper.selectPage(page,ew);
@@ -75,7 +80,7 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
     }
 
     @Override
-    public PageResult<Detail> departmentListPage(int pageNum, int pageSize, Detail detail,List<String> list) {
+    public PageResult<Detail> departmentListPage(int pageNum, int pageSize, Detail detail,List<String> list,String createDate) {
         Page<Detail> page = new Page<Detail>(pageNum, pageSize);
         QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
         //获取部门名称
@@ -95,9 +100,14 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
         if (!StringUtils.isBlank(detail.getJtyx())) {//获取交通影响
             ew.eq("jtyx", detail.getJtyx());
         }
-        if (null!=detail.getCreateDate()) {//时间排序
-            ew.gt("create_date", DateUtil.getDay(detail.getCreateDate())+" 00:00:00");
-            ew.lt("create_date", DateUtil.getDay(detail.getCreateDate())+" 23:59:00");
+        if (createDate==null){
+            ew.gt("create_date", DateUtil.getNowDate()+" 00:00:00");
+            ew.lt("create_date", DateUtil.getNowDate()+" 23:59:00");
+        }
+
+        if (!StringUtils.isBlank(createDate)) {//时间排序
+            ew.gt("create_date", createDate+" 00:00:00");
+            ew.lt("create_date", createDate+" 23:59:00");
         }
         ew.orderByDesc("create_Date");
         IPage iPage = detailMapper.selectPage(page,ew);
@@ -105,7 +115,7 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
     }
 
     @Override
-    public PageResult<Detail> listPage(int pageNum, int pageSize, Detail detail,String type) {
+    public PageResult<Detail> listTodayPage(int pageNum, int pageSize, Detail detail,String type) {
         Page<Detail> page = new Page<Detail>(pageNum, pageSize);
         QueryWrapper<Detail> ew = new QueryWrapper<Detail>();
         if (type.equals("0")){
@@ -126,10 +136,6 @@ public class DetailServiceImpl extends ServiceImpl<DetailMapper, Detail> impleme
             }
             if (!StringUtils.isBlank(detail.getJtyx())) {//获取交通影响
                 ew.eq("jtyx", detail.getJtyx());
-            }
-            if (null!=detail.getCreateDate()) {//时间排序
-                ew.gt("create_date", DateUtil.getDay(detail.getCreateDate())+" 00:00:00");
-                ew.lt("create_date", DateUtil.getDay(detail.getCreateDate())+" 23:59:00");
             }
             ew.gt("create_date", DateUtil.getNowDate()+" 00:00:00");
             ew.orderByDesc("create_Date");

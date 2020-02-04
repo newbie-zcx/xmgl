@@ -79,7 +79,10 @@
                     </button>
                     <% } %>
                     <button id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export" >
-                        <i class="layui-icon">&#xe67d;</i>导出
+                        <i class="layui-icon">&#xe67d;</i>导出选中
+                    </button>
+                    <button id="exportAll" class="layui-btn layui-btn-normal layui-btn-sm" >
+                        <i class="layui-icon">&#xe67d;</i>导出全部
                     </button>
                 </div>
             </script>
@@ -113,8 +116,9 @@
         var admin = layui.admin;
         var laydate = layui.laydate;
 
+        var exportData = " ";			//定义全局变量
         //渲染表格
-        table.render({
+        var ins1=table.render({
             elem: '#detailTable',
             title:"疫情上报详情",
             url: '/yqsb/detail/list',
@@ -396,18 +400,19 @@
         laydate.render({
             elem: '#createDate',
             type:'date',
-            //value  :new Date(),                    //初始值
+            value  :new Date(),                    //初始值
             fommat:'yyyy-MM-dd'
         });
         // 导出excel
-        //         $('#btnExp').click(function () {
-        //             var checkRows = table.checkStatus('detailTable');
-        //             if (checkRows.data.length == 0) {
-        //                 layer.msg('请选择要导出的数据', {icon: 2});
-        //             } else {
-        //                 table.exportFile(ins1.config.id, checkRows.data, 'xls');
-        //             }
-        //         });
+        $('#exportAll').click(function () {
+            table.exportFile(ins1.config.id,exportData, 'xls');
+            // var checkRows = table.checkStatus('detailTable');
+            // if (checkRows.data.length == 0) {
+            //     layer.msg('请选择要导出的数据', {icon: 2});
+            // } else {
+            //     table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            // }
+        });
     });
 
 </script>

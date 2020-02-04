@@ -156,8 +156,8 @@ public class DetailController extends BaseController {
     @RequestMapping(value = "/list")
     @RequiresPermissions("detail:view")
     @ResponseBody
-    public PageResult<Detail> list(Integer page, Integer limit, Detail detail,String condition, Model model,HttpServletRequest request) {
-        return detailService.listPage(page,limit,detail);
+    public PageResult<Detail> list(Integer page, Integer limit, Detail detail,String condition,String createDate, Model model,HttpServletRequest request) {
+        return detailService.listPage(page,limit,detail,createDate);
     }
 
     /**
@@ -183,7 +183,7 @@ public class DetailController extends BaseController {
         for (Depart depart:departs){
             departNames.add(depart.getDepartName());
         }
-        return detailService.departmentListPage(page,limit,detail,departNames);
+        return detailService.departmentListPage(page,limit,detail,departNames,createDate);
     }
 
     /**
@@ -193,7 +193,7 @@ public class DetailController extends BaseController {
     @RequiresPermissions("detail:view")
     @ResponseBody
     public PageResult<Detail> todaylist(Integer page, Integer limit,String ntype, Detail detail,String condition, Model model,HttpServletRequest request) {
-        return detailService.listPage(page,limit,detail,ntype);
+        return detailService.listTodayPage(page,limit,detail,ntype);
     }
 
 /**

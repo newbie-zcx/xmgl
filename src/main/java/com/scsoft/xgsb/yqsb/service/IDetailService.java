@@ -20,16 +20,16 @@ public interface IDetailService extends IService<Detail> {
      *  分页查询结果集
      * @param detail
      */
-    PageResult<Detail> listPage(int pageNum, int pageSize,Detail detail);
+    PageResult<Detail> listPage(int pageNum, int pageSize,Detail detail,String createDate);
     //本人分页查询
     PageResult<Detail> oneselfListPage(int pageNum, int pageSize,Detail detail);
     //部门分页查询
-    PageResult<Detail> departmentListPage(int pageNum, int pageSize,Detail detail,List<String> list);
+    PageResult<Detail> departmentListPage(int pageNum, int pageSize,Detail detail,List<String> list,String createDate);
     /**
      *  分页查询结果集
      * @param detail
      */
-    PageResult<Detail> listPage(int pageNum, int pageSize,Detail detail,String type);
+    PageResult<Detail> listTodayPage(int pageNum, int pageSize,Detail detail,String type);
     /**
       *  list查询
       */

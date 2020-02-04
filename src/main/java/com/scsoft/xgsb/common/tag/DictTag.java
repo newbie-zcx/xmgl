@@ -74,6 +74,7 @@ public class DictTag extends GeneralVarTagBinding {
             sb.append(" lay-filter=\""+layfilter+"\"");
         }
         sb.append(" >");
+        sb.append("<option value=''>请选择</option>");
         for (Dict dict:dictList){
             if (StringUtils.isNotBlank(value)){
                 if (dict.getValue().equals(value)){
