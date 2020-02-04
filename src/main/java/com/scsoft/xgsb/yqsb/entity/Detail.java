@@ -123,11 +123,20 @@ public class Detail extends BaseEntity {
     private String cxqk;
 
     /**
-     * 是否隔离
+     * 今日体温
      */
     @TableField("sfgl")
     private String sfgl;
-
+    /**
+     * 工作状态
+     */
+    @TableField("gzzt")
+    private String gzzt;
+    /**
+     * 复工情况
+     */
+    @TableField("fgqk")
+    private String fgqk;
     /**
      * 隔离天数
      */

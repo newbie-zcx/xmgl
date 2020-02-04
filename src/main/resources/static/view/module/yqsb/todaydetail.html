@@ -128,6 +128,38 @@
                 {title: '手机号', field: 'userPhone',width:120, align: 'center', valign: 'middle', sort: true},
                 {title: '上报时间', width:180,field: 'createDate', align: 'center', valign: 'middle', sort: true},
                 {title: '所在地', field: 'address',width:200, align: 'center', valign: 'middle', sort: true},
+                {title: '工作状态', width:100,field: 'gzzt', align: 'center', valign: 'middle', sort: true,
+                    templet: function (d) {
+                        if (d.gzzt=="0"){
+                            return "上班在岗";
+                        } else if (d.gzzt=="1"){
+                            return "在家办公";
+                        } else if (d.gzzt=="2"){
+                            return "外地在岗";
+                        }else if (d.gzzt=="3"){
+                            return "充电学习";
+                        }else if (d.gzzt=="4"){
+                            return "无办公环境";
+                        }else{
+                            return "其他";
+                        }
+                    }
+                },
+                {title: '复工情况', width:100,field: 'fgqk', align: 'center', valign: 'middle', sort: true,
+                    templet: function (d) {
+                        if (d.fgqk=="0"){
+                            return "已复工";
+                        } else if (d.fgqk=="1"){
+                            return "如期复工";
+                        } else if (d.fgqk=="2"){
+                            return "延期复工";
+                        }else if (d.fgqk=="3"){
+                            return "情况未知";
+                        }else{
+                            return "其他";
+                        }
+                    }
+                },
                 {title: '外出状态', width:100,field: 'outState', align: 'center', valign: 'middle', sort: true,
                     templet: function (d) {
                         if (d.outState=="0"){
@@ -137,7 +169,7 @@
                         } else if (d.outState=="2"){
                             return "外出";
                         }else if (d.outState=="3"){
-                            return "上班在岗";
+                            return "其他";
                         }else{
                             return "其他";
                         }
@@ -182,6 +214,8 @@
                         }
                     }
                 },
+                {title: '今日体温', field: 'sfgl',width:100, align: 'center', valign: 'middle', sort: true},
+                {title: '出行情况', field: 'cxqk',width:200, align: 'center', valign: 'middle', sort: true},
                 {title: '是否感冒', field: 'fsgm', align: 'center', valign: 'middle',width:100, sort: true,
                     templet: function (d) {
                         if (d.fsgm=="0"){

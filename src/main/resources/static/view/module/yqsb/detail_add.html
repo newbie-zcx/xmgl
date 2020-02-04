@@ -42,9 +42,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label required">所在地<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
+        <label class="layui-form-label required">居住地<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
-            <input name="address" id="address" placeholder="请输入所在地" value="${detail.address!}"  type="text" class="layui-input"
+            <input name="address" id="address" placeholder="请输入所在地详细地址" value="${detail.address!}"  type="text" class="layui-input"
                    lay-verify="required"  lay-verType="tips"/>
         </div>
     </div>
@@ -56,10 +56,18 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label required">工作状态<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
+        <div class="layui-input-block">
+            <#dict_tag id="gzzt" name="gzzt" defaultVal="" value="${detail.gzzt}" dictCode="gzzt" lay-verify="required"/>
+            <!--            <input name="jtyx" id="jtyx" placeholder="请输入交通是否影响，0、正常、1、封路 2、交通管制、3无法反郑" value=${detail.jtyx} type="text" class="layui-input"-->
+            <!--                   lay-verify="required" required/>-->
+        </div>
+    </div>
+    <div class="layui-form-item">
         <!--        -->
         <label class="layui-form-label required">出行情况<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
-            <input name="cxqk" id="cxqk" placeholder="请输入出行情况" type="text" value="${detail.cxqk!}" class="layui-input"/>
+            <input name="cxqk" id="cxqk" placeholder="请详细填写今日出行情况" type="text" value="${detail.cxqk!}" class="layui-input"/>
         </div>
     </div>
     <div class="layui-form-item">
@@ -83,7 +91,7 @@
         </div>
     </div>
     <div class="layui-form-item ">
-        <label class="layui-form-label required">活动区域<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
+        <label class="layui-form-label required">重点区域<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
             <#dict_tag id="hdXznsz" name="hdXznsz" defaultVal="" value="${detail.hdXznsz}" dictCode="hd_xznsz" lay-verify="required"/>
 <!--            <input name="hdXznsz" id="hdXznsz" placeholder="请输入是否在信阳、周口、商丘、驻马店、南阳活动" value=${detail.hdXznsz} type="text" class="layui-input"-->
@@ -117,16 +125,24 @@
     </div>
     <div class="layui-form-item">
         <!--        -->
-        <label class="layui-form-label required">是否隔离<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
+        <label class="layui-form-label required">今日体温<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
-            <input name="sfgl" id="sfgl" placeholder="请输入是否隔离" type="text" value="${detail.sfgl!}" class="layui-input"/>
+            <input name="sfgl" id="sfgl" placeholder="请输入今日体温" type="text" value="${detail.sfgl!}" class="layui-input"/>
         </div>
     </div>
+<!--    <div class="layui-form-item">-->
+<!--        &lt;!&ndash;        &ndash;&gt;-->
+<!--        <label class="layui-form-label required">隔离天数<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>-->
+<!--        <div class="layui-input-block">-->
+<!--            <input name="glts" id="glts" placeholder="请输入隔离天数" type="text" value="${detail.glts!}" class="layui-input"/>-->
+<!--        </div>-->
+<!--    </div>-->
     <div class="layui-form-item">
-        <!--        -->
-        <label class="layui-form-label required">隔离天数<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
+        <label class="layui-form-label required">复工情况<span class="layui-badge-dot" style="position: relative; right: -10px;"></span></label>
         <div class="layui-input-block">
-            <input name="glts" id="glts" placeholder="请输入隔离天数" type="text" value="${detail.glts!}" class="layui-input"/>
+            <#dict_tag id="fgqk" name="fgqk" defaultVal="" value="${detail.fgqk}" dictCode="fgqk" lay-verify="required"/>
+            <!--            <input name="jtyx" id="jtyx" placeholder="请输入交通是否影响，0、正常、1、封路 2、交通管制、3无法反郑" value=${detail.jtyx} type="text" class="layui-input"-->
+            <!--                   lay-verify="required" required/>-->
         </div>
     </div>
     <div class="layui-form-item">
