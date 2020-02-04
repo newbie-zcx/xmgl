@@ -1,10 +1,18 @@
 package com.scsoft.xgsb.system.controller;
 
+import com.alibaba.excel.EasyExcelFactory;
+import com.alibaba.excel.metadata.Sheet;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.scsoft.xgsb.common.handler.SystemCommonHandler;
 import com.scsoft.xgsb.common.shiro.EndecryptUtil;
 import com.scsoft.xgsb.system.entity.Depart;
 import com.scsoft.xgsb.system.entity.Role;
 import com.scsoft.xgsb.system.entity.User;
+import com.scsoft.xgsb.system.entity.UserDepart;
+import com.scsoft.xgsb.system.mapper.UserDepartMapper;
+import com.scsoft.xgsb.system.mapper.UserMapper;
 import com.scsoft.xgsb.system.service.IDepartService;
 import com.scsoft.xgsb.system.service.IRoleService;
 import com.scsoft.xgsb.system.service.IUserService;
@@ -17,15 +25,24 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户管理
@@ -44,6 +61,8 @@ public class UserController extends BaseController {
     private IRoleService roleService;
     @Autowired
     private IDepartService departService;
+    @Resource
+    private UserDepartMapper userDepartMapper;
 
     private final String PREFIX="module/system";
 
@@ -199,5 +218,49 @@ public class UserController extends BaseController {
         } else {
             return JsonResult.error("重置失败");
         }
+    }
+    /**
+     * 批量导入
+     **/
+    @ResponseBody
+    @RequestMapping("/batchImportUser")
+    @SysLog(operationType="导入用户操作:",operationName="批量导入用户")
+    public JsonResult resetPsw(String departId, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        List<Object> list = EasyExcelFactory.read(new BufferedInputStream(getInputStream(file)), new Sheet(1));
+        String listString = JSONObject.toJSONString(list);
+        JSONArray arryList = JSONObject.parseArray(listString);
+        // 处理数据
+        //根据部门ID删除部门所有人员及关联表数据  然后重新插入
+        List<UserDepart> userDepartList = userDepartMapper.selectList(new QueryWrapper<UserDepart>().eq("depart_id",departId));
+        List<Integer> idList = new ArrayList<>();
+        for (UserDepart userDepart : userDepartList){
+            idList.add(userDepart.getUserId());
+        }
+        userDepartMapper.delete(new QueryWrapper<UserDepart>().eq("depart_id",departId));
+        if (idList.size()>0){
+            userService.removeByIds(idList);
+        }
+        for (int i = 1; i < arryList.size(); i++) {
+            Map<String, Object> map = new HashMap<>();
+            JSONArray rowData = JSONObject.parseArray(JSONObject.toJSONString(arryList.get(i)));
+            User user = new User();
+            user.setPassword("123456");
+            user.setRealName(String.valueOf(rowData.get(0)));
+            user.setSex(String.valueOf(rowData.get(1)));
+            user.setUserName(String.valueOf(rowData.get(2)));
+            user.setMobilePhone(String.valueOf(rowData.get(3)));
+            user.setRoles(getRoles("2"));
+            user.setUserType(0);
+            userService.add(user,departId);
+        }
+        return JsonResult.ok("导入成功！");
+    }
+    private InputStream getInputStream(MultipartFile file) {
+        try {
+            return file.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

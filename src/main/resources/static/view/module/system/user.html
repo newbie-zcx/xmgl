@@ -6,6 +6,30 @@
     <link rel="stylesheet" href="/static/assets/module/formSelects/formSelects-v4.css"/>
     <link rel="stylesheet" href="/static/assets/module/dtree/dtree.css"/>
     <link rel="stylesheet" href="/static/assets/module/dtree/font/dtreefont.css"/>
+    <style>
+        .chooseCss .chooseHeader {
+            width: 698px;
+            padding: 12px 0 12px 22px;
+            background: #EDF7F8;
+            border-bottom: 1px solid #deeeee;
+        }
+        .chooseCss .chooseHeader .title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        .chooseCss .chooseHeader .search input{
+            width: 215px;
+            height: 36px;
+            display: inline-block;
+            margin-left: 60px;
+            color: #aeaeae;
+            border: 1px solid #deeeee;
+            -webkit-border-radius: 18px;
+            -moz-border-radius: 18px;
+            border-radius: 18px;
+        }
+    </style>
 </head>
 <body>
 
@@ -58,6 +82,9 @@
                   <button id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export" >
                       <i class="layui-icon">&#xe67d;</i>导出
                   </button>
+                  <button id="btnImp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="import" >
+                      <i class="layui-icon">&#xe681;</i>导入
+                  </button>
                </div>
             </script>
             <table class="layui-table" id="userTable" lay-filter="userTable"></table>
@@ -65,6 +92,19 @@
     </div>
     </div>
 </div>
+</div>
+<div id="chooseUser" style="height: 262px;display: none;" hidden class="chooseCss">
+    <div class="chooseContent" style="height: 150px;">
+        <div style="text-align: center;">
+            <a href="/static/template/用户导入模版文件.xls" title="点击下载模版文件" style="font-size: 18px;color: blue;">点击下载模版文件</a>
+            <p>温馨提示：模版文件格式要求为【.XLS】</p>
+        </div>
+        <div class="layui-upload" style="margin: 20px 0 0 20px;">
+            <button type="button" class="layui-btn layui-btn-normal" id="chooseFile">选择文件</button><br>
+            <button type="button" class="layui-btn" id="uploadFile" style="margin-top: 5px;">开始导入</button>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
 </div>
 <!-- 表格操作列 -->
 <script type="text/html" id="tableBar">
@@ -82,7 +122,7 @@
 <!-- js部分 -->
 <% include("../../layout/jsPart.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin', 'dtree'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'dtree',"upload"], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -90,8 +130,7 @@
         var util = layui.util;
         var admin = layui.admin;
         var dtree = layui.dtree;
-
-
+        var upload = layui.upload;
         var departId=$("#departId").val();
         // 树形渲染
         var dtr=dtree.render({
@@ -114,9 +153,6 @@
             $("#departId").val(data.nodeId);
             table.reload("userTable",{where: {departId: data.nodeId}});
         });
-
-
-
 
         // 渲染表格
         var ins1 = table.render({
@@ -169,6 +205,9 @@
                 case 'add':
                     showEditModel();
                     break;
+                case 'import':
+                    importUsers();
+                    break;
                 case 'export':
                     if (checkStatus.data.length == 0) {
                         layer.msg('请选择要导出的数据', {icon: 2});
@@ -211,8 +250,35 @@
                 }
             });
         });
-
-
+        function importUsers(){
+            layer.open({
+                type: 1,
+                title:"用户导入",
+                content: $('#chooseUser'),
+                area: ['500px', '200px']
+            });
+            var departId=$("#departId").val();
+            upload.render({
+                elem: '#chooseFile'
+                ,url: 'user/batchImportUser' //改成您自己的上传接口
+                ,data: {departId:departId}
+                ,auto: false
+                ,accept: 'file' //普通文件
+                ,exts: 'xls'
+                ,bindAction: '#uploadFile'
+                ,before: function(){
+                    layer.load(2);
+                }
+                ,done: function(data){
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }
+            });
+        }
         // 重置密码
         function resetPsw(userId) {
             top.layer.confirm('确定重置此用户的密码吗？', function (i) {
