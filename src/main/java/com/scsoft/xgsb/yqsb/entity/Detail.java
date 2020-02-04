@@ -116,5 +116,23 @@ public class Detail extends BaseEntity {
     @TableField("jf_date")
     private Date jfDate;
 
+    /**
+     * 出行情况
+     */
+    @TableField("cxqk")
+    private String cxqk;
+
+    /**
+     * 是否隔离
+     */
+    @TableField("sfgl")
+    private String sfgl;
+
+    /**
+     * 隔离天数
+     */
+    @TableField("glts")
+    private String glts;
+
 
 }

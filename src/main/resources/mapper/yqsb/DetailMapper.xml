@@ -26,6 +26,9 @@
         <result column="status" property="status" />
         <result column="jtyx" property="jtyx" />
         <result column="jf_date" property="jfDate" />
+        <result column="cxqk" property="cxqk" />
+        <result column="sfgl" property="sfgl" />
+        <result column="glts" property="glts" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -38,7 +41,7 @@
         update_date,
         remark,
         is_del,
-        id, user_name, user_depart, out_state, wh_fz, wh_detail, wh_date, hd_xznsz, fsgm, jsfsgm, address, status, jtyx, jf_date
+        id, user_name, user_depart, out_state, wh_fz, wh_detail, wh_date, hd_xznsz, fsgm, jsfsgm, address, status, jtyx, jf_date,cxqk,sfgl,glts
     </sql>
 
 
