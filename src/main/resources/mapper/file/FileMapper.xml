@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.scsoft.xgsb.file.mapper.FileMapper">
+<mapper namespace="com.scsoft.xmgl.file.mapper.FileMapper">
 
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.scsoft.xgsb.file.entity.FileInfo">
+    <resultMap id="BaseResultMap" type="com.scsoft.xmgl.file.entity.FileInfo">
         <id column="id" property="id" />
     <result column="create_id" property="createId" />
     <result column="create_name" property="createName" />

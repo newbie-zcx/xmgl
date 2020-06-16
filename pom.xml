@@ -10,9 +10,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.scsoft</groupId>
-    <artifactId>xgsb</artifactId>
+    <artifactId>xmgl</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>xgsb</name>
+    <name>xmgl</name>
     <description>雪城软件员工健康状态上报平台</description>
 
     <properties>
