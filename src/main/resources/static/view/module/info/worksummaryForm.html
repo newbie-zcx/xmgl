@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style type="text/css">
+        .text_red{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<!-- 工作周报表单弹窗 -->
+<form id="WorkSummaryForm" lay-filter="WorkSummaryForm" class="layui-form model-form" style="padding-top: 0px;">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item" style="background-color: #d8e4bc;width: 745px;height: 45px;">
+        <label class="layui-form-label" style="margin-left: 40px;width: 100px;font-size: 18px;margin-top: 5px">本周任务</label>
+    </div>
+    <div class="layui-form-item" style="margin-left: 40px">
+        <label class="layui-form-label" style="width: 84px;margin-left: 2px">创建人</label>
+        <div class="layui-input-inline">
+            <input name="userName" type="text" readonly="readonly" class="layui-input" value="${realName}"/>
+        </div>
+        <label class="layui-form-label" style="margin-left: 5px">提交时间</label>
+        <div class="layui-input-inline">
+            <input name="addTime" type="text" class="layui-input"  readonly="readonly" value="${format}"/>
+        </div>
+        <label class="layui-form-label" style="margin-top: 10px;margin-left: 5px">起始日期</label>
+        <div class="layui-input-inline">
+            <input name="beginDate" type="text" class="layui-input" style="margin-top: 10px;" readonly="readonly" value="${mondayDate}">
+        </div>
+        <label class="layui-form-label" style="margin-top: 10px;margin-left:5px">结束日期</label>
+        <div class="layui-input-inline">
+            <input name="endDate" type="text" class="layui-input" style="margin-top: 10px;"  readonly="readonly" value="${sundayDate}">
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-left: 40px;">
+        <label class="layui-form-label" style="margin-left: 5px">项目名称<span class="text_red">*</span></label>
+        <div class="layui-input-inline">
+            <select name="proName" xm-select-direction="down" lay-search required>
+                <option value=""></option>
+                <% for(info in infoList) { %>
+                <option value="${info.proName}">${info.proName}</option>
+                <% } %>
+            </select>
+        </div>
+        <label class="layui-form-label" style="margin-left: 5px">任务类型<span class="text_red">*</span></label>
+        <div class="layui-input-inline">
+            <select name="taskType" xm-select-direction="down" lay-search required>
+                <option value=""></option>
+                <option value="新任务">新任务</option>
+                <option value="计划外">计划外</option>
+                <option value="正常">正常</option>
+                <option value="其它">其它</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-left: 40px">
+        <label class="layui-form-label" style="width: 84px">计划百分比<span class="text_red">*</span></label>
+        <div class="layui-input-inline">
+            <select name="popWork" xm-select-direction="down" lay-search required>
+                <option value="0%">0%</option>
+                <option value="10%">10%</option>
+                <option value="20%">20%</option>
+                <option value="30%">30%</option>
+                <option value="40%">40%</option>
+                <option value="50%">50%</option>
+                <option value="60%">60%</option>
+                <option value="70%">70%</option>
+                <option value="80%">80%</option>
+                <option value="90%">90%</option>
+                <option value="100%">100%</option>
+            </select>
+        </div>
+        <label class="layui-form-label" style="width: 84px;">完成百分比<span class="text_red">*</span></label>
+        <div class="layui-input-inline">
+            <select name="pocWork" xm-select-direction="down" lay-search >
+                <option value="0%">0%</option>
+                <option value="10%">10%</option>
+                <option value="20%">20%</option>
+                <option value="30%">30%</option>
+                <option value="40%">40%</option>
+                <option value="50%">50%</option>
+                <option value="60%">60%</option>
+                <option value="70%">70%</option>
+                <option value="80%">80%</option>
+                <option value="90%">90%</option>
+                <option value="100%">100%</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-left: 40px">
+        <label class="layui-form-label">原因：</label>
+        <textarea name="reason" class="layui-textarea" style="width:600px;height:150px;font-size: larger;margin-left: 30px" lay-verify="zflength"></textarea>
+    </div>
+    <hr class="layui-bg-blue" style="height: 3px;width: 748px;margin-left:-3px;">
+    <div class="layui-form-item" style="background-color: #d8e4bc;width: 745px;height: 45px;">
+        <label class="layui-form-label" style="margin-left: 40px;width: 100px;font-size: 18px;margin-top: 5px">下周计划</label>
+    </div>
+    <div class="layui-form-item" style="margin-left: 40px">
+        <label class="layui-form-label" style="margin-left: 5px;width: 84px">计划百分比：</label>
+        <div class="layui-input-inline">
+            <select name="planPopWork" xm-select-direction="down" lay-search>
+                <option value="0%">0%</option>
+                <option value="10%">10%</option>
+                <option value="20%">20%</option>
+                <option value="30%">30%</option>
+                <option value="40%">40%</option>
+                <option value="50%">50%</option>
+                <option value="60%">60%</option>
+                <option value="70%">70%</option>
+                <option value="80%">80%</option>
+                <option value="90%">90%</option>
+                <option value="100%">100%</option>
+            </select>
+        </div>
+        <label class="layui-form-label" style="">任务类型：</label>
+        <div class="layui-input-inline">
+            <select name="planTaskType" xm-select-direction="down" lay-search >
+                <option value=""></option>
+                <option value="新任务">新任务</option>
+                <option value="计划外">计划外</option>
+                <option value="正常">正常</option>
+                <option value="其它">其它</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-left:40px;">
+        <label class="layui-form-label" style="margin-left: 10px">工作说明：</label>
+        <textarea name="jobDescription" class="layui-textarea" style="width:600px;height:150px;font-size: larger;margin-left: 30px" lay-verify="zflength"></textarea>
+    </div>
+    <input name="examineStatus" type="hidden" class="layui-input"/>
+    <input name="examineStatusDept" type="hidden" class="layui-input"/>
+    <input name="checkStatus" type="hidden" class="layui-input"/>
+    <input name="checkStatusDept" type="hidden" class="layui-input"/>
+    <div class="layui-input-block">
+        <button class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 160px">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 50px">重置</button>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<!-- 表格顶部操作列 -->
+<script>
+    layui.use(['layer', 'form', 'admin','layer'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var admin = layui.admin;
+
+        //自定义文本不得超过255字节
+        form.verify({
+            zflength:function (value) {
+                var i,sum;
+                sum=0;
+                for(i=0;i<value.length;i++){
+                    if ((value.charCodeAt(i)>=0) && (value.charCodeAt(i)<=255))
+                        sum=sum+1;
+                    else
+                        sum=sum+2;
+                }
+                if (sum > 255) {
+                    return '字符长度溢出';
+                }
+            }
+        });
+        //回显工作周报数据
+        var worksummary = admin.getTempData('t_work');
+        url = '/info/worksummary/add';
+        if (worksummary) {
+            $('input[name="user_name"]').attr('readonly', 'readonly');
+            url = 'update';
+            form.val('WorkSummaryForm', worksummary);
+        }
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            $.post(url, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    // 关闭当前iframe弹出层
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+    });
+
+
+</script>
+</body>
+
+</html>

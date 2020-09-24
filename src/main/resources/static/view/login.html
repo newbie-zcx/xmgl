@@ -23,7 +23,7 @@
         <i class="login-logo-pic">
             <img src="/static/assets/images/default-logo.png" alt="">
         </i>
-        雪城软件项目管理系统
+        雪城软件办公管理系统
     </div>
 
     <div class="login-body">
@@ -68,7 +68,7 @@
     </div>
 
     <div class="login-footer">
-        <p>Copyright@2018河南雪城软件有限公司 版权所有 | <a href="javascript:http://www.scsoft.com.cn;" target="_blank">豫ICP备15003151号 </a> </p>
+        <p>Copyright@2020河南雪城软件有限公司 版权所有 | <a href="http://www.scsoft.com.cn/" target="_blank">豫ICP备15003151号 </a> </p>
     </div>
 </div>
 
@@ -91,7 +91,6 @@
             }else{
                 layer.load(2);
                 $.post('login', obj.field, function (data) {
-                    console.info(obj.field);
                     if (200 == data.code) {
                         layer.closeAll('loading');
                         var password=$("#password").val();

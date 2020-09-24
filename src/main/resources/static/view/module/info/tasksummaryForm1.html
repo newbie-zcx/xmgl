@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style type="text/css">
+        .text_red{
+            color: red;
+        }
+    </style>
+</head>
+<body >
+<!-- 项目表单弹窗 -->
+<form id="taskSummaryForm" lay-filter="taskSummaryForm" class="layui-form model-form" autocomplete="off">
+    <input name="id" type="hidden"/>
+    <input name="workSummaryId" type="hidden" value="${workSummaryId}"/>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">项目名称</label>-->
+<!--        <div class="layui-input-inline">-->
+            <input name="proName" type="hidden" class="layui-input" maxlength="20" readonly="readonly"/>
+<!--        </div>-->
+<!--    </div>-->
+    <div class="layui-form-item">
+<!--        <label class="layui-form-label">创建时间</label>-->
+<!--        <div class="layui-input-inline">-->
+            <input name="addTime" type="hidden" value="${format}" class="layui-input" maxlength="20" readonly="readonly"/>
+<!--        </div>-->
+        <label class="layui-form-label" style="margin-left: 20px">创建人</label>
+        <div class="layui-input-inline">
+            <input name="userName" type="text" value="${realName}" class="layui-input" maxlength="20" readonly="readonly"/>
+        </div>
+        <label class="layui-form-label style-lable">阶段<span class="text_red">*</span></label>
+        <div class="layui-input-inline">
+            <select name="taskStage" xm-select-direction="down" lay-search >
+                <option value=""></option>
+                <option value="计划">计划</option>
+                <option value="需求">需求</option>
+                <option value="设计">设计</option>
+                <option value="编码">编码</option>
+                <option value="测试">测试</option>
+                <option value="培训">培训</option>
+                <option value="维护">维护</option>
+                <option value="其他">其他</option>
+            </select>
+        </div>
+    </div>
+    <label class="layui-form-label">计划任务<span class="text_red">*</span></label>
+    <div class="layui-input-inline">
+        <textarea name="task" class="layui-textarea" style="width:600px;height:300px;font-size: larger;margin-left: 60px" lay-verify="required|zflength"></textarea>
+    </div>
+    <div class="layui-input-block">
+        <button class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 120px;margin-top: 30px">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 50px;margin-top: 30px">重置</button>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'admin', 'formSelects','laydate','element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var admin = layui.admin;
+        var laydate1 = layui.laydate;
+        var laydate2 = layui.laydate;
+        var laydate3 = layui.laydate;
+        var laydate4 = layui.laydate;
+        var beginDate1 = "${beginDate}";
+        var endDate1 = "${endDate}";
+        form.on('select(taskType)', function (data) {
+            var $input = $("input[name='taskHour']");
+            if (data.value==1){ //计划中
+                $('#beginDate').hide();
+                $('#endDate').hide();
+                $('#beginDateLabel').hide();
+                $('#endDateLabel').hide();
+                $input.attr("placeholder",'可不填');
+            } else if (data.value==0){//已完成
+                $('#beginDate').show();
+                $('#endDate').show();
+                $('#beginDateLabel').show();
+                $('#endDateLabel').show();
+            }
+        });
+        laydate3.render({
+            elem: '#beginDate',
+            format: 'yyyy-MM-dd',
+            value:getMonday(),
+            isInitValue: false,
+            min:getMonday(),
+            max:getSunday(),
+        });
+        laydate4.render({
+            elem: '#endDate',
+            format: 'yyyy-MM-dd',
+            value:getMonday(),
+            isInitValue: false,
+            min:getMonday(),
+            max:getSunday(),
+        });
+        //时间选择器选择本周----周一
+        function getMonday() {
+            var today=new Date();
+            var weekday=today.getDay();
+            var dd=new Date(1000*60*60*24*(1-weekday) + today.getTime());
+            var y = dd.getFullYear();
+            var m = dd.getMonth()+1;//获取当前月份的日期
+            m=parseInt(m,10);
+            if(m<10){
+                m="0"+m;
+            }
+            var d = dd.getDate();
+            d=parseInt(d,10);
+            if(d<10){
+                d="0"+d;
+            }
+            return y+"-"+m+"-"+d;
+        }
+        //时间选择器选择本周----周日
+        function getSunday() {
+            var today=new Date();
+            var weekday=today.getDay();
+            var dd=new Date(1000*60*60*24*(7-weekday) + today.getTime());
+            var y = dd.getFullYear();
+            var m = dd.getMonth()+1;//获取当前月份的日期
+            m=parseInt(m,10);
+            if(m<10){
+                m="0"+m;
+            }
+            var d = dd.getDate();
+            d=parseInt(d,10);
+            if(d<10){
+                d="0"+d;
+            }
+            return y+"-"+m+"-"+d;
+        }
+        //时间选择器选择下周----周一
+        function getNextMonday() {
+            var today=new Date();
+            var weekday=today.getDay();
+            var dd=new Date(1000*60*60*24*(8-weekday) + today.getTime());
+            var y = dd.getFullYear();
+            var m = dd.getMonth()+1;//获取当前月份的日期
+            m=parseInt(m,10);
+            if(m<10){
+                m="0"+m;
+            }
+            var d = dd.getDate();
+            d=parseInt(d,10);
+            if(d<10){
+                d="0"+d;
+            }
+            return y+"-"+m+"-"+d;
+        }
+        //时间选择器选择下周----周日
+        function getNextSunday() {
+            var today=new Date();
+            var weekday=today.getDay();
+            var dd=new Date(1000*60*60*24*(14-weekday) + today.getTime());
+            var y = dd.getFullYear();
+            var m = dd.getMonth()+1;//获取当前月份的日期
+            m=parseInt(m,10);
+            if(m<10){
+                m="0"+m;
+            }
+            var d = dd.getDate();
+            d=parseInt(d,10);
+            if(d<10){
+                d="0"+d;
+            }
+            return y+"-"+m+"-"+d;
+        }
+        //回显task数据
+        var proName = admin.getTempData('t_task1');
+        if (proName){
+            $('input[name="proName"]').attr('readonly', 'readonly');
+            var url = 'add?beginDate1='+beginDate1+'&endDate1='+endDate1;
+            form.val("taskSummaryForm", {
+                "proName":proName,
+            });
+        }
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            data.field.taskType=1;
+            $.post(url, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    // 关闭当前iframe弹出层
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+
+
+    });
+
+
+
+</script>
+</body>
+
+</html>

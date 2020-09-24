@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scsoft.xmgl.work.mapper.ProjectMapper">
+    <select id="getByProName" parameterType="String" resultType="com.scsoft.xmgl.work.entity.Project">
+        select * from work_pro where pro_name = #{proName}
+    </select>
+</mapper>

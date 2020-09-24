@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>工作周报管理</title>
+    <link rel="stylesheet" href="/static/assets/libs/layui/css/layui.css"  media="all">
+</head>
+
+<body class="layui-layout-body">
+
+<div class="layui-card-body">
+    <!-- 内容主体区域 -->
+    <div class="layui-form toolbar">
+        <div class="layui-form-item" style="margin-top: 15px">
+            <div class="layui-inline" style="width: auto;">
+                <form style="float: left">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto" >创建时间：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="addTime" class="layui-input" type="text" placeholder="输入创建时间" id="addTime" name="addTime"/>
+                        </div>
+                    </div>
+                    <% if(shiro.hasPermission("worksummary:viewLevel1")||shiro.hasPermission("worksummary:viewLevel4")){ %>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">创建人：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="userName" class="layui-input" type="text" placeholder="输入创建人"/>
+                        </div>
+                    </div>
+                    <% } %>
+                    <% if(shiro.hasPermission("worksummary:viewLevel4")){ %>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">项目名称：</label>
+                        <div class="layui-input-inline mr0">
+                            <select id="proName" name="proName" >
+                                <% for(info in infoList) { %>
+                                    <option value="${info.proName}">${info.proName}</option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <% } %>
+                    <div class="layui-inline">
+                        <button type="reset" class="layui-btn layui-btn-primary" style="">重置</button>
+                    </div>
+                </form>
+                <div class="layui-inline">
+                    <button id="btnSearch" class="layui-btn icon-btn" style=""><i class="layui-icon">&#xe615;</i>搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 表格顶部操作列 -->
+    <script type="text/html" id="addToolBar">
+        <div class="layui-btn-container">
+            <button type="button" id="btnAdd" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add" >
+                <i class="layui-icon">&#xe654;</i>添加
+            </button>
+            <button type="button" id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export" >
+                <i class="layui-icon">&#xe67d;</i>导出
+            </button>
+            <% if(shiro.hasPermission("worksummary:viewLevel1")){ %>
+            <button type="button" id="batchAudit1" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="batchAudit1" >
+                <i class="layui-icon">&#xe67d;</i>批量审核
+            </button>
+            <% } %>
+            <% if(shiro.hasPermission("worksummary:viewLevel4")){ %>
+            <button type="button" id="batchAudit2" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="batchAudit2" >
+                <i class="layui-icon">&#xe67d;</i>批量审核
+            </button>
+            <% } %>
+        </div>
+    </script>
+    <!-- 表格 -->
+    <% if(shiro.hasPermission("worksummary:viewLevel1")){ %>
+        <table class="layui-table" id="workSummaryTable1" lay-filter="workSummaryTable1"></table>
+    <% } %>
+    <% if(shiro.hasPermission("worksummary:viewLevel2")){ %>
+        <table class="layui-table" id="workSummaryTable2" lay-filter="workSummaryTable2"></table>
+    <% } %>
+    <% if(shiro.hasPermission("worksummary:viewLevel3")){ %>
+        <table class="layui-table" id="workSummaryTable3" lay-filter="workSummaryTable3"></table>
+    <% } %>
+    <% if(shiro.hasPermission("worksummary:viewLevel4")){ %>
+        <table class="layui-table" id="workSummaryTable4" lay-filter="workSummaryTable4"></table>
+    <% } %>
+    <!--
+    <a class="layui-btn layui-btn layui-btn-xs" lay-event="tasklist">任务列表</a>
+    <a class="layui-btn layui-btn layui-btn-xs" lay-event="edit">${ctxPath}修改</a>
+    <% if(shiro.hasPermission("worksummary:viewLevel1")||shiro.hasPermission("worksummary:viewLevel4")){ %>
+    <a class="layui-btn layui-btn layui-btn-xs" lay-event="comment">评论</a>
+    <% } %>
+    -->
+</div>
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit2">查看详情</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- 表格状态列 -->
+<script type="text/html" id="tbaleState1">
+    <% if(shiro.hasPermission("worksummary:viewLevel1")){ %>
+    <input type="checkbox" lay-filter="examineStatusDept" value="{{d.examineStatusDept}}-{{d.id}}" lay-skin="switch" lay-text="通过|未通过"
+           {{d.examineStatusDept==0?'checked':''}}/>
+    <% } %>
+    <% if(shiro.hasPermission("worksummary:viewLevel4")){ %>
+    <input type="checkbox" lay-filter="examineStatus" value="{{d.examineStatus}}-{{d.id}}" lay-skin="switch" lay-text="通过|未通过"
+           {{d.examineStatus==0?'checked':''}}/>
+    <% } %>
+</script>
+<script type="text/javascript" src="${ctxPath }/static/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath }/static/assets/js/common.js"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', "upload","laydate"], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table1 = layui.table;
+        var table2 = layui.table;
+        var table3 = layui.table;
+        var table4 = layui.table;
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+        buildTable1();//创建表格
+        buildTable2();
+        buildTable3();
+        buildTable4();
+        function  buildTable1() {
+            table1.render({
+                elem: '#workSummaryTable1',
+                url: 'worksummary/list1',
+                cellMinWidth: 50,
+                toolbar: '#addToolBar',
+                initSort: {
+                    field: 'addTime',
+                    type: 'desc',
+                },
+                page: true,
+                cols: [[
+                    {type: 'checkbox'},
+                    {field: 'id', width: 69, sort: true, align: 'center', title: 'ID'},
+                    {field: 'userName',sort: true, width: 106, align: 'center', title: '创建人 '},
+                    {field: 'addTime', width: 120,sort: true, align: 'center', title: '创建时间'},
+                    {field: 'beginDate', width: 120,sort: true, align: 'center', title: '起始日期'},
+                    {field: 'endDate', width: 120,sort: true, align: 'center', title: '结束日期'},
+                    {field: 'proCompletion',sort: true, width: 120, align: 'center', title: '项目类型'},
+                    {field: 'proName', sort: true,width: 200, align: 'center', title: '项目名称'},
+                    {field: 'workHour', width: 96, align: 'center', sort: true, title: '工时',templet:function (d) {
+                            var proHtml = d.workHour+"时(h)";
+                            return proHtml;
+                        }},
+                    {field: 'examineStatus',hide:true,  width:100,align:'center', templet: '#tbaleState1', title: '项目审核'},
+                    {field: 'examineStatusDept', width:100,align:'center', templet: '#tbaleState1', title: '部门审核'},
+                    {field: 'checkStatus',hide:true, width:100,align:'center', title: '项目查看'},
+                    {field: 'checkStatusDept', width:100,align:'center', title: '部门查看',templet:function (d) {
+                            var checkStatusDept = d.checkStatusDept;
+                            if (checkStatusDept==0){
+                                return '<p style="background-color:#2486FF;color: white"">已查看</p>';
+                            }else {
+                                return '<p style="background-color:#AA3130;color: white"">未查看</p>';
+                            }}},
+                    {field: 'comment', width: 264, align: 'center', title: '评论'},
+                    {align: 'center', toolbar: '#tableBar', title: '操作', width: 167}
+                ]]
+            });
+        }
+        function  buildTable2() {
+            table2.render({
+                elem: '#workSummaryTable2',
+                url: 'worksummary/list2',
+                cellMinWidth: 50,
+                initSort: {
+                    field: 'addTime',
+                    type: 'desc',
+                },
+                toolbar: '#addToolBar',
+                page: true,
+                cols: [[
+                    {type: 'checkbox'},
+                    {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                    {field: 'addTime', width: 120,sort: true, align: 'center', title: '创建时间'},
+                    {field: 'beginDate', width: 120,sort: true, align: 'center', title: '起始日期'},
+                    {field: 'endDate', width: 120,sort: true, align: 'center', title: '结束日期'},
+                    {field: 'proName', width: 200,sort: true, align: 'center', title: '项目名称'},
+                    {field: 'workHour', width: 95, align: 'center', sort: true, title: '工时',templet:function (d) {
+                            var proHtml = d.workHour+"时(h)";
+                            return proHtml;
+                        }},
+                    {field: 'examineStatus', width: 120, align: 'center', title: '项目审核',templet:function (d) {
+                            var examineStatus = d.examineStatus;
+                            if (examineStatus==0){
+                                return '<p style="background-color:#1890ff;color: white">已审核</p>';
+                            }else {
+                                return '<p style="background-color:#fc764c;color: white">未审核</p>';
+                            }}},
+                    {field: 'checkStatus', width: 120, align: 'center', title: '项目查看',templet:function (d) {
+                            var checkStatus = d.checkStatus;
+                            if (checkStatus==0){
+                                return '<p style="background-color:#1890ff;color: white"">已查看</p>';
+                            }else {
+                                return '<p style="background-color:#fc764c;color: white"">未查看</p>';
+                            }}},
+                    {field: 'examineStatusDept', width: 120, align: 'center', title: '部门审核',templet:function (d) {
+                            var examineStatusDept = d.examineStatusDept;
+                            if (examineStatusDept==0){
+                                return '<p style="background-color:#1890ff;color: white">已审核</p>';
+                            }else {
+                                return '<p style="background-color:#fc764c;color: white">未审核</p>';
+                            }}},
+                    {field: 'checkStatusDept', width: 120, align: 'center', title: '部门查看',templet:function (d) {
+                            var checkStatusDept = d.checkStatusDept;
+                            if (checkStatusDept==0){
+                                return '<p style="background-color:#1890ff;color: white"">已查看</p>';
+                            }else {
+                                return '<p style="background-color:#fc764c;color: white"">未查看</p>';
+                            }}},
+                    {field: 'comment', width: 240, align: 'center', title: '评论'},
+                    {align: 'center', toolbar: '#tableBar', title: '操作', width: 167}
+                ]]
+            });
+        }
+        function  buildTable3() {
+            table3.render({
+                elem: '#workSummaryTable3',
+                url: 'worksummary/list3',
+                cellMinWidth: 50,
+                toolbar: '#addToolBar',
+                initSort: {
+                    field: 'addTime',
+                    type: 'desc',
+                },
+                page: true,
+                cols: [[
+                    {type: 'checkbox'},
+                    {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                    {field: 'userName', width: 137,sort: true, align: 'center', title: '创建人 '},
+                    {field: 'addTime', width: 137,sort: true, align: 'center', title: '创建时间'},
+                    {field: 'beginDate', width: 144,sort: true, align: 'center', title: '起始日期'},
+                    {field: 'endDate', width: 147,sort: true, align: 'center', title: '结束日期'},
+                    {field: 'proCompletion', width: 132,sort: true, align: 'center', title: '项目类型'},
+                    {field: 'proName', width: 320,sort: true, align: 'center', title: '项目名称'},
+                    {field: 'workHour', width: 95, align: 'center', sort: true, title: '工时',templet:function (d) {
+                            var proHtml = d.workHour+"时(h)";
+                            return proHtml;
+                        }},
+                    {align: 'center', toolbar: '#tableBar', title: '操作', width: 417}
+                ]]
+            });
+        }
+        function  buildTable4() {
+            table4.render({
+                elem: '#workSummaryTable4',
+                url: 'worksummary/list4',
+                cellMinWidth: 50,
+                toolbar: '#addToolBar',
+                initSort: {
+                    field: 'addTime',
+                    type: 'desc',
+                },
+                page: true,
+                cols: [[
+                    {type: 'checkbox'},
+                    {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                    {field: 'userName', width: 120, sort: true,align: 'center', title: '创建人 '},
+                    {field: 'addTime', width: 120,sort: true, align: 'center', title: '创建时间'},
+                    {field: 'beginDate', width: 120,sort: true, align: 'center', title: '起始日期'},
+                    {field: 'endDate', width: 120,sort: true, align: 'center', title: '结束日期'},
+                    {field: 'proCompletion', width: 120,sort: true, align: 'center', title: '项目类型'},
+                    {field: 'proName', width: 200,sort: true, align: 'center', title: '项目名称'},
+                    {field: 'workHour', width: 95, align: 'center', sort: true, title: '工时',templet:function (d) {
+                            var proHtml1 = d.workHour+"时(h)";
+                            return proHtml1;
+                        }},
+                    {field: 'examineStatus', width:100,align:'center', templet: '#tbaleState1', title: '项目审核'},
+                    {field: 'examineStatusDept',hide:true,  width:100,align:'center', title: '部门审核'},
+                    {field: 'checkStatus',  width:100,align:'center',templet: '#tbaleState1', title: '项目查看',templet:function (d) {
+                            var checkStatus = d.checkStatus;
+                            if (checkStatus==0){
+                                return '<p style="background-color:#2486FF;color: white"">已查看</p>';
+                            }else {
+                                return '<p style="background-color:#AA3130;color: white"">未查看</p>';
+                            }}},
+                    {field: 'checkStatusDept',hide:true,  width:100,align:'center', title: '部门查看'},
+                    {field: 'comment', width: 264, align: 'center',  title: '评论'},
+                    {align: 'center', toolbar: '#tableBar', title: '操作', width: 167}
+                ]]
+            });
+        }
+        // 渲染表格
+        var ins1 = table1.render({
+            elem: '#workSummaryTable1',
+            url: 'worksummary/list1',
+            cellMinWidth: 50,
+            toolbar: '#addToolBar',
+            initSort: {
+                field: 'addTime',
+                type: 'desc',
+            },
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 69, sort: true, align: 'center', title: 'ID'},
+                {field: 'userName',sort: true, width: 106, align: 'center', title: '创建人 '},
+                {field: 'addTime', width: 120,sort: true, align: 'center', title: '创建时间'},
+                {field: 'beginDate', width: 120,sort: true, align: 'center', title: '起始日期'},
+                {field: 'endDate', width: 120,sort: true, align: 'center', title: '结束日期'},
+                {field: 'proCompletion',sort: true, width: 120, align: 'center', title: '项目类型'},
+                {field: 'proName', sort: true,width: 200, align: 'center', title: '项目名称'},
+                {field: 'workHour', width: 96, align: 'center', sort: true, title: '工时',templet:function (d) {
+                        var proHtml = d.workHour+"时(h)";
+                        return proHtml;
+                    }},
+                {field: 'examineStatus',hide:true,  width:100,align:'center', templet: '#tbaleState1', title: '项目审核'},
+                {field: 'examineStatusDept', width:100,align:'center', templet: '#tbaleState1', title: '部门审核'},
+                {field: 'checkStatus',hide:true, width:100,align:'center', title: '项目查看'},
+                {field: 'checkStatusDept', width:100,align:'center', title: '部门查看',templet:function (d) {
+                        var checkStatusDept = d.checkStatusDept;
+                        if (checkStatusDept==0){
+                            return '<p style="background-color:#2486FF;color: white"">已查看</p>';
+                        }else {
+                            return '<p style="background-color:#AA3130;color: white"">未查看</p>';
+                        }}},
+                {field: 'comment', width: 264, align: 'center', title: '评论'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 167}
+            ]]
+        });
+        var ins2 = table2.render({
+            elem: '#workSummaryTable2',
+            url: 'worksummary/list2',
+            cellMinWidth: 50,
+            initSort: {
+                field: 'addTime',
+                type: 'desc',
+            },
+            toolbar: '#addToolBar',
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                {field: 'addTime', width: 120,sort: true, align: 'center', title: '创建时间'},
+                {field: 'beginDate', width: 120,sort: true, align: 'center', title: '起始日期'},
+                {field: 'endDate', width: 120,sort: true, align: 'center', title: '结束日期'},
+                {field: 'proName', width: 200,sort: true, align: 'center', title: '项目名称'},
+                {field: 'workHour', width: 95, align: 'center', sort: true, title: '工时',templet:function (d) {
+                        var proHtml = d.workHour+"时(h)";
+                        return proHtml;
+                    }},
+                {field: 'examineStatus', width: 120, align: 'center', title: '项目审核',templet:function (d) {
+                        var examineStatus = d.examineStatus;
+                        if (examineStatus==0){
+                            return '<p style="background-color:#1890ff;color: white">已审核</p>';
+                        }else {
+                            return '<p style="background-color:#fc764c;color: white">未审核</p>';
+                        }}},
+                {field: 'checkStatus', width: 120, align: 'center', title: '项目查看',templet:function (d) {
+                        var checkStatus = d.checkStatus;
+                        if (checkStatus==0){
+                            return '<p style="background-color:#1890ff;color: white"">已查看</p>';
+                        }else {
+                            return '<p style="background-color:#fc764c;color: white"">未查看</p>';
+                        }}},
+                {field: 'examineStatusDept', width: 120, align: 'center', title: '部门审核',templet:function (d) {
+                        var examineStatusDept = d.examineStatusDept;
+                        if (examineStatusDept==0){
+                            return '<p style="background-color:#1890ff;color: white">已审核</p>';
+                        }else {
+                            return '<p style="background-color:#fc764c;color: white">未审核</p>';
+                        }}},
+                {field: 'checkStatusDept', width: 120, align: 'center', title: '部门查看',templet:function (d) {
+                        var checkStatusDept = d.checkStatusDept;
+                        if (checkStatusDept==0){
+                            return '<p style="background-color:#1890ff;color: white"">已查看</p>';
+                        }else {
+                            return '<p style="background-color:#fc764c;color: white"">未查看</p>';
+                        }}},
+                {field: 'comment', width: 240, align: 'center', title: '评论'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 167}
+            ]]
+        });
+        var ins3 = table3.render({
+            elem: '#workSummaryTable3',
+            url: 'worksummary/list3',
+            cellMinWidth: 50,
+            toolbar: '#addToolBar',
+            initSort: {
+                field: 'addTime',
+                type: 'desc',
+            },
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                {field: 'userName', width: 137,sort: true, align: 'center', title: '创建人 '},
+                {field: 'addTime', width: 137,sort: true, align: 'center', title: '创建时间'},
+                {field: 'beginDate', width: 144,sort: true, align: 'center', title: '起始日期'},
+                {field: 'endDate', width: 147,sort: true, align: 'center', title: '结束日期'},
+                {field: 'proCompletion', width: 132,sort: true, align: 'center', title: '项目类型'},
+                {field: 'proName', width: 320,sort: true, align: 'center', title: '项目名称'},
+                {field: 'workHour', width: 95, align: 'center', sort: true, title: '工时',templet:function (d) {
+                        var proHtml = d.workHour+"时(h)";
+                        return proHtml;
+                    }},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 417}
+            ]]
+        });
+        var ins4 = table4.render({
+            elem: '#workSummaryTable4',
+            url: 'worksummary/list4',
+            cellMinWidth: 50,
+            toolbar: '#addToolBar',
+            initSort: {
+                field: 'addTime',
+                type: 'desc',
+            },
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                {field: 'userName', width: 120, sort: true,align: 'center', title: '创建人 '},
+                {field: 'addTime', width: 120,sort: true, align: 'center', title: '创建时间'},
+                {field: 'beginDate', width: 120,sort: true, align: 'center', title: '起始日期'},
+                {field: 'endDate', width: 120,sort: true, align: 'center', title: '结束日期'},
+                {field: 'proCompletion', width: 120,sort: true, align: 'center', title: '项目类型'},
+                {field: 'proName', width: 200,sort: true, align: 'center', title: '项目名称'},
+                {field: 'workHour', width: 95, align: 'center', sort: true, title: '工时',templet:function (d) {
+                        var proHtml1 = d.workHour+"时(h)";
+                        return proHtml1;
+                    }},
+                {field: 'examineStatus', width:100,align:'center', templet: '#tbaleState1', title: '项目审核'},
+                {field: 'examineStatusDept',hide:true,  width:100,align:'center', title: '部门审核'},
+                {field: 'checkStatus',  width:100,align:'center',templet: '#tbaleState1', title: '项目查看',templet:function (d) {
+                        var checkStatus = d.checkStatus;
+                        if (checkStatus==0){
+                            return '<p style="background-color:#2486FF;color: white"">已查看</p>';
+                        }else {
+                            return '<p style="background-color:#AA3130;color: white"">未查看</p>';
+                        }}},
+                {field: 'checkStatusDept',hide:true,  width:100,align:'center', title: '部门查看'},
+                {field: 'comment', width: 264, align: 'center',  title: '评论'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 167}
+            ]]
+        });
+        //时间控件
+        laydate.render({
+            elem: '#addTime',
+            format: 'yyyy-MM-dd',
+        });
+        //修改审核状态(部门经理)
+        form.on('switch(examineStatusDept)', function (obj) {
+            layer.load(2);
+            var id =obj.value.split("-")[1];
+            $.post('worksummary/updateState1', {
+                id: id,
+                examineStatusDept: obj.elem.checked ? 0 : 1,
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                    $(obj.elem).prop('checked', !obj.elem.checked);
+                    form.render('checkbox');
+                }
+            });
+        });
+        //修改审核状态(项目经理)
+        form.on('switch(examineStatus)', function (obj) {
+            layer.load(2);
+            var id =obj.value.split("-")[1];
+            $.post('worksummary/updateState4', {
+                id: id,
+                examineStatus: obj.elem.checked ? 0 : 1,
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                    $(obj.elem).prop('checked', !obj.elem.checked);
+                    form.render('checkbox');
+                }
+            });
+        });
+        //搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var addTime = $('#addTime').val();
+            var userName = $('#userName').val();
+            table1.reload('workSummaryTable1', {where: {addTime:addTime,userName:userName}});
+        });
+        $('#btnSearch').click(function () {
+            var addTime = $('#addTime').val();
+            table2.reload('workSummaryTable2', {where: {addTime:addTime}});
+        });
+        $('#btnSearch').click(function () {
+            var addTime = $('#addTime').val();
+            var userName = $('#userName').val();
+            var proName = $('#proName').val();
+            table3.reload('workSummaryTable3', {where: {addTime:addTime,userName:userName,proName:proName}});
+        });
+        $('#btnSearch').click(function () {
+            var addTime = $('#addTime').val();
+            var userName = $('#userName').val();
+            var proName = $('#proName').val();
+            table4.reload('workSummaryTable4', {where: {addTime:addTime,userName:userName,proName:proName}});
+        });
+        //头工具栏事件
+        table1.on('toolbar(workSummaryTable1)', function (obj) {
+            var checkStatus = table1.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    showEditModel();
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table1.exportFile(ins1.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+                case 'batchAudit1':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要审核的数据', {icon: 2});
+                    } else {
+                        batchAudit1(checkStatus.data);
+                    }
+                    break;
+            }
+            ;
+        });
+        table2.on('toolbar(workSummaryTable2)', function (obj) {
+            var checkStatus = table2.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    showEditModel();
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table2.exportFile(ins2.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            }
+            ;
+        });
+        table3.on('toolbar(workSummaryTable3)', function (obj) {
+            var checkStatus = table3.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    showEditModel();
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table3.exportFile(ins3.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            }
+            ;
+        });
+        table4.on('toolbar(workSummaryTable4)', function (obj) {
+            var checkStatus = table4.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    showEditModel();
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table4.exportFile(ins4.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+                case 'batchAudit2':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要审核的数据', {icon: 2});
+                    } else {
+                        batchAudit2(checkStatus.data);
+                    }
+                    break;
+            };
+        });
+        //工具条点击事件
+        table1.on('tool(workSummaryTable1)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } else if (layEvent === 'edit2') { // 查看详情
+                showEditModel2(data);
+            }else if (layEvent === 'comment'){
+                showCommentModel(data);
+            }else if (layEvent === 'tasklist'){
+                showTaskList(data);
+            }
+        });
+        table2.on('tool(workSummaryTable2)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } else if (layEvent === 'edit2') { // 查看详情
+                showEditModel2(data);
+            }else if (layEvent === 'tasklist'){
+                showTaskList(data);
+            }
+        });
+        table3.on('tool(workSummaryTable3)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } else if (layEvent === 'edit2') { // 查看详情
+                showEditModel2(data);
+            }else if (layEvent === 'tasklist'){
+                showTaskList(data);
+            }
+        });
+        table4.on('tool(workSummaryTable4)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } else if (layEvent === 'edit2') { // 查看详情
+                showEditModel2(data);
+            }else if (layEvent === 'comment'){
+                showCommentModel(data);
+            }else if (layEvent === 'tasklist'){
+                showTaskList(data);
+            }
+        });
+
+        //显示表单弹窗
+        function showEditModel(data) {
+            admin.putTempData('t_work', data);
+            admin.putTempData('formOk', false);
+            url="info/worksummary/editForm";
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title:'添加工作周报',
+                area: ['750px', '720px'],
+                content: url,
+                end: function () {
+                    admin.getTempData('formOk')&& table1.reload('workSummaryTable1');
+                    admin.getTempData('formOk')&& table2.reload('workSummaryTable2');
+                    admin.getTempData('formOk')&& table3.reload('workSummaryTable3');
+                    admin.getTempData('formOk')&& table4.reload('workSummaryTable4');
+                }
+            });
+        }
+        function showCommentModel(data) {
+            admin.putTempData('t_work', data);
+            admin.putTempData('formOk', false);
+            url="info/worksummary/editForm3";
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title: '评论',
+                area: ['750px', '520px'],
+                content: url,
+                end: function () {
+                    admin.getTempData('formOk')&& table1.reload('workSummaryTable1');
+                    admin.getTempData('formOk')&& table4.reload('workSummaryTable4');  // 成功刷新表格
+                }
+            });
+        }
+        function showTaskList(data) {
+            admin.putTempData('t_work', data);
+            admin.putTempData('formOk', false);
+            url="info/tasksummary/editForm1?proName="+data.proName+"&beginDate="+data.beginDate+"&endDate="+data.endDate+"&userName="+data.userName+"&id="+data.id;
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title: '##'+data.proName+'##'+'任务列表',
+                area: ['1000px', '600px'],
+                content: url,
+                end: function () {
+                    admin.getTempData('formOk')&& table1.reload('workSummaryTable1');
+                    admin.getTempData('formOk')&& table2.reload('workSummaryTable2');
+                    admin.getTempData('formOk')&& table3.reload('workSummaryTable3');
+                    admin.getTempData('formOk')&& table4.reload('workSummaryTable4');
+                }
+            });
+        }
+        function showEditModel2(data) {
+            admin.putTempData('t_work', data);
+            admin.putTempData('formOk', false);
+            var url ="info/worksummary/editForm2?id="+data.id+"&examineStatus="+data.examineStatus+"&examineStatusDept="+data.examineStatusDept+"&checkStatus="+data.checkStatus+"&checkStatusDept="+data.checkStatusDept+"&proName="+data.proName+"&beginDate="+data.beginDate+"&endDate="+data.endDate+"&userName="+data.userName;
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                // closeBtn:2,
+                shadeClose: true,
+                title: '周报详细信息',
+                area: ['54%', '80%'],
+                content: url,
+                end: function () {
+                    buildTable1();
+                    buildTable2();
+                    buildTable3();
+                    buildTable4();
+                }
+            });
+        }
+        //删除
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post('worksummary/delete', {
+                    id: obj.data.id,
+                    userName: obj.data.userName,
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+
+        function batchAudit1(data) {
+            top.layer.confirm('确定要批量审核吗？', function (index) {
+                top.layer.close(index);
+                $.ajax({
+                    url: 'worksummary/updateState2',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function() {
+                        table1.reload('workSummaryTable1');
+                    }
+                });
+            });
+        }
+        function batchAudit2(data) {
+            top.layer.confirm('确定要批量审核吗？', function (index) {
+                top.layer.close(index);
+                $.ajax({
+                    url: 'worksummary/updateState3',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function() {
+                        console.log(JSON.stringify(data));
+                        table4.reload('workSummaryTable4');
+                    }
+                });
+            });
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>外出登记管理</title>
+    <link rel="stylesheet" href="/static/assets/libs/layui/css/layui.css"  media="all">
+</head>
+
+<body class="layui-layout-body">
+
+<div class="layui-card-body">
+    <!-- 内容主体区域 -->
+    <!-- 表格顶部操作列 -->
+    <script type="text/html" id="addToolBar">
+        <div class="layui-btn-container">
+            <button type="button" id="btnAdd" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add" >
+                <i class="layui-icon">&#xe654;</i>添加
+            </button>
+            <button type="button" id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export" >
+                <i class="layui-icon">&#xe67d;</i>导出
+            </button>
+        </div>
+    </script>
+    <!-- 表格 -->
+    <% if(shiro.hasPermission("outregister:deptview")){ %>
+    <table class="layui-table" id="registerTableDept" lay-filter="registerTableDept"></table>
+    <% } %>
+    <% if(shiro.hasPermission("outregister:view")){ %>
+    <table class="layui-table" id="registerTable" lay-filter="registerTable"></table>
+    <% } %>
+</div>
+<script type="text/html" id="tbaleState">
+    <% if(shiro.hasPermission("outregister:deptview")){ %>
+    <input type="checkbox" lay-filter="approval" value="{{d.approval}}-{{d.id}}" lay-skin="switch" lay-text="批准|未批准"
+           {{d.approval==0?'checked':''}}/>
+    <% } %>
+</script>
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn layui-btn-xs" lay-event="edit">${ctxPath}修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/javascript" src="${ctxPath }/static/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath }/static/assets/js/common.js"></script>
+<script>
+    layui.use(['layer', 'table', 'admin','form'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var table1 = layui.table;
+        var admin = layui.admin;
+        var form = layui.form;
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#registerTable',
+            url: 'outregister/list',
+            cellMinWidth: 50,
+            toolbar: '#addToolBar',
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                {field: 'dept', sort: true,width: 146, align: 'center', title: '部门'},
+                {field: 'outDate',sort: true, width: 114, sort: true, align: 'center', title: '日期'},
+                {field: 'outTime', sort: true, width: 200, align: 'center', title: '外出时间'},
+                {field: 'userName', sort: true,width: 130, align: 'center', title: '姓名'},
+                {field: 'reason', width:250, align: 'center', title: '外出事由'},
+                {field: 'inTime', sort: true,width: 200, align: 'center', title: '返回时间'},
+                {field: 'approval', width: 120, align: 'center', title: '领导批准',templet:function (d) {
+                        var approval = d.approval;
+                        if (approval==0){
+                            return '<p style="background-color:#1890ff;color: white">已批准</p>';
+                        }else {
+                            return '<p style="background-color:#fc764c;color: white">未批准</p>';
+                        }}},
+                {field: 'remark', width: 220, align: 'center', title: '备注'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 150}
+            ]]
+        });
+        var ins2 = table1.render({
+            elem: '#registerTableDept',
+            url: 'outregister/deptlist',
+            cellMinWidth: 50,
+            toolbar: '#addToolBar',
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                {field: 'dept',sort: true, width: 146, align: 'center', title: '部门'},
+                {field: 'outDate',sort: true, width: 114, sort: true, align: 'center', title: '日期'},
+                {field: 'outTime',sort: true, sort: true, width: 200, align: 'center', title: '外出时间'},
+                {field: 'userName',sort: true, width: 130, align: 'center', title: '姓名'},
+                {field: 'reason', width:250, align: 'center', title: '外出事由'},
+                {field: 'inTime',sort: true, width: 200, align: 'center', title: '返回时间'},
+                {field: 'approval', width: 120, align: 'center', title: '领导批准',templet: '#tbaleState'},
+                {field: 'remark', width: 220, align: 'center', title: '备注'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 150}
+            ]]
+        });
+        //开关
+        form.on('switch(approval)', function (obj) {
+            layer.load(2);
+            var id =obj.value.split("-")[1];
+            $.post('outregister/updateState', {
+                id: id,
+                approval: obj.elem.checked ? 0 : 1,
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    layer.msg(data.msg, {icon: 1});
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                    $(obj.elem).prop('checked', !obj.elem.checked);
+                    form.render('checkbox');
+                }
+            });
+        });
+        table1.on('toolbar(registerTableDept)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    showEditModel();
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table.exportFile(ins2.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            }
+            ;
+        });
+        table1.on('tool(registerTableDept)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModeledit(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+        table.on('toolbar(registerTable)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    showEditModel();
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table.exportFile(ins1.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            }
+            ;
+        });
+        table.on('tool(registerTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModeledit(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+
+        function showEditModel() {
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title:'添加外出信息',
+                area: ['675px', '600px'],
+                content: 'info/outregister/editForm',
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('registerTableDept');
+                    admin.getTempData('formOk') && table.reload('registerTable');
+                }
+            });
+        }
+        function showEditModeledit(data) {
+            var approval1 = data.approval;
+            if (approval1==1){
+                admin.putTempData('t_out',data)
+                admin.putTempData('formOk', false);
+                top.layui.admin.open({
+                    type: 2,
+                    fix: false,
+                    shadeClose: true,
+                    title:'修改外出信息',
+                    area: ['625px', '550px'],
+                    content: 'info/outregister/editFormEdit',
+                    end: function () {
+                        admin.getTempData('formOk') && table.reload('registerTableDept');
+                        admin.getTempData('formOk') && table.reload('registerTable');
+                    }
+                });
+            }else {
+                layer.msg("已审核，请勿修改！")
+            }
+        }
+        function doDelete(obj) {
+            var approval = obj.data.approval;
+            if (approval==1){
+                top.layer.confirm('确定要删除吗？', function (index) {
+                    top.layer.close(index);
+                    layer.load(2);
+                    $.post('outregister/delete', {
+                        id: obj.data.id,
+                        userName: obj.data.userName,
+                    }, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1});
+                            obj.del();
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    });
+                });
+            }else{
+                layer.msg("已审核，请勿删除！");
+            }
+        }
+    });
+</script>
+</body>
+</html>

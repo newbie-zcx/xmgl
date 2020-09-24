@@ -21,4 +21,6 @@ public interface UserRoleMapper extends BaseMapper<UserRole> {
         List<UserRole> selectByUserIds(@Param("userIds") List<Integer> userIds);
 
         int insertBatch(@Param("userId") int userId, @Param("roleIds") List<Integer> roleIds);
+
+        UserRole getByUserId(@Param("userId") int userId);
 }

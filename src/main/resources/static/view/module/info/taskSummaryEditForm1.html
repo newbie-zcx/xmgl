@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style type="text/css">
+        .text_red{
+            color: red;
+        }
+    </style>
+</head>
+<body >
+<!-- 项目表单弹窗 -->
+<form id="taskSummaryForm" lay-filter="taskSummaryForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <input name="workSummaryId" type="hidden" value="${workSummaryId}"/>
+    <input name="proName" type="hidden" class="layui-input" maxlength="20" readonly="readonly"/>
+    <input name="addTime" type="hidden" class="layui-input" maxlength="20" readonly="readonly"/>
+    <input name="beginDate" id="beginDate" type="hidden" class="layui-input" maxlength="20" lay-verify="required"/>
+    <input name="endDate" id="endDate" type="hidden" class="layui-input" maxlength="20" lay-verify="required"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="margin-left: 20px">创建人</label>
+        <div class="layui-input-inline">
+            <input name="userName" type="text" class="layui-input" maxlength="20" readonly="readonly"/>
+        </div>
+        <label class="layui-form-label style-lable">阶段<span class="text_red">*</span></label>
+        <div class="layui-input-inline">
+            <select name="taskStage" xm-select-direction="down" lay-search >
+                <option value=""></option>
+                <option value="计划">计划</option>
+                <option value="需求">需求</option>
+                <option value="设计">设计</option>
+                <option value="编码">编码</option>
+                <option value="测试">测试</option>
+                <option value="培训">培训</option>
+                <option value="维护">维护</option>
+            </select>
+        </div>
+    </div>
+    <label class="layui-form-label">计划任务<span class="text_red">*</span></label>
+    <div class="layui-input-inline">
+        <textarea name="task" class="layui-textarea" style="width:600px;height:300px;font-size: larger;margin-left: 60px;" lay-verify="required|zflength"></textarea>
+    </div>
+    <div class="layui-input-block">
+        <button class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 120px;margin-top: 30px;">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 50px;margin-top: 30px;">重置</button>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'admin', 'laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var admin = layui.admin;
+        var laydate1 = layui.laydate;
+        var laydate2 = layui.laydate;
+        var taskType = "${taskType}";
+        //回显task数据
+        var task = admin.getTempData('t_task');
+        if (task) {
+            $('input[name="id"]').attr('readonly', 'readonly');
+            url = 'update';
+            form.val('taskSummaryForm',task);
+        }
+        var $input1 = $("input[name='taskType']");
+        var $input2 = $("input[name='taskHour']");
+        console.log(taskType);
+        if (taskType==0){
+            $input1.val("已完成");
+            $('#beginDate').show();
+            $('#endDate').show();
+            $('#beginDateLabel').show();
+            $('#endDateLabel').show();
+        }else if (taskType==1){
+            $input1.val("计划中");
+            $('#beginDate').hide();
+            $('#endDate').hide();
+            $('#beginDateLabel').hide();
+            $('#endDateLabel').hide();
+            $input2.attr("placeholder",'可不填');
+        }
+        //时间控件
+        laydate1.render({
+            elem: '#beginDate',
+            format: 'yyyy-MM-dd',
+            value:getMonday(),
+            isInitValue: false,
+            min:getMonday(),
+            max:getSunday(),
+        });
+        laydate2.render({
+            elem: '#endDate',
+            format: 'yyyy-MM-dd',
+            value:getMonday(),
+            isInitValue: false,
+            min:getMonday(),
+            max:getSunday(),
+        });
+        //时间选择器选择本周----周一
+        function getMonday() {
+            var today=new Date();
+            var weekday=today.getDay();
+            var dd=new Date(1000*60*60*24*(1-weekday) + today.getTime());
+            var y = dd.getFullYear();
+            var m = dd.getMonth()+1;//获取当前月份的日期
+            m=parseInt(m,10);
+            if(m<10){
+                m="0"+m;
+            }
+            var d = dd.getDate();
+            d=parseInt(d,10);
+            if(d<10){
+                d="0"+d;
+            }
+            return y+"-"+m+"-"+d;
+        }
+        //时间选择器选择本周----周日
+        function getSunday() {
+            var today=new Date();
+            var weekday=today.getDay();
+            var dd=new Date(1000*60*60*24*(7-weekday) + today.getTime());
+            var y = dd.getFullYear();
+            var m = dd.getMonth()+1;//获取当前月份的日期
+            m=parseInt(m,10);
+            if(m<10){
+                m="0"+m;
+            }
+            var d = dd.getDate();
+            d=parseInt(d,10);
+            if(d<10){
+                d="0"+d;
+            }
+            return y+"-"+m+"-"+d;
+        }
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            if (data.field.taskType=="已完成"){
+                data.field.taskType=0;
+            }else if (data.field.taskType=="计划中"){
+                data.field.taskType=1;
+                data.field.taskHour=0;
+            }
+            $.post(url, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    // 关闭当前iframe弹出层
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+
+
+    });
+
+
+
+</script>
+</body>
+
+</html>

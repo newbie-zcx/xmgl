@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.scsoft.xmgl.system.entity.Depart;
+import com.scsoft.xmgl.system.entity.User;
 import com.scsoft.xmgl.system.mapper.DepartMapper;
+import com.scsoft.xmgl.system.mapper.UserMapper;
 import com.scsoft.xmgl.system.service.IDepartService;
 
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ import java.util.List;
 public class DepartServiceImpl extends ServiceImpl<DepartMapper, Depart> implements IDepartService {
     @Resource
     private DepartMapper departMapper;
+    @Resource
+    private UserMapper userMapper;
     @Override
     public List<Depart> getByUserId(int userId) {
         return departMapper.selectByUserId(userId);
@@ -56,6 +60,13 @@ public class DepartServiceImpl extends ServiceImpl<DepartMapper, Depart> impleme
     public List<Depart> findChridByName(String name) {
         QueryWrapper<Depart> query = new QueryWrapper<Depart>().like("description", name);
         return departMapper.selectList(query);
+    }
+
+    @Override
+    public List<User> getUserListByDepart(Depart depart) {
+        Integer departId = depart.getId();
+        List<User> userList = userMapper.getByDepart(departId);
+        return userList;
     }
 
 }

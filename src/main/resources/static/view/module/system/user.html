@@ -301,6 +301,7 @@
         function showEditModel(data) {
             var departId=$("#departId").val();
             admin.putTempData('t_user', data);
+            console.log(data);
             admin.putTempData('formOk', false);
             top.layui.admin.open({
                 type: 2,

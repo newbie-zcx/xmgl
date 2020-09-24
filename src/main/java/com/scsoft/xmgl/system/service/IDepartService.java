@@ -2,6 +2,7 @@ package com.scsoft.xmgl.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.scsoft.xmgl.system.entity.Depart;
+import com.scsoft.xmgl.system.entity.User;
 
 import java.util.List;
 
@@ -19,4 +20,5 @@ public interface IDepartService extends IService<Depart> {
     List<Depart> getByPId(List<Depart> pids);
     List<Depart> selectNotInId(int departId);
     List<Depart> findChridByName(String name);
+    List<User> getUserListByDepart(Depart depart);
 }

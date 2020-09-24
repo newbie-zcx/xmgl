@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style>
+        .layui-table-cell {
+            height: auto;
+        }
+        .title{
+            width: 240px;
+            height: 45px;
+            font-size: 17px;
+            color: black;
+            background-color: #d8e4bc;
+        }
+    </style>
+</head>
+<body>
+<!-- 工作周报表单弹窗 -->
+<div class="layui-form toolbar">
+    <div class="layui-form-item" style="margin-top: 20px;width: 100%;height: 100%">
+        <div class="layui-inline" style="width: 100%;height: 100%">
+            <form style="float: left;width: 100%;height: 100%">
+                <div class="layui-form-item" style="">
+                    <label class="layui-form-label" style="margin-left: 3px;width: 20%;background-color:#b8cce4;text-align: center;font-size: 17px;border: black solid 1px"><b>项目名称</b></label>
+                    <div class="layui-input-inline" style="width: 76%">
+                        <input name="proName" type="text" class="layui-input" style="width: 102%;height:40px;text-align: center;font-size: 17px;border: black solid 1px;border-left: none;" value="${proName}" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="float: left;width: 100%">
+                    <div style="width:69%;height: 40px;float: left;">
+                        <label class="layui-form-label" style="margin-left: 3px;width: 29%;font-size: 17px;background-color:#b8cce4;text-align: center;border: black solid 1px;border-top:none;border-bottom: none; "><b>项目经理</b></label>
+                        <div class="layui-input-inline" style="width: 66%">
+                            <input name="userName" id="userName" type="text" class="layui-input" value="${proManager}" style="width: 103%;font-size: 17px;text-align: center;margin: 0px;padding: 0px" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div style="width: 31%;height: 40px;float: left;">
+                        <label class="layui-form-label" style="width: 20%;font-size: 17px;text-align: center;background-color:#b8cce4;border: black solid 1px;border-top:none;border-bottom: none;"><b>提交日期</b></label>
+                        <div class="layui-input-inline" style="width: 71%">
+                            <input name="addTime" id="addTime" type="text" class="layui-input" value="${format}" style="width: 102%;font-size: 17px;text-align: center;border-right:black solid 1px;" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="">
+                    <label class="layui-form-label" style="margin-left: 3px;width: 20%;border: black solid 1px;font-size: 17px;background-color:#b8cce4;text-align: center;"><b>项目日期</b></label>
+                    <label class="layui-form-label" style="width: 15%;border:black solid 1px;border-left:none;text-align: center;font-size: 17px;">从</label>
+                    <div class="layui-input-inline" style="width: 29.7%">
+                        <input name="beginDate" type="text" class="layui-input" id="beginDate" style="width:100%;height:40px;border:black solid 1px;border-left:none;text-align: center;font-size: 17px;"/>
+                    </div>
+                    <label class="layui-form-label" style="border:black solid 1px;border-left:none;width: 6.3%;margin-left: -10px;text-align: center;font-size: 17px;">到</label>
+                    <div class="layui-input-inline" style="width: 22.4%;margin: 0px;">
+                        <input name="endDate" type="text" class="layui-input" id="endDate" style="width:100%;height:40px;border:black solid 1px;border-left:none;text-align: center;font-size: 17px;padding: 0px;margin: 0px;"/>
+                    </div>
+                </div>
+            </form>
+            <div class="layui-inline" style="width: 100%;">
+                <button id="btnSearch" class="layui-btn icon-btn" style="margin: 25px 567px;width: 400px"><i class="layui-icon">&#xe615;</i>搜索</button>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="layui-table" id="proSummary" lay-filter="proSummary" style="display: none;"></table>
+<table class="layui-table" id="proSummary1" lay-filter="proSummary1" style="display: none;"></table>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<!-- 表格顶部列 -->
+<script type="text/html" id="addToolBar1">
+    <div class="layui-btn-container">
+        <button id="btnAdd1" class="layui-btn layui-btn-normal layui-btn-sm title"  >
+            <i class="layui-icon"></i>本周任务
+        </button>
+    </div>
+</script>
+<script type="text/html" id="addToolBar2">
+    <div class="layui-btn-container">
+        <button id="btnAdd2" class="layui-btn layui-btn-normal layui-btn-sm title"  >
+            <i class="layui-icon"></i>下周计划
+        </button>
+    </div>
+</script>
+<script>
+    layui.use(['layer', 'form', 'admin', 'formSelects','table', 'laydate','upload'], function () {
+        var $ = layui.jquery;
+        var table1 = layui.table;
+        var table2 = layui.table;
+        var laydate = layui.laydate;
+        var proName = "${proName}";
+        //时间选择器选择本周----周一
+        function getMonday() {
+            var today=new Date();
+            var weekday=today.getDay();
+            var dd=new Date(1000*60*60*24*(1-weekday) + today.getTime());
+            var y = dd.getFullYear();
+            var m = dd.getMonth()+1;//获取当前月份的日期
+            m=parseInt(m,10);
+            if(m<10){
+                m="0"+m;
+            }
+            var d = dd.getDate();
+            d=parseInt(d,10);
+            if(d<10){
+                d="0"+d;
+            }
+            return y+"-"+m+"-"+d;
+        }
+        //时间选择器选择本周----周日
+        function getSunday() {
+            var today=new Date();
+            var weekday=today.getDay();
+            var dd=new Date(1000*60*60*24*(7-weekday) + today.getTime());
+            var y = dd.getFullYear();
+            var m = dd.getMonth()+1;//获取当前月份的日期
+            m=parseInt(m,10);
+            if(m<10){
+                m="0"+m;
+            }
+            var d = dd.getDate();
+            d=parseInt(d,10);
+            if(d<10){
+                d="0"+d;
+            }
+            return y+"-"+m+"-"+d;
+        }
+        laydate.render({
+            elem: '#beginDate',
+            value: getMonday(),
+        });
+        laydate.render({
+            elem: '#endDate',
+            value: getSunday(),
+        });
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var beginDate = $('#beginDate').val();
+            var endDate = $('#endDate').val();
+            table1.render({
+                elem: '#proSummary',
+                url: 'summaryList',
+                cellMinWidth: 50,
+                toolbar: '#addToolBar1',
+                loading:true,
+                page: true,
+                text: {
+                    none: '暂无相关数据'
+                },
+                where: {proName:proName,beginDate:beginDate,endDate:endDate},
+                cols: [[
+                    {type: 'checkbox'},
+                    { title: '序号',width: 104, sort: true, align: 'center',templet:function(d){
+                            return d.LAY_INDEX
+                        }},
+                    {field: 'taskSummaries', width: 301, title: '任务',templet:function(d){
+                            var proHtml="";
+                            if(d.taskSummaries.length>0){
+                                for(var i=0;i<d.taskSummaries.length;i++){
+                                    proHtml +="<div style='text-align: left;'>"+(i+1)+"."+d.taskSummaries[i].task+"</div>";
+                                }
+                                return proHtml
+                            }else {
+                                return ''
+                            }
+                        }},
+                    {field: 'userName', width: 131, align: 'center', title: '责任人'},
+                    {field: 'popWork', width: 147, align: 'center', title: '计划工作百分比'},
+                    {field: 'pocWork', width:124, align: 'center', title: '完成百分比'},
+                    {field: 'taskType', width: 125, align: 'center', title: '任务类型'},
+                    {field: 'workHour', width: 221, align: 'center', title: '实际工作量(h)'},
+                    {field: 'reason', width: 322, align: 'center', title: '原因'},
+                ]]
+            });
+            table2.render({
+                elem: '#proSummary1',
+                url: 'summaryList1',
+                cellMinWidth: 50,
+                loading:true,
+                toolbar: '#addToolBar2',
+                page: true,
+                text: {
+                    none: '暂无相关数据'
+                },
+                where: {proName:proName,beginDate:beginDate,endDate:endDate},
+                cols: [[
+                    {type: 'checkbox'},
+                    { title: '序号',width: 104, sort: true, align: 'center',templet:function(d){
+                            return d.LAY_INDEX
+                        }},
+                    {field: 'taskSummaries', width: 304, title: '已计划的任务',templet:function(d){
+                            if(d.taskSummaries.length>0){
+                                var proHtml="";
+                                for(var i=0;i<d.taskSummaries.length;i++){
+                                    proHtml +="<div style='text-align: left;'>"+(i+1)+"."+d.taskSummaries[i].task+"</div>";
+                                }
+                                return proHtml
+                            }else {
+                                return ''
+                            }
+                        }},
+                    {field: 'userName', width: 131, align: 'center', title: '责任人'},
+                    {field: 'planPopWork', width: 147, align: 'center', title: '计划工作百分比'},
+                    {field: 'planTaskType', width: 126, align: 'center', title: '任务类型'},
+                    {field: 'jobDescription', width: 665, align: 'center', title: '工作说明'},
+                ]]
+            });
+        });
+
+    });
+</script>
+</body>
+
+</html>

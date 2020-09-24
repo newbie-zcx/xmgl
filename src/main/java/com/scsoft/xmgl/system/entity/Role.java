@@ -55,7 +55,7 @@ public class Role extends BaseEntity {
     public Role(int roleId, String roleName) {
         setId(roleId);
         setName(roleName);
-    }
+}
     public Role(int roleId) {
         setId(roleId);
     }

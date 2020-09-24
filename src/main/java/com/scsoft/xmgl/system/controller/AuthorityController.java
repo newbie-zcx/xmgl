@@ -1,6 +1,7 @@
 package com.scsoft.xmgl.system.controller;
 
 import com.scsoft.xmgl.common.handler.SystemCommonHandler;
+import com.scsoft.xmgl.common.shiro.UserRealm;
 import com.scsoft.xmgl.system.entity.Authority;
 import com.scsoft.xmgl.system.service.IAuthorityService;
 import com.scsoft.xmgl.system.service.IRoleService;
@@ -143,6 +144,11 @@ public class AuthorityController extends BaseController {
         return JsonResult.error("删除失败");
     }
 
+//    @RequestMapping("/clearCached")
+//    @SysLog(operationType="clearCached操作:",operationName="clear缓存权限")
+//    public void clear() {
+//        new UserRealm().clearCachedAuthorizationInfo();
+//    }
 
 
     /**

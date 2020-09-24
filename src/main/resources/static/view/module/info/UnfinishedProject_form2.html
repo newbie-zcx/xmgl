@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style type="text/css">
+        .label{
+            width: 120px;
+        }
+    </style>
+</head>
+<body >
+<!-- user表单弹窗 -->
+<form id="projectInfoForm" lay-filter="projectInfoForm" class="layui-form model-form">
+        <input name="id" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">完成情况</label>
+        <div class="layui-input-inline">
+            <input name="proCompletion"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label">项目经理</label>
+        <div class="layui-input-inline">
+            <input name="proManager"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目类型</label>
+        <div class="layui-input-inline">
+            <input name="proType"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label">项目名称</label>
+        <div class="layui-input-inline">
+            <input name="proName" readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目编号</label>
+        <div class="layui-input-inline">
+            <input name="proId"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label">合同编号</label>
+        <div class="layui-input-inline">
+            <input name="contractId"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">承担部门</label>
+        <div class="layui-input-inline">
+            <input name="proDept"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label">联合部门</label>
+        <div class="layui-input-inline">
+            <input name="jointDev"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">启动时间</label>
+        <div class="layui-input-inline">
+            <input name="proDatetime"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label">客户名称</label>
+        <div class="layui-input-inline">
+            <input name="customerName"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">签约时间</label>
+        <div class="layui-input-inline">
+            <input name="contractDatetime"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label">签约人</label>
+        <div class="layui-input-inline">
+            <input name="contractPeople"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">付款方式</label>
+        <div class="layui-input-inline">
+            <input name="contractPayment"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label">合同金额</label>
+        <div class="layui-input-inline">
+            <input name="contractAmount"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" >计划时间</label>
+        <div class="layui-input-inline">
+            <input name="proFinishPlan"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label">验收时间</label>
+        <div class="layui-input-inline">
+            <input name="proFinishActual"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">运维期限</label>
+        <div class="layui-input-inline">
+            <input name="proYWPeriod"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label">质保期限</label>
+        <div class="layui-input-inline">
+            <input name="proZBPeriod"  readonly="readonly" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'admin', 'formSelects','laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+        //回显user数据
+        var info = admin.getTempData('t_info');
+            form.val('projectInfoForm', info);
+        //时间控件
+        laydate.render({
+            elem: '#test1',
+            // range:true,
+            format: 'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem: '#test2',
+            // range:true,
+            format: 'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem: '#test3',
+            // range:true,
+            format: 'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem: '#test4',
+            // range:true,
+            format: 'yyyy-MM-dd',
+        });
+    });
+</script>
+</body>
+
+</html>

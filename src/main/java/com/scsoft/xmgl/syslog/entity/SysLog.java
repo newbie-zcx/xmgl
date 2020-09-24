@@ -49,7 +49,6 @@ public class SysLog extends BaseEntity {
     /** 日志内容 */
     @TableField( "content")
     private String content;
-
     /** 操作提交的数据 */
     @TableField( "params")
     private String params;

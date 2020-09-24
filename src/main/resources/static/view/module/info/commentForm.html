@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+</head>
+<body>
+<!-- 工作周报表单弹窗 -->
+<form id="WorkSummaryForm" lay-filter="WorkSummaryForm" class="layui-form model-form">
+    <textarea name="comment" class="layui-textarea" style="width:500px;height:200px;font-size: larger;margin-left: 50px" lay-verify="required"></textarea>
+    <div class="layui-input-block">
+        <button class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 100px;margin-top: 31px">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 20px;margin-top: 30px">重置</button>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'admin', 'formSelects', 'laydate','upload'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var admin = layui.admin;
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            url = '/info/worksummary/addComment';
+            var worksummary = admin.getTempData('t_work');
+            $.post(url, {
+                "id":worksummary.id,
+                "comment":worksummary.comment+data.field.comment,
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    // 关闭当前iframe弹出层
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+
+</html>

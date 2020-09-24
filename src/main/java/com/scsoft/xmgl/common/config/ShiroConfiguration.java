@@ -52,7 +52,7 @@ public class ShiroConfiguration {
     public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager  securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        //配置登录的url和登录成功的url
+        //配置登录的url和登录成功的url以及未授权的url
         shiroFilterFactoryBean.setLoginUrl("/login");
         shiroFilterFactoryBean.setSuccessUrl("/");
         shiroFilterFactoryBean.setUnauthorizedUrl("/error?code=403");
@@ -152,7 +152,7 @@ public class ShiroConfiguration {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(host+":"+port);
         redisManager.setDatabase(10);
-        redisManager.setTimeout(30000);
+        redisManager.setTimeout(60000);
         return redisManager;
     }
 

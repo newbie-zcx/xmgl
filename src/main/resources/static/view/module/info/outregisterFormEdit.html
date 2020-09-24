@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style type="text/css">
+        .text_red{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<!-- 工作周报表单弹窗 -->
+<form id="OutRegisterFormEdit" lay-filter="OutRegisterFormEdit" class="layui-form model-form" style="padding-top: 0px;">
+    <input name="id" type="hidden"/>
+    <input name="userName" type="hidden"/>
+    <div class="layui-form-item" style="margin-left: 56px;margin-top: 25px">
+        <label class="layui-form-label">外出事由</label>
+        <textarea name="reason" class="layui-textarea" style="width:500px;height:150px;font-size: larger;margin-left: 30px" lay-verify="zflength|required"></textarea>
+    </div>
+    <div class="layui-form-item" style="margin-left:56px;">
+        <label class="layui-form-label" style="padding-left: 7px">备&nbsp;&nbsp;注</label>
+        <textarea name="remark" class="layui-textarea" style="width:500px;height:150px;font-size: larger;margin-left: 30px" lay-verify="zflength"></textarea>
+    </div>
+    <input name="approval" type="hidden" class="layui-input"/>
+    <div class="layui-input-block">
+        <button class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 130px">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 50px">重置</button>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<!-- 表格顶部操作列 -->
+<script>
+    layui.use(['layer', 'form', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var admin = layui.admin;
+
+        //自定义文本不得超过255字节
+        form.verify({
+            zflength:function (value) {
+                var i,sum;
+                sum=0;
+                for(i=0;i<value.length;i++){
+                    if ((value.charCodeAt(i)>=0) && (value.charCodeAt(i)<=255))
+                        sum=sum+1;
+                    else
+                        sum=sum+2;
+                }
+                if (sum > 255) {
+                    return '字符长度溢出';
+                }
+            }
+        });
+        var outregister = admin.getTempData('t_out');
+        form.val('OutRegisterFormEdit', outregister);
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            $.post('/info/outregister/update', data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    // 关闭当前iframe弹出层
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+    });
+
+
+</script>
+</body>
+
+</html>

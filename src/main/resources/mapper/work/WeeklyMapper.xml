@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scsoft.xmgl.work.mapper.WeeklyMapper">
+    <select id="getByUserName" resultType="com.scsoft.xmgl.work.entity.Weekly" parameterType="String">
+        select * from work_weekly where user_name = #{userName}
+    </select>
+    <select id="getByProId" resultType="com.scsoft.xmgl.work.entity.Weekly">
+        select * from work_weekly
+        <if test="weeklyIdList.size() > 0">
+            where id in
+            <foreach collection="weeklyIdList" open="(" close=")" separator="," item="weeklyId">
+                #{weeklyId}
+            </foreach>
+        </if>
+            and start_date = #{startDate} and end_date = #{endDate}
+    </select>
+    <select id="getHour" resultType="com.scsoft.xmgl.work.entity.Weekly">
+        select * from work_weekly
+        <if test="weeklyIdList.size() > 0">
+            where id in
+            <foreach collection="weeklyIdList" open="(" close=")" separator="," item="weeklyId">
+                #{weeklyId}
+            </foreach>
+        </if>
+        and start_date &gt;= #{dateStart} and end_date &lt;= #{dateEnd}
+    </select>
+</mapper>

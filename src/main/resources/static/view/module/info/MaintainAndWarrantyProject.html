@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>维护项目管理</title>
+    <link rel="stylesheet" href="/static/assets/libs/layui/css/layui.css"  media="all">
+</head>
+
+<body class="layui-layout-body">
+
+        <div class="layui-card-body">
+            <!-- 内容主体区域 -->
+            <div id="chooseInfo" style="height: 262px;display: none;" hidden class="chooseCss">
+                <div class="chooseContent" style="height: 150px;">
+                    <div style="text-align: center;">
+                        <a href="/static/template/用户导入模版文件.xls" title="点击下载模版文件" style="font-size: 18px;color: blue;">点击下载模版文件</a>
+                        <p>温馨提示：模版文件格式要求为【.XLS】</p>
+                    </div>
+                    <div class="layui-upload" style="margin: 20px 0 0 20px;">
+                        <button type="button" class="layui-btn layui-btn-normal" id="chooseFile">选择文件</button><br>
+                        <button type="button" class="layui-btn" id="uploadFile" style="margin-top: 5px;">开始导入</button>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+            </div>
+            <div class="layui-form toolbar">
+                <div class="layui-form-item" style="margin-top: 20px;margin-left: 260px">
+                    <div class="layui-inline" style="width: auto;">
+                        <form style="float: left">
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目名称：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="proName" class="layui-input" type="text" placeholder="输入项目名称"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目经理：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="proManager" class="layui-input" type="text" placeholder="输入项目经理"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">承担部门：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="proDept" class="layui-input" type="text" placeholder="输入承担部门"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button type="reset" class="layui-btn layui-btn-primary" >重置</button>
+                            </div>
+                        </form>
+                        <div class="layui-inline">
+                            <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 表格顶部操作列 -->
+            <script type="text/html" id="addToolBar">
+                <div class="layui-btn-container">
+                    <button type="button" id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export" >
+                        <i class="layui-icon">&#xe67d;</i>导出
+                    </button>
+                    <button type="button" id="btnImp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="import" >
+                        <i class="layui-icon">&#xe681;</i>导入
+                    </button>
+                </div>
+            </script>
+            <!-- 表格 -->
+            <table class="layui-table" id="infoTable" lay-filter="infoTable"></table>
+        </div>
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn layui-btn-xs" lay-event="edit">${ctxPath}修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit2">查看详情</a>
+</script>
+<script type="text/javascript" src="${ctxPath }/static/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath }/static/assets/js/common.js"></script>
+<script>
+    layui.use(['layer','table',  'admin', "upload"], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var admin = layui.admin;
+        var upload = layui.upload;
+
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#infoTable',
+            url: 'maintainandwarranty/list',
+            cellMinWidth: 50,
+            toolbar: '#addToolBar',
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                {field: 'proCompletion',sort: true, width: 130, align: 'center', title: '完成情况'},
+                {field: 'proId', width: 130, sort: true, align: 'center', title: '项目编号'},
+                {field: 'contractId', sort: true, width: 130, align: 'center', title: '合同编号'},
+                {field: 'proType', sort: true,width: 130, align: 'center', title: '项目类型'},
+                {field: 'proManager',sort: true, width:120, align: 'center', title: '项目经理'},
+                {field: 'proDept', sort: true,width: 180, align: 'center', title: '承担部门'},
+                {field: 'proName',sort: true, width: 180, align: 'center', title: '项目名称'},
+                {field: 'proZBEnd',sort: true, width: 180, align: 'center', title: '质保结束时间'},
+                {field: 'proYWEnd', sort: true,width: 180, align: 'center', title: '运维结束时间'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 220}
+            ]]
+        });
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var proCompletion = $('#proCompletion').val();
+            var proName = $('#proName').val();
+            var proManager = $('#proManager').val();
+            var proDept = $('#proDept').val();
+            table.reload('infoTable', {where: {proCompletion:proCompletion,proName:proName,proManager:proManager,proDept:proDept}});
+        });
+        //头工具栏事件
+        table.on('toolbar(infoTable)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    showEditModel();
+                    break;
+                case 'import':
+                    importProjects();
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table.exportFile(ins1.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            }
+            ;
+        });
+        // 工具条点击事件
+        table.on('tool(infoTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } else if (layEvent === 'edit2') { // 查看详情
+                showEditModel2(data);
+            }
+        });
+
+        function importProjects() {
+            layer.open({
+                type: 1,
+                title: "用户导入",
+                content: $('#chooseInfo'),
+                area: ['500px', '200px']
+            });
+            upload.render({
+                elem: '#chooseFile'
+                , url: 'maintain/batchImportInfo' //改成您自己的上传接口
+                , auto: false
+                , accept: 'file' //普通文件
+                , exts: 'xls'
+                , bindAction: '#uploadFile'
+                , before: function () {
+                    layer.load(2);
+                }
+                , done: function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }
+            });
+        }
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.putTempData('t_info', data);
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title:'修改维护/质保项目信息',
+                area: ['400px', '290px'],
+                content: 'info/maintainandwarranty/editForm',
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('infoTable');  // 成功刷新表格
+                }
+            });
+        }
+        function showEditModel2(data) {
+            admin.putTempData('t_info', data);
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title: '维护项目详细信息',
+                area: ['675px', '600px'],
+                content: 'info/maintainandwarranty/editForm2',
+            });
+        }
+        // 删除
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post('maintainandwarranty/delete', {
+                    id: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style type="text/css">
+        .label{
+            width: 120px;
+        }
+        .pos_abs
+        {
+            position:absolute;
+            left:350px;
+            top:370px
+        }
+    </style>
+</head>
+<body >
+<!-- 项目表单弹窗 -->
+<form id="projectAddForm" lay-filter="projectAddForm" class="layui-form model-form">
+<!--    <input name="id" type="hidden"/>-->
+<!--    <div class="layui-form-item" style="margin-left: 33px;">-->
+<!--        <label class="layui-form-label">项目名称</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <select name="proId" lay-verify="required">-->
+<!--                <% for(project in projectList) { %>-->
+<!--                <option value="${project.id}">${project.proName}</option>-->
+<!--                <% } %>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <label class="layui-form-label">上月周工时</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <input name="lastMonthHour" id="lastMonthHour" placeholder="输入上月周工时" type="text" class="layui-input" maxlength="20"/>-->
+<!--        </div>-->
+<!--        <label class="layui-form-label">本月周工时</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <input name="thisMonthHour" id="thisMonthHour" placeholder="输入本月周工时" type="text" class="layui-input" maxlength="20" lay-verify="required"/>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash;周报内容&ndash;&gt;-->
+<!--    <div class="layui-form-item" id="addInput" style="margin-left: -35px;margin-top: 30px;">-->
+<!--        <label class="layui-form-label" style="margin-left: 92px">周报内容</label>-->
+<!--        <input type="button" style="margin-top: 5px;" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add" id="add" value="添加行"/>-->
+<!--        <div class="layui-input-block" style="margin-top: 10px">-->
+<!--            <span style="float: left;height: 38px;line-height: 38px;width: 2%">1.</span>-->
+<!--            <input type="text" id="content_0" style="width:92%;float: left" class="layui-input" maxlength="20" lay-verify="required"/>-->
+<!--        </div>-->
+<!--    </div>-->
+    <table class="layui-table" lay-even style="margin-left:10px" id="addFormTable">
+        <colgroup>
+            <col width="200">
+            <col width="150">
+            <col width="150">
+            <col width="300">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>项目名称</th>
+                <th>上月周工时</th>
+                <th>本月周工时</th>
+                <th>周报内容</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(project in projectList) { %>
+            <tr>
+                <th>${project.proName}</th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+                <th><input type="text"/></th>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+    <div class="layui-input-block pos_abs" style="width: 500px;margin: 25px auto">
+        <button type="button" class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 120px">保存</button>
+        <button type="button" class="layui-btn layui-btn-primary" id="btnShut" style="margin-left: 50px">关闭</button>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'admin', 'formSelects', 'laydate', 'element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var url = 'add';
+        var laydate = layui.laydate;
+        var element = layui.element;
+        // var sc ="";
+        // var max = 7;
+        // var x = 1;
+        // //添加行
+        // $("#add").click(function(){
+        //     if (x<max){
+        //         var str = '<div class="layui-input-block" style="margin-top: 10px">'+
+        //             '<span style="float: left;height: 38px;line-height: 38px;width: 2%;">'+(x+1)+'.</span>'+
+        //             '<input style="width:92%;float: left" type="text" id=\"content_'+x+'\" class="layui-input" maxlength="20" />'+
+        //             '</div>'
+        //         $("#addInput").append(str);
+        //         x++;
+        //     }else{
+        //         layer.msg("最多添加6条信息",{icon:2});
+        //     }
+        // });
+        //时间控件
+        laydate.render({
+            elem: '#startDate',
+            format: 'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem: '#planCompleteDate',
+            format: 'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem: '#planCheckDate',
+            format: 'yyyy-MM-dd',
+        });
+        $("#btnShut").on('click', function () {
+            parent.layer.closeAll();
+        });
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            //获取input框的数据
+            // $('.layui-input-block input').each(function(){
+            //     sc += this.value+"-";
+            // });
+            var trList = $("#addFormTable").find("tr");
+            for (var i = 1; i < trList.length; i++) {
+                var trArr = trList.eq(i);
+                var proName = trArr.children("th").eq(0).text;
+                var lastMonthHour = trArr.children("th").children("input").eq(1).value;
+                var thisMonthHour = trArr.children("th").children("input").eq(2).value;
+                var content = trArr.children("th").children("input").eq(3).value;
+                if (thisMonthHour == null || thisMonthHour == "" || thisMonthHour == undefined) {
+                    layer.msg("内容不可为空！")
+                }
+                if (content == null || content == "" || thisMonthHour == content) {
+                    layer.msg("内容不可为空！")
+                }
+                top.layer.confirm('确定要添加吗？', function (index) {
+                    top.layer.close(index);
+                    layer.load(2);
+                    // data.field.sc=sc;
+                    data.field.proName = proName;
+                    data.field.lastMonthHour = lastMonthHour;
+                    data.field.thisMonthHour = thisMonthHour;
+                    data.field.content = content;
+                    $.post(url, data.field, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 200) {
+                            top.layer.msg(data.msg, {icon: 1});
+                            // 关闭当前iframe弹出层
+                            parent.layer.close(parent.layer.getFrameIndex(window.name));
+                        } else {
+                            top.layer.msg(data.msg, {icon: 2});
+                        }
+                    });
+                    return false;
+                });
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

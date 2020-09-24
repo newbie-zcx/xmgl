@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>项目管理</title>
+    <% include("../../layout/cssPart.html"){} %>
+    <style>
+        .layui-table-cell {
+            height: auto;
+        }
+        .chooseCss .chooseHeader {
+            width: 698px;
+            padding: 12px 0 12px 22px;
+            background: #EDF7F8;
+            border-bottom: 1px solid #deeeee;
+        }
+        .chooseCss .chooseHeader .title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        .chooseCss .chooseHeader .search input{
+            width: 215px;
+            height: 36px;
+            display: inline-block;
+            margin-left: 60px;
+            color: #aeaeae;
+            border: 1px solid #deeeee;
+            -webkit-border-radius: 18px;
+            -moz-border-radius: 18px;
+            border-radius: 18px;
+        }
+    </style>
+</head>
+
+<body class="layui-layout-body">
+    <div class="layui-card-body">
+        <!--搜索功能-->
+        <div class="layui-form toolbar">
+            <div class="layui-form-item" style="margin-top: 15px;margin-left: 70px">
+                <div class="layui-inline" style="width: auto;">
+                    <form style="float: left">
+                        <div class="layui-inline">
+                            <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目编号：</label>
+                            <div class="layui-input-inline mr0">
+                                <input id="proId" class="layui-input" type="text" placeholder="输入项目编号"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目名称：</label>
+                            <div class="layui-input-inline mr0">
+                                <input id="proName" class="layui-input" type="text" placeholder="输入项目名称"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label w-auto" style="padding: 9px 0px;">技术负责人：</label>
+                            <div class="layui-input-inline mr0">
+                                <select id="proManager" name="proManager" lay-verify="required">
+                                    <option value=""></option>
+                                    <% for(user in nameList) { %>
+                                    <option value="${user.realName}">${user.realName}</option>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目经理：</label>
+                            <div class="layui-input-inline mr0">
+                                <input id="manager" class="layui-input" type="text" placeholder="输入项目经理"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label w-auto" style="padding: 9px 0px;">承担部门：</label>
+                            <div class="layui-input-inline mr0">
+                                <select name="proDept" id="proDept" lay-verify="required">
+                                    <option value=""></option>
+                                    <% for(dept in departList) { %>
+                                    <option value="${dept.departName}">${dept.address}</option>
+                                    <% } %>
+                                    <option value="【技术】联合开发">联合开发</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label w-auto" style="padding: 9px 0px;">商务负责人：</label>
+                            <div class="layui-input-inline mr0">
+                                <input id="proSigner" class="layui-input" type="text" placeholder="输入商务负责人"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目完成情况：</label>
+                            <div class="layui-input-inline mr0">
+                                <select name="proEndState" id="proEndState">
+                                    <option value=""></option>
+                                    <option value="1">已完成</option>
+                                    <option value="0">未完成</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="reset" class="layui-btn layui-btn-primary" >重置</button>
+                        </div>
+                    </form>
+                    <div class="layui-inline">
+                        <button id="btnSearch1" type="button" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 表格顶部操作列 -->
+        <script type="text/html" id="addToolBar">
+            <div class="layui-form-item" style="margin-top: 15px;margin-left: 70px">
+                <div class="layui-inline" style="width: auto;">
+                    <form style="float: left">
+                        <div class="layui-inline">
+                            <label class="layui-form-label w-auto" style="padding: 9px 0px;">开始时间：</label>
+                            <div class="layui-input-inline mr0">
+                                <input id="startDate" class="layui-input" type="text"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label w-auto" style="padding: 9px 0px;">结束时间：</label>
+                            <div class="layui-input-inline mr0">
+                                <input id="endDate" class="layui-input" type="text"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="reset" class="layui-btn layui-btn-primary" >重置</button>
+                        </div>
+                    </form>
+                    <div class="layui-inline">
+                        <button id="btnSearch2" type="button" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <!-- 表格 -->
+        <table class="layui-table" id="proTable" lay-filter="proTable"></table>
+        <table class="layui-table" id="weeklyTable" lay-filter="weeklyTable"></table>
+    </div>
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+</script>
+<script type="text/javascript" src="${ctxPath }/static/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath }/static/assets/js/common.js"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', "upload","laydate"], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var upload = layui.upload;
+        var laydate = layui.laydate;
+        laydate.render({
+            elem:'#startDate',
+            format:'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem:'#endDate',
+            format:'yyyy-MM-dd',
+        });
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#proTable',
+            url: 'check/list',
+            cellMinWidth: 50,
+            text: {
+                none: '无相关数据'
+            },
+            page: true,
+            limit: 5,
+            limits:[5,10],
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                {field: 'proId', width: 180, sort: true, align: 'center', title: '项目编号'},
+                {field: 'proName', sort: true, width: 290, align: 'center', title: '项目名称'},
+                {field: 'proManager', sort: true, width: 160, align: 'center', title: '负责人'},
+                {field: 'startDate', sort: true, width: 230, align: 'center', title: '启动时间'},
+                {field: 'planCompleteDate', sort: true, width: 230, align: 'center', title: '计划完成时间'},
+                {field: 'lastMonthHour', sort: true, width: 221, align: 'center', title: '上月周工时(h)'},
+                {field: 'thisMonthHour', sort: true, width: 221, align: 'center', title: '本月周工时(h)'},
+            ]]
+        });
+        //项目搜索按钮点击事件
+        $('#btnSearch1').click(function () {
+            var proId = $('#proId').val();
+            var proName = $('#proName').val();
+            var proManager = $('#proManager').val();
+            var manager = $('#manager').val();
+            var proDept = $('#proDept').val();
+            var proSigner = $('#proSigner').val();
+            var proEndState = $('#proEndState').val();
+            table.reload('proTable', {where: {proId:proId,proName:proName,proManager:proManager,manager:manager,proDept:proDept,proSigner:proSigner,proEndState:proEndState}});
+        });
+        //周报搜索
+        $('#btnSearch2').click(function () {
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            table.reload('weeklyTable', {where: {startDate: startDate,endDate:endDate}});
+        });
+        //监听行单击事件
+        table.on('row(proTable)', function (obj) {
+            var ins2 = table.render({
+                elem: '#weeklyTable',
+                text: {
+                    none: '无相关数据'
+                },
+                toolbar: "<div>"+obj.data.proName+"---项目周报</div>",
+                defaultToolbar:[],
+                toolbar: '#addToolBar',
+                cellMinWidth: 50,
+                page: true,
+                limit: 5,
+                limits:[5,10],
+                url: 'weekly/list',
+                where: {proId: obj.data.id},
+                cols: [[
+                    { title: "<div>"+obj.data.proName+"---项目周报</div>", align: 'center', colspan: 11 },
+                    ],[{type: 'checkbox'},
+                    {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                    {field: 'userName', width: 160, sort: true, align: 'center', title: '姓名'},
+                    {field: 'scList', width: 300, title: '周报内容', align: 'center', templet: function (d) {
+                            if (d && d.scList && d.scList.length > 0) {
+                                var proHtml = "";
+                                for (var i = 0; i < d.scList.length; i++) {
+                                    proHtml += "<div style='text-align: left;'>" + (i + 1) + "." + d.scList[i].content + "</div>";
+                                }
+                                return proHtml
+                            } else {
+                                return ''
+                    }}},
+                    {field: 'startDate', sort: true, width: 180, align: 'center', title: '起始时间'},
+                    {field: 'endDate', sort: true, width: 180, align: 'center', title: '结束时间'},
+                    {field: 'lastMonthHour', sort: true, width: 150, edit: 'text', align: 'center', title: '上月周工时(h)'},
+                    {field: 'thisMonthHour', sort: true, width: 150, edit: 'text', align: 'center', title: '本月周工时(h)'},
+                    {field: 'projectHour', sort: true, width: 150, align: 'center', title: '项目总工时'},
+                    {field: 'monthHour', sort: true, width: 150, align: 'center', title: '本月总工时'},
+                    {align: 'center', toolbar: '#tableBar', title: '操作', width: 110},
+                ]]
+            });
+
+        });
+
+        table.on('tool(weeklyTable)', function (obj) {
+            console.log(obj);
+            var layEvent = obj.event;
+            if (layEvent === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post('weekly/delete', {
+                    weeklyId: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+        //监听单元格编辑
+        table.on('edit(weeklyTable)', function (obj) {
+            var newVar = $(this).prev().text();
+            layer.prompt({title: '请输入修改原因', formType: 2, maxlength: 100, yes: function (index, layero) {
+                    var text = layero.find(".layui-layer-input").val();
+                    if (text.trim() === '') {
+                        layer.msg('修改原因不可为空', {icon: 2});
+                    } else {
+                        top.layer.close(index);
+                        layer.load(2);
+                        var url = "check/updateHour";
+                        $.post(url, {
+                            entityId:obj.data.id,
+                            beforeParams: newVar,
+                            afterParams: obj.value,
+                            updateTable: "weekly",
+                            updateRow: obj.field,
+                            updateReason:text,
+                        }, function (data) {
+                            layer.close(index);
+                            layer.closeAll('loading');
+                            if (data.code == 200) {
+                                top.layer.msg(data.msg, {icon: 1});
+                            } else {
+                                top.layer.msg(data.msg, {icon: 2});
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+
+
+
+
+    });
+</script>
+</body>
+</html>

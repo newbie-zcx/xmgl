@@ -2,12 +2,14 @@ package com.scsoft.xmgl.system.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.scsoft.xmgl.system.entity.Role;
 import com.scsoft.xmgl.system.entity.User;
 import com.scsoft.scpt.common.PageResult;
 import com.scsoft.scpt.exception.BusinessException;
 import com.scsoft.scpt.exception.ParameterException;
 import org.apache.ibatis.annotations.Param;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +28,7 @@ public interface IUserService extends IService<User> {
     List<Map<String, Object>> selectUsers(@Param("name") String name, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("deptid") int deptid);
 
     User getByUsername(String username);
-    User getByname(String username);
-
+    User getByRealName(String realName);
     PageResult<User> list(int pageNum, int pageSize, boolean showDelete, String searchKey, String searchValue, String departId);
 
     User getById(int userId);
@@ -42,5 +43,14 @@ public interface IUserService extends IService<User> {
     boolean add(User user, String departId) throws BusinessException;
 
     boolean update(User user);
+    boolean updateUser(User user);
     boolean delete(int userId);
+    User getRealNameByLoginName(String LoginName);
+    List<User> getRealNameBySection(String section);
+    List<Role> getRoleByid(int id);
+
+    /**
+    * 用户工时统计
+    **/
+    PageResult<User> countList(int pageSize,int pageNum,Integer proId,String realName,String startDate,String endDate) throws ParseException;
 }

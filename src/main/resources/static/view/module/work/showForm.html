@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>周报内容</title>
+    <% include("../../layout/cssPart.html"){} %>
+    <link rel="stylesheet" href="/static/assets/module/formSelects/formSelects-v4.css"/>
+    <style>
+        .layui-table-cell {
+            height: auto;
+        }
+        .chooseCss .chooseHeader {
+            width: 698px;
+            padding: 12px 0 12px 22px;
+            background: #EDF7F8;
+            border-bottom: 1px solid #deeeee;
+        }
+        .chooseCss .chooseHeader .title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        .chooseCss .chooseHeader .search input{
+            width: 215px;
+            height: 36px;
+            display: inline-block;
+            margin-left: 60px;
+            color: #aeaeae;
+            border: 1px solid #deeeee;
+            -webkit-border-radius: 18px;
+            -moz-border-radius: 18px;
+            border-radius: 18px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+
+<!-- 页面加载loading -->
+<% include("../../layout/loading.html"){} %>
+
+<!-- 正文开始 -->
+<div class="layui-card-body">
+    <div class="layui-form toolbar">
+        <div class="layui-form-item" style="margin-top: 15px;">
+            <div class="layui-inline" style="width: auto;">
+                <form style="float: left;margin-left: 155px;">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">开始时间：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="startDate" class="layui-input" type="text"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">结束时间：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="endDate" class="layui-input" type="text"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="reset" class="layui-btn layui-btn-primary" >重置</button>
+                    </div>
+                </form>
+                <div class="layui-inline">
+                    <button id="btnSearch" type="button" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input name="proId" id="proId" value="${proId}" type="hidden"/>
+    <table class="layui-table" id="userCountTable" lay-filter="userCountTable"></table>
+</div>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin',"upload","laydate"], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var upload = layui.upload;
+        var laydate = layui.laydate;
+        var proId = $("#proId").val();
+        laydate.render({
+            elem:'#startDate',
+            format:'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem:'#endDate',
+            format:'yyyy-MM-dd',
+        });
+        table.render({
+            elem: '#userCountTable',
+            url: '../proUserCount/list?proId='+proId,
+            page: true,
+            limit:10,
+            limits:[10,20,30],
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 75, sort: true, align: 'center', title: 'ID'},
+                {field: 'realName', width: 154, sort: true, align: 'center', title: '姓名'},
+                {field: 'totalHour', width: 180, sort: true, align: 'center', title: '总工时(h)'},
+                {field: 'monthHour', width: 180, sort: true, align: 'center', title: '月总工时(h)'},
+                {field: 'lastWeekHour', width: 180, sort: true, align: 'center', title: '上月周工时(h)'},
+                {field: 'thisWeekHour', width: 180, sort: true, align: 'center', title: '本月周工时(h)'},
+            ]]
+        });
+        $('#btnSearch').click(function () {
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            table.reload('userCountTable', {where: {startDate: startDate,endDate:endDate}});
+        });
+    });
+
+</script>
+</body>
+
+</html>

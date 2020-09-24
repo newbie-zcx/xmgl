@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style type="text/css">
+        .bgc{
+            background-color:#d8e4bc;
+            height: 37px;
+            margin-bottom:-20px;
+        }
+        .font{
+            color: black;
+            margin-left: 60px;
+            font-size: 16px;
+            line-height: 40px;
+        }
+        .text_red{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<!-- 工作周志表单弹窗 -->
+<form id="WorkSummaryForm" lay-filter="WorkSummaryForm" class="layui-form model-form">
+    <div class="bgc"><a class="font">本周任务</a></div>
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item" style="margin-left: 40px;margin-top: 30px;">
+        <label class="layui-form-label" style="margin-left: 5px">创建人：</label>
+        <div class="layui-input-inline">
+            <input name="userName" type="text" readonly="readonly" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label" style="margin-left: 5px">提交时间：</label>
+        <div class="layui-input-inline">
+            <input name="addTime" type="text" readonly="readonly"  class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label" style="margin-left: 5px">起始日期：</label>
+        <div class="layui-input-inline">
+            <input name="beginDate" style="" type="text" readonly="readonly"  class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label" style="margin-top: 10px;margin-left: 5px">结束日期：</label>
+        <div class="layui-input-inline">
+            <input name="endDate" style="margin-top: 10px;" type="text" readonly="readonly" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label" style="margin-top: 10px;margin-left: 5px">项目名称<span class="text_red">*</span></label>
+        <div class="layui-input-inline" style="margin-top: 10px">
+            <select name="proName" xm-select-direction="down" lay-search required>
+                <option value=""></option>
+                <% for(info in infoList) { %>
+                <option value="${info.proName}">${info.proName}</option>
+                <% } %>
+            </select>
+        </div>
+        <label class="layui-form-label" style="margin-top: 10px;margin-left: 5px">任务类型<span class="text_red">*</span></label>
+        <div class="layui-input-inline" style="margin-top: 10px">
+            <select name="taskType" xm-select-direction="down" lay-search required>
+                <option value=""></option>
+                <option value="新任务">新任务</option>
+                <option value="计划外">计划外</option>
+                <option value="正常">正常</option>
+                <option value="其它">其它</option>
+            </select>
+        </div>
+        <label class="layui-form-label" style="margin-top: 10px;width: 84px">计划百分比<span class="text_red">*</span></label>
+        <div class="layui-input-inline" style="margin-top: 10px">
+            <select name="popWork" xm-select-direction="down" lay-search required>
+                <option value="0%">0%</option>
+                <option value="10%">10%</option>
+                <option value="20%">20%</option>
+                <option value="30%">30%</option>
+                <option value="40%">40%</option>
+                <option value="50%">50%</option>
+                <option value="60%">60%</option>
+                <option value="70%">70%</option>
+                <option value="80%">80%</option>
+                <option value="90%">90%</option>
+                <option value="100%">100%</option>
+            </select>
+        </div>
+        <label class="layui-form-label" style="margin-top: 10px;width: 84px">完成百分比<span class="text_red">*</span></label>
+        <div class="layui-input-inline" style="margin-top: 10px">
+            <select name="pocWork" xm-select-direction="down" lay-search required>
+                <option value="0%">0%</option>
+                <option value="10%">10%</option>
+                <option value="20%">20%</option>
+                <option value="30%">30%</option>
+                <option value="40%">40%</option>
+                <option value="50%">50%</option>
+                <option value="60%">60%</option>
+                <option value="70%">70%</option>
+                <option value="80%">80%</option>
+                <option value="90%">90%</option>
+                <option value="100%">100%</option>
+            </select>
+        </div>
+        <label class="layui-form-label" style="margin-top: 10px;margin-left: 5px;">原因</label>
+        <div class="layui-input-inline">
+            <input name="reason" style="margin-top: 10px;" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    </div>
+    <table class="layui-table" id="taskSummaryTable1" lay-filter="taskSummaryTable1"></table>
+    <div class="bgc"><a class="font">下周计划</a></div>
+    <div class="layui-form-item" style="margin-left: 40px;margin-top: 30px;">
+        <label class="layui-form-label" style="margin-left: 5px;width: 84px">计划百分比：</label>
+        <div class="layui-input-inline">
+            <select name="planPopWork" xm-select-direction="down" lay-search>
+                <option value="0%">0%</option>
+                <option value="10%">10%</option>
+                <option value="20%">20%</option>
+                <option value="30%">30%</option>
+                <option value="40%">40%</option>
+                <option value="50%">50%</option>
+                <option value="60%">60%</option>
+                <option value="70%">70%</option>
+                <option value="80%">80%</option>
+                <option value="90%">90%</option>
+                <option value="100%">100%</option>
+            </select>
+        </div>
+        <label class="layui-form-label" style="">任务类型：</label>
+        <div class="layui-input-inline">
+            <select name="planTaskType" xm-select-direction="down" lay-search >
+                <option value=""></option>
+                <option value="新任务">新任务</option>
+                <option value="计划外">计划外</option>
+                <option value="正常">正常</option>
+                <option value="其它">其它</option>
+            </select>
+        </div>
+        <label class="layui-form-label" style="margin-top: 0px;margin-left: 5px;">工作说明：</label>
+        <div class="layui-input-inline">
+            <input name="jobDescription" style="margin-top: 0px;" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    </div>
+    <table class="layui-table" id="taskSummaryTable2" lay-filter="taskSummaryTable2"></table>
+    <input name="examineStatus" type="hidden" class="layui-input"/>
+    <input name="examineStatusDept" type="hidden" class="layui-input"/>
+    <input name="checkStatus" type="hidden" class="layui-input"/>
+    <input name="checkStatusDept" type="hidden" class="layui-input"/>
+
+    <% if(shiro.hasPermission("worksummary:viewLevel1")||shiro.hasPermission("worksummary:viewLevel4")){ %>
+    <div class="layui-form-item" style="margin-left:40px;">
+        <label class="layui-form-label" style="margin-left: 10px">评论：</label>
+        <textarea name="comment" class="layui-textarea" style="width:100%;height:200px;font-size: larger;" lay-verify="zflength"></textarea>
+    </div>
+    <% } %>
+    <div class="layui-input-block">
+        <button class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 315px;margin-top: -5px;">保存</button>
+        <button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 50px;margin-top: -5px;">重置</button>
+    </div>
+</form>
+
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script type="text/html" id="addToolBar">
+    <div class="layui-btn-container">
+        <button  type="button" id="btnAdd" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="taskadd" >
+            <i class="layui-icon">&#xe654;</i>添加
+        </button>
+        <button type="button" id= "btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export" >
+            <i class="layui-icon">&#xe67d;</i>导出
+        </button>
+    </div>
+</script>
+<script type="text/html" id="addToolBar1">
+    <div class="layui-btn-container">
+        <button id="btnAdd1" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="taskadd1" >
+            <i class="layui-icon">&#xe654;</i>添加
+        </button>
+        <button id= "btnExp1" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export1" >
+            <i class="layui-icon">&#xe67d;</i>导出
+        </button>
+    </div>
+</script>
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn layui-btn-xs" lay-event="taskedit">${ctxPath}修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="taskdel">删除</a>
+</script>
+<script type="text/html" id="tableBar1">
+    <a class="layui-btn layui-btn layui-btn-xs" lay-event="taskedit1">${ctxPath}修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="taskdel">删除</a>
+</script>
+<script>
+    layui.use(['layer', 'form', 'admin', 'formSelects','table', 'laydate','upload'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table1 = layui.table;
+        var table2 = layui.table;
+        var admin = layui.admin;
+        var proName = "${proName}";
+        var beginDate = "${beginDate}";
+        var endDate = "${endDate}";
+        var userName = "${userName}";
+        var realName = "${realName}";
+        var workSummaryId = "${workSummaryId}";
+        //回显工作周志数据
+        var worksummary = admin.getTempData('t_work');
+        var beforeComment = worksummary.comment;
+        if (worksummary) {
+            form.val('WorkSummaryForm', worksummary);
+        }
+        //自定义文本不得超过255字节
+        form.verify({
+            zflength:function (value) {
+                var i,sum;
+                sum=0;
+                for(i=0;i<value.length;i++){
+                    if ((value.charCodeAt(i)>=0) && (value.charCodeAt(i)<=255))
+                        sum=sum+1;
+                    else
+                        sum=sum+2;
+                }
+                if (sum > 255) {
+                    return '字符长度溢出';
+                }
+            }
+        });
+        var ins1 = table1.render({
+            elem: '#taskSummaryTable1',
+            url : '/info/tasksummary/list1?proName='+proName+'&beginDate='+beginDate+'&endDate='+endDate+'&userName='+userName,
+            cellMinWidth: 50,
+            toolbar: '#addToolBar',
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 70, sort: true, align: 'center', title: 'ID'},
+                {field: 'addTime', sort: true,width: 120, align: 'center', title: '创建时间'},
+                {field: 'beginDate',sort: true, width: 120, align: 'center', title: '起始日期'},
+                {field: 'endDate', sort: true,width: 120, align: 'center', title: '结束日期'},
+                {field: 'task',sort: true, width: 201, align: 'center', title: '任务'},
+                {field: 'taskStage', sort: true,width: 81, align: 'center', title: '阶段'},
+                {field: 'taskHour',sort: true, width: 105, align: 'center', title: '任务工时'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 120}
+            ]]
+        });
+        var ins2 = table2.render({
+            elem: '#taskSummaryTable2',
+            url : '/info/tasksummary/list2?proName='+proName+'&beginDate='+beginDate+'&endDate='+endDate+'&userName='+userName,
+            cellMinWidth: 50,
+            page: true,
+            toolbar: '#addToolBar1',
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                {field: 'addTime',sort: true, width: 120, align: 'center', title: '创建时间'},
+                {field: 'beginDate',sort: true, width: 120, align: 'center', title: '起始日期'},
+                {field: 'endDate', sort: true,width: 120, align: 'center', title: '结束日期'},
+                {field: 'task', sort: true,width: 300, align: 'center', title: '计划任务'},
+                {field: 'taskStage',sort: true, width: 80, align: 'center', title: '阶段'},
+                {align: 'center', toolbar: '#tableBar1', title: '操作', width: 120}
+            ]]
+        });
+        //头工具栏事件
+        table1.on('toolbar(taskSummaryTable1)', function (obj) {
+            var checkStatus = table1.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'taskadd':
+                    if (userName===realName){
+                        showEditModeladd(proName);
+                        break;
+                    }
+                    layer.msg('无权限新增！');
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table1.exportFile(ins1.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            }
+            ;
+        });
+        table2.on('toolbar(taskSummaryTable2)', function (obj) {
+            var checkStatus = table2.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'taskadd1':
+                    if (userName===realName){
+                        showEditModeladd1(proName);
+                        break;
+                    }
+                    layer.msg('无权限新增！');
+                    break;
+                case 'export1':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table2.exportFile(ins2.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            }
+            ;
+        });
+        // 工具条点击事件
+        table1.on('tool(taskSummaryTable1)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (obj.event === 'taskdel') { //删除
+                if (userName===realName){
+                    doDelete(obj);
+                }else{
+                    layer.msg("无权限删除！")
+                }
+            } else if (layEvent === 'taskedit') { // 修改
+                if (userName===realName){
+                    showEditModeledit(data);
+                }else{
+                    layer.msg("无权限修改！")
+                }
+            }
+        });
+        table2.on('tool(taskSummaryTable2)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (obj.event === 'taskdel') { //删除
+                if (userName===realName){
+                    doDelete(obj);
+                }else{
+                    layer.msg("无权限删除！")
+                }
+            } else if (layEvent === 'taskedit1') { // 修改
+                if (userName===realName){
+                    showEditModeledit1(data);
+                }else{
+                    layer.msg("无权限修改！")
+                }
+            }
+        });
+        // 显示表单弹窗
+        function showEditModeladd(proName) {
+            admin.putTempData('t_task1', proName);
+            admin.putTempData('formOk', false);
+            url="info/tasksummary/editFormadd?beginDate="+beginDate+"&endDate="+endDate+"&workSummaryId="+workSummaryId;
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title:'添加任务',
+                area: ['720px', '600px'],
+                content: url,
+                end:function () {
+                    admin.getTempData('formOk')&& window.location.reload();
+                }
+            });
+        }
+        function showEditModeladd1(proName) {
+            admin.putTempData('t_task1', proName);
+            admin.putTempData('formOk', false);
+            url="info/tasksummary/editFormadd1?beginDate="+beginDate+"&endDate="+endDate+"&workSummaryId="+workSummaryId;
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title:'添加计划',
+                area: ['720px', '550px'],
+                content: url,
+                end:function () {
+                    admin.getTempData('formOk')&& window.location.reload();
+                }
+            });
+        }
+        function showEditModeledit(data) {
+            admin.putTempData('t_task', data);
+            admin.putTempData('formOk', false);
+            url="info/tasksummary/editFormedit?id="+data.id+"&workSummaryId="+workSummaryId;
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title: '修改任务',
+                area: ['720px', '600px'],
+                content: url,
+                end: function () {
+                    admin.getTempData('formOk')&& window.location.reload();
+                }
+            });
+        }
+        function showEditModeledit1(data) {
+            admin.putTempData('t_task', data);
+            admin.putTempData('formOk', false);
+            url="info/tasksummary/editFormedit1?id="+data.id+"&workSummaryId="+workSummaryId;
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title: '修改计划',
+                area: ['720px', '550px'],
+                content: url,
+                end: function () {
+                    admin.getTempData('formOk')&& window.location.reload();
+                }
+            });
+        }
+        // 删除
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post('../tasksummary/delete', {
+                    id: obj.data.id,
+                    workSummaryId:workSummaryId,
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            data.field.beforeComment=beforeComment;
+            $.post('update',data.field, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        top.layer.msg(data.msg, {icon: 1});
+                        admin.putTempData('formOk', true);  // 操作成功刷新表格
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                    } else {
+                        top.layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            return false;
+        });
+    });
+</script>
+</body>
+
+</html>

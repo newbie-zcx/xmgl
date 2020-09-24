@@ -1,8 +1,12 @@
 package com.scsoft.xmgl.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.scsoft.xmgl.system.entity.Depart;
+import com.scsoft.xmgl.system.entity.Role;
 import com.scsoft.xmgl.system.entity.User;
 import com.scsoft.scpt.annotation.MyBatisDao;
+
+import java.util.List;
 
 
 /**
@@ -15,4 +19,8 @@ import com.scsoft.scpt.annotation.MyBatisDao;
 @MyBatisDao
 public interface UserMapper extends BaseMapper<User> {
     User getByUsername(String username);
+    User getByRealName(String realName);
+    List<User> getBySection(String section);
+    List<Role> getRoleByid(int id);
+    List<User> getByDepart(Integer departId);
 }

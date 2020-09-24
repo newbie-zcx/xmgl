@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+</head>
+<body >
+<!-- user表单弹窗 -->
+<form id="userForm" lay-filter="userForm" class="layui-form model-form">
+    <input name="id" type="hidden" value="${id}"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目成员:</label>
+        <div class="layui-input-block" style="float:left;width: auto;margin-left: 0px;">
+            <select name="userName" xm-select="userId" lay-verify="required">
+                <% for(user in userList) { %>
+                <option value="${user.id}">${user.realName}</option>
+                <% } %>
+            </select>
+        </div>
+        <div style="float:left;width: auto;margin-left: 30px;">
+            <button class="layui-btn" lay-filter="btnSubmit" lay-submit >保存</button>
+        </div>
+    </div>
+
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'admin','formSelects'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var formSelects = layui.formSelects;
+        var form = layui.form;
+        var admin = layui.admin;
+        var uds = new Array();
+        var info = admin.getTempData('pro');
+        form.val('pro', info);
+        for (var i = 0; i < info.userList.length; i++) {
+            uds.push(info.userList[i].id);
+        }
+        formSelects.value('userId', uds);
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            $.post('proMember', {
+                id:data.field.id,
+                member:data.field.userName,
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    // 关闭当前iframe弹出层
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+
+    });
+
+
+
+</script>
+</body>
+
+</html>

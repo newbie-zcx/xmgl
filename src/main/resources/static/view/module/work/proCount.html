@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>台账管理</title>
+    <% include("../../layout/cssPart.html"){} %>
+    <link rel="stylesheet" href="/static/assets/module/formSelects/formSelects-v4.css"/>
+    <style>
+        .layui-table-cell {
+            height: auto;
+        }
+        .chooseCss .chooseHeader {
+            width: 698px;
+            padding: 12px 0 12px 22px;
+            background: #EDF7F8;
+            border-bottom: 1px solid #deeeee;
+        }
+        .chooseCss .chooseHeader .title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        .chooseCss .chooseHeader .search input{
+            width: 215px;
+            height: 36px;
+            display: inline-block;
+            margin-left: 60px;
+            color: #aeaeae;
+            border: 1px solid #deeeee;
+            -webkit-border-radius: 18px;
+            -moz-border-radius: 18px;
+            border-radius: 18px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+
+<!-- 页面加载loading -->
+<% include("../../layout/loading.html"){} %>
+
+<!-- 正文开始 -->
+<div class="layui-card-body">
+    <div class="layui-form toolbar">
+        <div class="layui-form-item" style="margin-top: 15px;margin-left: 70px">
+            <div class="layui-inline" style="width: auto;">
+                <form style="float: left;">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目编号：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="proId" id="proId" class="layui-input" type="text" placeholder="输入项目编号"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目名称：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="proName" id="proName" class="layui-input" type="text" placeholder="输入项目名称"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">负责人：</label>
+                        <div class="layui-input-inline mr0">
+                            <select id="proManager" name="proManager" lay-verify="required">
+                                <option value=""></option>
+                                <% for(user in nameList) { %>
+                                <option value="${user.realName}">${user.realName}</option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">承担部门：</label>
+                        <div class="layui-input-inline mr0">
+                            <select name="proDept" id="proDept" lay-verify="required">
+                                <option value=""></option>
+                                <% for(dept in departList) { %>
+                                <option value="${dept.departName}">${dept.address}</option>
+                                <% } %>
+                                <option value="【技术】联合开发">联合开发</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">商务负责人：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="proSigner" id="proSigner" class="layui-input" type="text" placeholder="输入商务负责人"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="margin-top: 8px;">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">开始时间：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="startDate" id="startDate" class="layui-input" type="text"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="margin-top: 8px;">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">结束时间：</label>
+                        <div class="layui-input-inline mr0">
+                            <input name="endDate" id="endDate" class="layui-input" type="text"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="margin-top: 8px;">
+                        <button type="reset" class="layui-btn layui-btn-primary" >重置</button>
+                    </div>
+                </form>
+                <button id="btnSearch" type="button" class="layui-btn icon-btn" style="margin-left:650px;margin-top:-75px;"><i class="layui-icon">&#xe615;</i>搜索</button>
+            </div>
+        </div>
+    </div>
+    <table class="layui-table" id="proCountTable" lay-filter="proCountTable"></table>
+</div>
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn layui-btn-xs" lay-event="showAll">${ctxPath}成员工时</a>
+</script>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['table', "laydate",'admin'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var laydate = layui.laydate;
+        var admin = layui.admin;
+
+        laydate.render({
+            elem:'#startDate',
+            format:'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem:'#endDate',
+            format:'yyyy-MM-dd',
+        });
+        // 渲染表格
+        table.render({
+            elem: '#proCountTable',
+            url: 'proCount/list',
+            page: true,
+            text: {
+                none: '无相关数据'
+            },
+            limit: 15,
+            limits: [15, 30, 45, 60],
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 60, sort: true, align: 'center', title: 'ID'},
+                {field: 'proId', width: 119, sort: true, align: 'center', title: '项目编号'},
+                {field: 'proName', sort: true, width: 172, align: 'center', title: '项目名称'},
+                {field: 'proNature', sort: true, width: 107, align: 'center', title: '项目性质'},
+                {field: 'proType', sort: true, width: 109, align: 'center', title: '项目类型'},
+                {field: 'proManager', sort: true, width: 123, align: 'center', title: '负责人'},
+                {field: 'proDept', sort: true, width: 171, align: 'center', title: '承担部门'},
+                {field: 'proSigner', sort: true, width: 116, align: 'center', title: '商务负责人'},
+                {field: 'projectHour', sort: true, width: 134, align: 'center', title: '项目总工时(h)'},
+                {field: 'monthHour', sort: true, width: 134, align: 'center', title: '本月总工时(h)'},
+                {field: 'lastWeekHour', sort: true, width: 134, align: 'center', title: '上月周工时(h)'},
+                {field: 'thisWeekHour', sort: true, width: 134, align: 'center', title: '本月周工时(h)'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 91}
+            ]]
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var proId = $('#proId').val();
+            var proName = $('#proName').val();
+            var proManager = $('#proManager').val();
+            var proDept = $('#proDept').val();
+            var proSigner = $('#proSigner').val();
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            table.reload('proCountTable', {where: {proId: proId,proName:proName,proManager:proManager,proDept:proDept,proSigner:proSigner ,startDate: startDate, endDate: endDate}});
+        });
+        table.on('tool(proCountTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'showAll') { // 修改
+                showAllModel(data);
+            }
+        });
+        function showAllModel(data) {
+            console.log(data);
+            url = "work/proCount/showForm?id="+data.id;
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title:  '<<'+data.proName+'>>项目成员工时统计',
+                area: ['54%', '72%'],
+                content:url,
+                offset: ['200px', '260px'],
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('proTable');
+                }
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

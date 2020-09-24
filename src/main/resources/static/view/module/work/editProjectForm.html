@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style type="text/css">
+        .layui-form-label{
+            width: 85px;
+        }
+        .layui-div{
+            margin-left: 70px;
+        }
+        .layui-form-checkbox{
+            margin-right: 24px;
+            margin-top: 10px;
+        }
+        .pos_abs
+        {
+            position:absolute;
+            left:350px;
+            top:510px
+        }
+    </style>
+</head>
+<body >
+<!-- 项目表单弹窗 -->
+<form id="projectAddForm" lay-filter="projectAddForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item layui-div">
+        <label class="layui-form-label">项目编码</label>
+        <div class="layui-input-inline">
+            <input name="proId" id="proId" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
+        </div>
+        <label class="layui-form-label">项目性质</label>
+        <div class="layui-input-inline">
+            <select id="proNature" name="proNature" lay-verify="required">
+                <option value=""></option>
+                <option value="在建项目">在建项目</option>
+                <option value="维保项目">维保项目</option>
+                <option value="其它项目">其它项目</option>
+            </select>
+        </div>
+        <label class="layui-form-label">项目类型</label>
+        <div class="layui-input-inline">
+            <select name="proType" lay-verify="required">
+                <option value=""></option>
+                <option value="签单">签单</option>
+                <option value="提前下单">提前下单</option>
+                <option value="内部研发">内部研发</option>
+                <option value="其他">其他</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-div">
+        <label class="layui-form-label">项目名称</label>
+        <div class="layui-input-inline">
+            <input name="proName" id="proName" style="width: 266%" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
+        </div>
+        <label class="layui-form-label"  style="margin-left: 315px">项目简述</label>
+        <div class="layui-input-inline">
+            <input name="proResume" id="proResume" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item layui-div">
+        <label class="layui-form-label">技术负责人</label>
+        <div class="layui-input-inline">
+            <select id="proManager" name="proManager" lay-verify="required">
+                <option value=""></option>
+                <% for(user in nameList) { %>
+                <option value="${user.realName}">${user.realName}</option>
+                <% } %>
+            </select>
+        </div>
+        <label class="layui-form-label">项目经理</label>
+        <div class="layui-input-inline">
+            <input name="manager" id="manager" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
+        </div>
+        <label class="layui-form-label">承担部门</label>
+        <div class="layui-input-inline">
+            <select name="proDept" id="proDept" lay-verify="required">
+                <option value=""></option>
+                <% for(dept in departList) { %>
+                <option value="${dept.departName}">${dept.address}</option>
+                <% } %>
+                <option value="【技术】联合开发">联合开发</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-div">
+        <label class="layui-form-label">商务负责人</label>
+        <div class="layui-input-inline">
+            <input name="proSigner" id="proSigner" placeholder="输入商务负责人" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
+        </div>
+        <label class="layui-form-label">启动时间</label>
+        <div class="layui-input-inline">
+            <input name="startDate" placeholder="输入项目启动时间" type="text" class="layui-input" maxlength="20" lay-verify="required" id="startDate" />
+        </div>
+        <label class="layui-form-label">计划完成时间</label>
+        <div class="layui-input-inline">
+            <input name="planCompleteDate" placeholder="输入计划完成时间" type="text" class="layui-input" maxlength="20" id="planCompleteDate"/>
+        </div>
+    </div>
+    <div class="layui-form-item layui-div">
+        <label class="layui-form-label">项目变更时间</label>
+        <div class="layui-input-inline">
+            <input name="planChangeDate" placeholder="输入项目变更时间" type="text" class="layui-input" maxlength="20" id="planChangeDate"/>
+        </div>
+        <label class="layui-form-label">项目完成状态</label>
+        <div class="layui-input-inline">
+            <select name="proEndState" id="proEndState">
+                <option value=""></option>
+                <option value="1">已完成</option>
+                <option value="0">未完成</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-tab layui-div" >
+        <ul class="layui-tab-title">
+            <% for(dept in departList){ %>
+            <li>${dept.address}</li>
+            <% } %>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-input-block" style="margin-left: 0px">
+                    <% for(User1 in List1) { %>
+                    <input type="checkbox" value="${User1.id}" id="${User1.id}" lay-filter="realName" title="${User1.realName}" />
+                    <% } %>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-input-block" style="margin-left: 0px">
+                    <% for(User2 in List2) { %>
+                    <input type="checkbox" value="${User2.id}" id="${User2.id}" lay-filter="realName" title="${User2.realName}" />
+                    <% } %>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-input-block" style="margin-left: 0px">
+                    <% for(User3 in List3) { %>
+                    <input type="checkbox" value="${User3.id}" id="${User3.id}" lay-filter="realName" title="${User3.realName}" />
+                    <% } %>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-input-block" style="margin-left: 0px">
+                    <% for(User4 in List4) { %>
+                    <input type="checkbox" value="${User4.id}" id="${User4.id}" lay-filter="realName" title="${User4.realName}" />
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-input-block pos_abs" style="width: 500px;margin: 25px auto">
+        <button type="button" class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 120px">保存</button>
+        <button type="button" class="layui-btn layui-btn-primary" id="btnShut" style="margin-left: 50px">关闭</button>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'admin', 'formSelects','laydate','element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+        var element = layui.element;
+        var IDs ="";
+        var IDss ="";
+        var userList = '${userList}';
+        //时间控件
+        laydate.render({
+            elem: '#startDate',
+            format: 'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem: '#planCompleteDate',
+            format: 'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem: '#planChangeDate',
+            format: 'yyyy-MM-dd',
+        });
+        //回显数据
+        var project = admin.getTempData('edit_pro');
+        console.log(project.proEndState);
+        if (project) {
+            $('input[id="id"]').attr('readonly', 'readonly');
+            url = 'update';
+            form.val('projectAddForm', project);
+        }
+        $("#proManager").each(function() {
+            $(this).children("option").each(function() {
+                if (this.value == project.proManager) {
+                    $(this).attr("selected","selected");
+                }
+                form.render('select');
+            });
+        });
+        $("#proEndState").each(function() {
+            $(this).children("option").each(function() {
+                if (this.value == project.proEndState) {
+                    $(this).attr("selected","selected");
+                }
+                form.render('select');
+            });
+        });
+        $("#proDept").each(function() {
+            $(this).children("option").each(function() {
+                if (this.value == project.proDept) {
+                    $(this).attr("selected","selected");
+                }
+                form.render('select');
+            });
+        });
+        const dataList = userList.replace(/[\\]/g, '');
+        if (Array.isArray(JSON.parse(dataList))) {
+            for (var i = 0;i < JSON.parse(dataList).length;i++){
+                var id = JSON.parse(dataList)[i].id;
+                $("input[id='"+id+"']").attr("checked", true);
+                IDs += id+"-";
+            }
+        }
+        form.render('checkbox');
+        //监听复选框
+        form.on('checkbox(realName)', function(data){
+            if (data.elem.checked){
+                IDs += data.elem.value+"-";
+            }else{
+                IDss += data.elem.value+"-";
+            }
+        });
+        $('#btnShut').click(function () {
+            layer.closeAll();
+        });
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            data.field.userIds=IDs;
+            data.field.unUserIds=IDss;
+            top.layer.confirm('确定要修改吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post(url, data.field, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        top.layer.msg(data.msg, {icon: 1});
+                        admin.putTempData('formOk', true);  // 操作成功刷新表格
+                        // 关闭当前iframe弹出层
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                    } else {
+                        top.layer.msg(data.msg, {icon: 2});
+                    }
+                });
+                return false;
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

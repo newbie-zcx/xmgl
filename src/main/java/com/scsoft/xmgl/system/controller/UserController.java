@@ -12,7 +12,6 @@ import com.scsoft.xmgl.system.entity.Role;
 import com.scsoft.xmgl.system.entity.User;
 import com.scsoft.xmgl.system.entity.UserDepart;
 import com.scsoft.xmgl.system.mapper.UserDepartMapper;
-import com.scsoft.xmgl.system.mapper.UserMapper;
 import com.scsoft.xmgl.system.service.IDepartService;
 import com.scsoft.xmgl.system.service.IRoleService;
 import com.scsoft.xmgl.system.service.IUserService;
@@ -25,7 +24,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -65,6 +62,7 @@ public class UserController extends BaseController {
     private UserDepartMapper userDepartMapper;
 
     private final String PREFIX="module/system";
+    private final String PRE="template";
 
     @RequiresPermissions("user:view")
     @RequestMapping
@@ -78,7 +76,12 @@ public class UserController extends BaseController {
         }
         return PREFIX+"/user";
     }
-
+    @RequestMapping("/userCenter")
+    public String userCenter(Model model) {
+        User user = userService.getRealNameByLoginName(SystemCommonHandler.getLoginUserName());
+        model.addAttribute("user",user);
+        return PRE+"/user-info";
+    }
     @RequestMapping("/editForm")
     public String addUser(Model model) {
         List<Role> roles = roleService.list(false);
@@ -119,7 +122,7 @@ public class UserController extends BaseController {
     @RequiresPermissions("user:add")
     @ResponseBody
     @RequestMapping("/add")
-    @SysLog(operationType="add操作:",operationName="添加用户")//注意：这个不加的话，这个方法的日志记录不会被
+    @SysLog(operationType="add操作:",operationName="添加用户")//注意：这个不加的话，这个方法的日志记录不会被记录
     public JsonResult add(User user, String roleId) {
         user.setRoles(getRoles(roleId));
         user.setPassword("123456");
@@ -146,7 +149,16 @@ public class UserController extends BaseController {
             return JsonResult.error("修改失败");
         }
     }
-
+    @ResponseBody
+    @RequestMapping("/updateUser")
+    @SysLog(operationType="update操作:",operationName="修改个人信息")
+    public JsonResult updateUser(User user) {
+        if (userService.updateUser(user)) {
+            return JsonResult.ok("修改成功");
+        } else {
+            return JsonResult.error("修改失败");
+        }
+    }
     private List<Role> getRoles(String roleStr) {
         List<Role> roles = new ArrayList<>();
         String[] split = roleStr.split(",");

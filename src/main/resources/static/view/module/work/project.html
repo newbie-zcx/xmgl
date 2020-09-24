@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>项目管理</title>
+    <% include("../../layout/cssPart.html"){} %>
+    <style>
+        .chooseCss .chooseHeader {
+            width: 698px;
+            padding: 12px 0 12px 22px;
+            background: #EDF7F8;
+            border-bottom: 1px solid #deeeee;
+        }
+        .chooseCss .chooseHeader .title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        .chooseCss .chooseHeader .search input{
+            width: 215px;
+            height: 36px;
+            display: inline-block;
+            margin-left: 60px;
+            color: #aeaeae;
+            border: 1px solid #deeeee;
+            -webkit-border-radius: 18px;
+            -moz-border-radius: 18px;
+            border-radius: 18px;
+        }
+    </style>
+</head>
+
+<body class="layui-layout-body">
+    <div class="layui-card-body">
+        <!-- 内容主体区域 -->
+        <div id="choosePro" style="height: 262px;display: none;" hidden class="chooseCss">
+            <div class="chooseContent" style="height: 150px;">
+                <div style="text-align: center;">
+                    <a href="/static/template/用户导入模版文件.xls" title="点击下载模版文件" style="font-size: 18px;color: blue;">点击下载模版文件</a>
+                    <p>温馨提示：模版文件格式要求为【.XLS】</p>
+                </div>
+                <div class="layui-upload" style="margin: 20px 0 0 20px;">
+                    <button type="button" class="layui-btn layui-btn-normal" id="chooseFile">选择文件</button><br>
+                    <button type="button" class="layui-btn" id="uploadFile" style="margin-top: 5px;">开始导入</button>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+        <!--搜索功能-->
+        <div class="layui-form toolbar">
+            <div class="layui-form-item" style="margin-top: 15px;margin-left: 70px">
+                <div class="layui-inline" style="width: auto;">
+                    <form style="float: left">
+                        <div class="layui-input-block">
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目编号：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="proId" class="layui-input" type="text" placeholder="输入项目编号"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;margin-left: 13px;">项目名称：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="proName" class="layui-input" type="text" placeholder="输入项目名称"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;margin-left: 15px;">技术负责人：</label>
+                                <div class="layui-input-inline mr0">
+                                    <select id="proManager" name="proManager" lay-verify="required">
+                                        <option value=""></option>
+                                        <% for(user in nameList) { %>
+                                        <option value="${user.realName}">${user.realName}</option>
+                                        <% } %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目经理：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="manager" class="layui-input" type="text" placeholder="输入项目经理"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-input-block" style="margin-top: 10px">
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">承担部门：</label>
+                                <div class="layui-input-inline mr0">
+                                    <select name="proDept" id="proDept" lay-verify="required">
+                                        <option value=""></option>
+                                        <% for(dept in departList) { %>
+                                        <option value="${dept.departName}">${dept.address}</option>
+                                        <% } %>
+                                        <option value="【技术】联合开发">联合开发</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">商务负责人：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="proSigner" class="layui-input" type="text" placeholder="输入商务负责人"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目完成情况：</label>
+                                <div class="layui-input-inline mr0">
+                                    <select name="proEndState" id="proEndState">
+                                        <option value=""></option>
+                                        <option value="1">已完成</option>
+                                        <option value="0">未完成</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="layui-inline">
+                        <button id="btnSearch" type="button" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 表格顶部操作列 -->
+        <script type="text/html" id="addToolBar">
+            <div class="layui-btn-container">
+                <button type="button" id="btnAdd" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add" >
+                    <i class="layui-icon">&#xe654;</i>添加
+                </button>
+                <button type="button" id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export" >
+                    <i class="layui-icon">&#xe67d;</i>导出
+                </button>
+                <button type="button" id="btnImp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="import" >
+                    <i class="layui-icon">&#xe681;</i>导入
+                </button>
+            </div>
+<!--            <div>-->
+<!--                共：<span class="gong"></span>-->
+<!--                执行中：<span  class="zhixing"></span>-->
+<!--                即将到期：<span class="jijiang"></span>-->
+<!--                过期：<span  class="guoqi"></span>-->
+<!--            </div>-->
+        </script>
+        <!-- 表格 -->
+        <table class="layui-table" id="proTable" lay-filter="proTable"></table>
+    </div>
+    <script type="text/html" id="tableBar">
+        <a class="layui-btn layui-btn layui-btn-xs" lay-event="edit">${ctxPath}修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    <script type="text/javascript" src="${ctxPath }/static/assets/libs/layui/layui.js"></script>
+    <script type="text/javascript" src="${ctxPath }/static/assets/js/common.js"></script>
+    <script>
+        layui.use(['layer', 'form', 'table', 'util', 'admin', "upload"], function () {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form;
+            var table = layui.table;
+            var util = layui.util;
+            var admin = layui.admin;
+            var upload = layui.upload;
+            // 渲染表格
+            var ins = table.render({
+                elem: '#proTable',
+                url: 'pro/list',
+                cellMinWidth: 50,
+                toolbar: '#addToolBar',
+                page: true,
+                limit:15,
+                limits:[15,30,45,60],
+                cols: [[
+                    {type: 'checkbox'},
+                    {field: 'id', width: 80, sort: true,hide:true, align: 'center', title: 'ID'},
+                    {field: 'proId', width: 116, sort: true, align: 'center', title: '项目编码'},
+                    {field: 'proName', sort: true, width: 180, align: 'center', title: '项目名称'},
+                    {field: 'proResume', sort: true, width: 180, align: 'center', title: '项目简述'},
+                    {field: 'proNature', sort: true, width: 119, align: 'center', title: '项目性质'},
+                    {field: 'proType', sort: true,width: 115, align: 'center', title: '项目类型'},
+                    {field: 'proManager',sort: true, width:107, align: 'center', title: '技术负责人'},
+                    {field: 'manager',sort: true, width:107, align: 'center', title: '项目经理'},
+                    {field: 'proDept', sort: true,width: 156, align: 'center', title: '承担部门'},
+                    {field: 'proSigner', sort: true,width: 125, align: 'center', title: '商务负责人'},
+                    {field: 'startDate', sort: true,width: 133, align: 'center', title: '启动时间'},
+                    {field: 'planCompleteDate', sort: true,width: 142, align: 'center', title: '计划完成时间'},
+                    {field: 'planChangeDate', sort: true,width: 145, align: 'center', title: '项目变更时间',
+                        templet:function (d) {
+                            if (d.proEndState=="1"){
+                                return '<div>'+ d.planChangeDate+'</div>'
+                            }else{
+                                if(d.planChangeDate == ''){//变更时间为空
+                                    if(new Date(d.planCompleteDate).getTime() < new Date().getTime()){//超出完成时间
+                                        return '<div class="red">'+ d.planChangeDate+'</div>'
+                                    }else if (new Date(d.planCompleteDate).getTime() - new Date().getTime() <= 1296000000){//剩余不到15天
+                                        return '<div class="yellow">'+ d.planChangeDate+'</div>'
+                                    }else if(new Date(d.planCompleteDate).getTime() - new Date().getTime() > 1296000000){//正常
+                                        return '<div>'+ d.planChangeDate+'</div>'
+                                    }
+                                }else{
+                                    if(new Date(d.planChangeDate).getTime() < new Date().getTime()){//超出完成时间
+                                        return '<div class="red">'+ d.planChangeDate+'</div>'
+                                    }else if (new Date(d.planChangeDate).getTime() - new Date().getTime() <= 1296000000){//剩余不到15天
+                                        return '<div class="yellow">'+ d.planChangeDate+'</div>'
+                                    }else if(new Date(d.planChangeDate).getTime() - new Date().getTime() > 1296000000){//正常
+                                        return '<div>'+ d.planChangeDate+'</div>'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {align: 'center', toolbar: '#tableBar', title: '操作', width: 188}
+                ]],
+                done:function (res) {
+                    $('.red').parent().parent().parent().css('color','#FF0000');
+                    $('.yellow').parent().parent().parent().css('color','#FFCC66');
+                }
+            });
+            // 搜索按钮点击事件
+            $('#btnSearch').click(function () {
+                var proId = $('#proId').val();
+                var proName = $('#proName').val();
+                var proManager = $('#proManager').val();
+                var manager = $('#manager').val();
+                var proDept = $('#proDept').val();
+                var proSigner = $('#proSigner').val();
+                var proEndState = $('#proEndState').val();
+                table.reload('proTable', {where: {proId:proId,proName:proName,proManager:proManager,manager:manager,proDept:proDept,proSigner:proSigner,proEndState:proEndState}});
+            });
+            //头工具栏事件
+            table.on('toolbar(proTable)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'add':
+                        showAddModel();
+                        break;
+                    case 'import':
+                        importProjects();
+                        break;
+                    case 'export':
+                        if (checkStatus.data.length == 0) {
+                            layer.msg('请选择要导出的数据', {icon: 2});
+                        } else {
+                            table.exportFile(ins.config.id, checkStatus.data, 'xls');
+                        }
+                        break;
+                }
+                ;
+            });
+            // 工具条点击事件
+            table.on('tool(proTable)', function (obj) {
+                var data = obj.data;
+                var layEvent = obj.event;
+
+                if (layEvent === 'edit') { // 修改
+                    showEditModel(data);
+                } else if (obj.event === 'del') { //删除
+                    doDelete(obj);
+                }
+            });
+
+            function importProjects() {
+                layer.open({
+                    type: 1,
+                    title: "项目导入",
+                    content: $('#choosePro'),
+                    area: ['500px', '200px']
+                });
+                upload.render({
+                    elem: '#chooseFile'
+                    , url: 'pro/batchImportPro' //改成您自己的上传接口
+                    , auto: false
+                    , accept: 'file' //普通文件
+                    , exts: 'xls'
+                    , bindAction: '#uploadFile'
+                    , before: function () {
+                        layer.load(2);
+                    }
+                    , done: function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1});
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    }
+                });
+            }
+            // 显示新增表单弹窗
+            function showAddModel() {
+                admin.putTempData('formOk', false);
+                url = "work/pro/addForm";
+                top.layui.admin.open({
+                    type: 2,
+                    fix: false,
+                    shadeClose: true,
+                    title:  '添加项目信息',
+                    area: ['60%', '70%'],
+                    content: url,
+                    offset: ['150px', '300px'],
+                    end: function () {
+                        admin.getTempData('formOk') && table.reload('proTable');
+                    }
+                });
+            }
+            // 显示修改表单弹窗
+            function showEditModel(data) {
+                admin.putTempData('edit_pro', data);
+                admin.putTempData('formOk', false);
+                url = "work/pro/editForm?id="+data.id;
+                top.layui.admin.open({
+                    type: 2,
+                    fix: false,
+                    shadeClose: true,
+                    title:  '修改项目信息',
+                    area: ['60%', '70%'],
+                    content:url,
+                    offset: ['150px', '300px'],
+                    end: function () {
+                        admin.getTempData('formOk') && table.reload('proTable');
+                    }
+                });
+            }
+            // 删除
+            function doDelete(obj) {
+                top.layer.confirm('确定要删除项目及成员吗？', function (index) {
+                    top.layer.close(index);
+                    layer.load(2);
+                    $.post('pro/delete', {
+                        proId: obj.data.id
+                    }, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1});
+                            obj.del();
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>里程碑管理</title>
+    <link rel="stylesheet" href="/static/assets/libs/layui/css/layui.css"  media="all">
+</head>
+
+<body class="layui-layout-body">
+
+        <div class="layui-card-body">
+            <!-- 内容主体区域 -->
+            <!--导入excel-->
+            <div id="chooseInfo" style="height: 262px;display: none;" hidden class="chooseCss">
+                <div class="chooseContent" style="height: 150px;">
+                    <div style="text-align: center;">
+                        <a href="/static/template/用户导入模版文件.xls" title="点击下载模版文件" style="font-size: 18px;color: blue;">点击下载模版文件</a>
+                        <p>温馨提示：模版文件格式要求为【.XLS】</p>
+                    </div>
+                    <div class="layui-upload" style="margin: 20px 0 0 20px;">
+                        <button type="button" class="layui-btn layui-btn-normal" id="chooseFile">选择文件</button><br>
+                        <button type="button" class="layui-btn" id="uploadFile" style="margin-top: 5px;">开始导入</button>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+            </div>
+            <!--上方搜索栏-->
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="width: auto;">
+                        <form style="float: left">
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目编号：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="proId" class="layui-input" type="text" placeholder="输入项目编号" />
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目名称：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="proName" class="layui-input" type="text" placeholder="输入项目名称" />
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">开始时间：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="milepostStartDate" class="layui-input" type="text" placeholder="输入开始时间"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">结束时间：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="milepostEndDate" class="layui-input" type="text" placeholder="输入结束时间"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto" style="padding: 9px 0px;">状态：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input id="milepostStatus" class="layui-input" type="text" placeholder="输入状态" />
+                                </div>
+                            </div>
+                            <div class="layui-inline" >
+                                <button type="reset" class="layui-btn layui-btn-primary" >重置</button>
+                            </div>
+                        </form>
+                        <div class="layui-inline">
+                            <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script type="text/html" id="addToolBar">
+                <div class="layui-btn-container">
+                    <button type="button" id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export" >
+                        <i class="layui-icon">&#xe67d;</i>导出
+                    </button>
+                </div>
+            </script>
+            <!-- 表格 -->
+            <table class="layui-table" id="milepostTable" lay-filter="milepostTable"></table>
+        </div>
+
+
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add">添加</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">${ctxPath}修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/javascript" src="${ctxPath }/static/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="${ctxPath }/static/assets/js/common.js"></script>
+<script>
+    layui.use(['layer',  'table', 'admin','laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var admin = layui.admin;
+        var laydate =  layui.laydate;
+
+        // 渲染表格
+        var ins = table.render({
+            elem: '#milepostTable',
+            url: 'milepost/list',
+            toolbar: '#addToolBar',
+            cellMinWidth: 50,
+            page: true,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
+                {field: 'proId', width: 130,sort: true, align: 'center', title: '项目编号'},
+                {field: 'proName', sort: true,width: 130, align: 'center', title: '项目名称'},
+                {field: 'milepostName',sort: true, width: 200, align: 'center', title: '里程碑名称'},
+                {field: 'milepostStartDate',sort: true, width: 120, align: 'center', title: '开始时间'},
+                {field: 'milepostEndDate',sort: true, width: 120, align: 'center', title: '结束时间'},
+                {field: 'entranceConditions',sort: true, width: 120, align: 'center', title: '入口条件'},
+                {field: 'exitConditions', sort: true,width: 120, align: 'center', title: '出口条件'},
+                {field: 'outputDoc', sort: true,width: 120, align: 'center', title: '输出文档'},
+                {field: 'milepostStatus', sort: true,width:120, align: 'center', title: '状态'},
+                {field: 'milepostRemainder',sort: true, width: 150, align: 'center', title: '剩余时间[天]',templet:function (d) {
+                        if (d.milepostRemainder <= 0){
+                            return '<div style="background-color:#e1504a;color: #0C0C0C">'+d.milepostRemainder+'</div>'
+                        }else if (d.milepostRemainder <= 7){
+                            return '<div style="background-color:#e0e13d;color: #0C0C0C">'+d.milepostRemainder+'</div>'
+                        }else{
+                            return '<div>'+d.milepostRemainder+'</div>'
+                        }
+                }},
+                {field: 'remark', width: 180, align: 'center', title: '备注'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 220}
+            ]]
+        });
+        laydate.render({
+            elem: '#milepostStartDate',
+            format: 'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem: '#milepostEndDate',
+            format: 'yyyy-MM-dd',
+        });
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var proId = $('#proId').val();
+            var proName = $('#proName').val();
+            var milepostStartDate = $('#milepostStartDate').val();
+            var milepostEndDate = $('#milepostEndDate').val();
+            var milepostStatus = $('#milepostStatus').val();
+            table.reload('milepostTable', {where: {proId:proId,proName:proName,milepostStartDate:milepostStartDate,milepostEndDate:milepostEndDate,milepostStatus:milepostStatus}});
+        });
+        // 工具条点击事件
+        table.on('tool(milepostTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            } else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            } else if (obj.event === 'add'){//新增
+                showEditModel2(data);
+            }
+        });
+        //头工具栏事件
+        table.on('toolbar(milepostTable)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'import':
+                    // importProjects();
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table.exportFile(ins.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            }
+            ;
+        });
+        // 显示表单弹窗
+        function showEditModel(data) {
+            admin.putTempData('t_milepost', data);
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title:'修改里程碑信息',
+                area: ['720px', '500px'],
+                content: 'info/milepost/editForm',
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('milepostTable');  // 成功刷新表格
+                }
+            });
+        }
+        function showEditModel2(data) {
+            admin.putTempData('t_milepost', data);
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                fix: false,
+                shadeClose: true,
+                title:'添加里程碑信息',
+                area: ['720px', '500px'],
+                content: 'info/milepost/editForm2',
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('milepostTable');  // 成功刷新表格
+                }
+            });
+        }
+        // 删除
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post('milepost/delete', {
+                    id: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+    });
+</script>
+</body>
+</html>

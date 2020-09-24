@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>台账管理</title>
+    <% include("../../layout/cssPart.html"){} %>
+    <link rel="stylesheet" href="/static/assets/module/formSelects/formSelects-v4.css"/>
+    <style>
+        .layui-table-cell {
+            height: auto;
+        }
+        .chooseCss .chooseHeader {
+            width: 698px;
+            padding: 12px 0 12px 22px;
+            background: #EDF7F8;
+            border-bottom: 1px solid #deeeee;
+        }
+        .chooseCss .chooseHeader .title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        .chooseCss .chooseHeader .search input{
+            width: 215px;
+            height: 36px;
+            display: inline-block;
+            margin-left: 60px;
+            color: #aeaeae;
+            border: 1px solid #deeeee;
+            -webkit-border-radius: 18px;
+            -moz-border-radius: 18px;
+            border-radius: 18px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+
+<!-- 页面加载loading -->
+<% include("../../layout/loading.html"){} %>
+
+<!-- 正文开始 -->
+<div class="layui-card-body">
+    <!-- 表格顶部操作列 -->
+    <div id="chooseWeekly" style="height: 262px;display: none;" hidden class="chooseCss">
+        <div class="chooseContent" style="height: 150px;">
+            <div style="text-align: center;">
+                <a href="/static/template/用户导入模版文件.xls" title="点击下载模版文件" style="font-size: 18px;color: blue;">点击下载模版文件</a>
+                <p>温馨提示：模版文件格式要求为【.XLS】</p>
+            </div>
+            <div class="layui-upload" style="margin: 20px 0 0 20px;">
+                <button type="button" class="layui-btn layui-btn-normal" id="chooseFile">选择文件</button><br>
+                <button type="button" class="layui-btn" id="uploadFile" style="margin-top: 5px;">开始导入</button>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+    <div class="layui-form toolbar">
+        <div class="layui-form-item" style="margin-top: 15px;margin-left: 70px">
+            <div class="layui-inline" style="width: auto;">
+                <form style="float: left">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目名称：</label>
+                        <div class="layui-input-inline mr0">
+                            <select id="proId" name="proId" lay-verify="required">
+                                <option value=""></option>
+                                <% for(project in projectList) { %>
+                                <option value="${project.proId}">${project.proName}</option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">开始时间：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="startDate" class="layui-input" type="text"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto" style="padding: 9px 0px;">结束时间：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="endDate" class="layui-input" type="text"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="reset" class="layui-btn layui-btn-primary" >重置</button>
+                    </div>
+                </form>
+                <div class="layui-inline">
+                    <button id="btnSearch" type="button" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="acount-toolbar">
+        <div class="layui-btn-container">
+            <button id="btnAdd" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add">
+                <i class="layui-icon">&#xe654;</i>添加
+            </button>
+            <button id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export" >
+                <i class="layui-icon">&#xe67d;</i>导出
+            </button>
+            <button id="btnImp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="import" >
+                <i class="layui-icon">&#xe681;</i>导入
+            </button>
+        </div>
+    </script>
+    <table class="layui-table" id="acountTable" lay-filter="acountTable"></table>
+</div>
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">${ctxPath}修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'dtree',"upload",'laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var upload = layui.upload;
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem:'#startDate',
+            format:'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem:'#endDate',
+            format:'yyyy-MM-dd',
+        });
+        // 渲染表格
+        var ins = table.render({
+            elem: '#acountTable',
+            url: 'acount/list',
+            toolbar: '#acount-toolbar',
+            page: true,
+            text: {
+                none: '无相关数据'
+            },
+            limit:15,
+            limits:[15,30,45,60],
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 68, sort: true, align: 'center', title: 'ID'},
+                {field: 'project', width: 115,sort: true, title: '项目编号',align: 'center',templet:function(d){
+                        if(d.project!=null){
+                            var proHtml="";
+                            proHtml +="<div style='text-align: center;'>"+d.project.proId+"</div>";
+                            return proHtml
+                        }else {
+                            return ''
+                        }
+                    }},
+                {field: 'project', width: 200,sort: true, title: '项目名称',align: 'center',templet:function(d){
+                        if(d.project!=null){
+                            var proHtml="";
+                            proHtml +="<div style='text-align: center;'>"+d.project.proName+"</div>";
+                            return proHtml
+                        }else {
+                            return ''
+                        }
+                    }},
+                {field: 'project', width: 115,sort: true, title: '项目经理',align: 'center',templet:function(d){
+                        if(d.project!=null){
+                            var proHtml="";
+                            proHtml +="<div style='text-align: center;'>"+d.project.proManager+"</div>";
+                            return proHtml
+                        }else {
+                            return ''
+                        }
+                    }},
+                {field: 'startDate', width: 124, sort: true, align: 'center', title: '开始时间'},
+                {field: 'endDate', width: 124, sort: true, align: 'center', title: '结束时间'},
+                {field: 'proLevel', width: 122,sort: true, align: 'center', title: '项目级别'},
+                {field: 'executionStatus', width: 135, sort: true, align: 'center', title: '执行状态'},
+                {field: 'proSituation', width: 140, sort: true, align: 'center', title: '项目现状概述'},
+                {field: 'acList', width: 145,sort: true, title: '本周工作总结',align: 'center',templet:function(d){
+                        if(d.acList.length>0){
+                            var proHtml="";
+                            for(var i=0;i<d.acList.length;i++){
+                                var thisSummary = d.acList[i].thisSummary;
+                                if (thisSummary==null||thisSummary==undefined||thisSummary==""){
+                                }else {
+                                    proHtml +="<div style='text-align: left;'>"+(i+1)+"."+thisSummary+"</div>";
+                                }
+                            }
+                            return proHtml
+                        }else {
+                            return ''
+                        }
+                    }},
+                {field: 'acList', width: 210,sort: true, title: '下周或下阶段工作计划',align: 'center',templet:function(d){
+                        if(d.acList.length>0){
+                            var proHtml="";
+                            for(var i=0;i<d.acList.length;i++){
+                                var nextSummary = d.acList[i].nextSummary;
+                                if (nextSummary==null||nextSummary==undefined||nextSummary==""){
+                                }else {
+                                    proHtml +="<div style='text-align: left;'>"+(i+1)+"."+nextSummary+"</div>";
+                                }
+                            }
+                            return proHtml
+                        }else {
+                            return ''
+                        }
+                    }},
+                {field: 'coordinatedMatters', width: 137, sort: true, align: 'center', title: '需协同事项'},
+                {field: 'remark', width: 128, sort: true, align: 'center', title: '备注'},
+                {field: 'project', width: 240, sort: true, align: 'center', title: '项目计划完成时间(含变更后)',templet:function(d){
+                        if(d.project!=null){
+                            var proHtml="";
+                            proHtml +="<div style='text-align: center;'>"+d.project.planCompleteDate+"</div>";
+                            return proHtml
+                        }else {
+                            return ''
+                        }
+                    }},
+                {field: 'thisReview', width: 150, sort: true, align: 'center', title: '本周评审情况'},
+                {field: 'thisDoc', width: 180, sort: true, align: 'center', title: '本周提交文档情况',templet:function(d){
+                        var thisDoc = d.thisDoc;
+                        if (thisDoc==0){
+                            return '<p>否</p>';
+                        }else {
+                            return '<p>是</p>';
+                        }}},
+                {field: 'nextTest', width: 140,sort: true ,align: 'center',title: '下周安排测试'},
+                {field: 'nextReview', width: 130, title: '下周是否有评审',align: 'center',templet:function(d){
+                        var nextReview = d.nextReview;
+                        if (nextReview==0){
+                            return '<p>否</p>';
+                        }else {
+                            return '<p>是</p>';
+                        }}},
+                {field: 'nextDoc', width: 153, title: '下周提交文档情况',align: 'center'},
+                {field: 'planMilepost', width: 124, title: '计划里程碑',align: 'center'},
+                {field: 'actualMilepost', width: 124, title: '实际里程碑',align: 'center'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', width: 125}
+            ]]
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var proId = $('#proId').val();
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            table.reload('acountTable', {where: {proId: proId, startDate:startDate,endDate:endDate}});
+        });
+
+        //头工具栏事件
+        table.on('toolbar(acountTable)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'add':
+                    showAddModel();
+                    break;
+                case 'import':
+                    importWeeklies();
+                    break;
+                case 'export':
+                    if (checkStatus.data.length == 0) {
+                        layer.msg('请选择要导出的数据', {icon: 2});
+                    } else {
+                        table.exportFile(ins.config.id, checkStatus.data, 'xls');
+                    }
+                    break;
+            };
+        });
+
+        // 工具条点击事件
+        table.on('tool(acountTable)', function (obj) {
+            console.log(obj);
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }else if (obj.event === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+
+        // function importWeeklies(){
+        //     layer.open({
+        //         type: 1,
+        //         title:"用户导入",
+        //         content: $('#chooseUser'),
+        //         area: ['500px', '200px']
+        //     });
+        //     var departId=$("#departId").val();
+        //     upload.render({
+        //         elem: '#chooseFile'
+        //         ,url: 'user/batchImportUser' //改成您自己的上传接口
+        //         ,data: {departId:departId}
+        //         ,auto: false
+        //         ,accept: 'file' //普通文件
+        //         ,exts: 'xls'
+        //         ,bindAction: '#uploadFile'
+        //         ,before: function(){
+        //             layer.load(2);
+        //         }
+        //         ,done: function(data){
+        //             layer.closeAll('loading');
+        //             if (data.code == 200) {
+        //                 layer.msg(data.msg, {icon: 1});
+        //             } else {
+        //                 layer.msg(data.msg, {icon: 2});
+        //             }
+        //         }
+        //     });
+        // }
+        // 显示表单弹窗
+        function showAddModel() {
+            admin.putTempData('formOk', false);
+            url = "work/acount/addForm";
+            top.layui.admin.open({
+                type: 2,
+                title: '新增台账',
+                area: ['80%', '80%'],
+                content: url,
+                offset:['120px','260px'],
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('acountTable');
+                }
+            });
+        }
+        function showEditModel(data) {
+            admin.putTempData('edit_acount',data);
+            admin.putTempData('formOk', false);
+            url = "work/acount/editForm";
+            top.layui.admin.open({
+                type: 2,
+                title: '修改台帐',
+                area: ['80%', '80%'],
+                content: url,
+                offset:['120px','260px'],
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('acountTable');  // 成功刷新表格
+                }
+            });
+        }
+        // 删除
+        function doDelete(obj) {
+            top.layer.confirm('确定要删除吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post('weekly/delete', {
+                    weeklyId: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                });
+            });
+        }
+    });
+
+</script>
+</body>
+
+</html>

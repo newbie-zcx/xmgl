@@ -20,4 +20,7 @@
             (#{id},#{userId},#{roleId})
         </foreach>
     </insert>
+    <select id="getByUserId" parameterType="int" resultType="com.scsoft.xmgl.system.entity.UserRole">
+        select * from sys_user_role where user_id = #{userId}
+    </select>
 </mapper>

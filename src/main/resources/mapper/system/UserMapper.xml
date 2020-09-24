@@ -2,7 +2,23 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.scsoft.xmgl.system.mapper.UserMapper">
-    <select id="getByUsername" resultType="com.scsoft.xmgl.system.entity.User">
+    <select id="getByUsername" resultType="com.scsoft.xmgl.system.entity.User" parameterType="String">
         select * from sys_user where user_name=#{username} and user_type='0'
+    </select>
+    <select id="getByRealName" resultType="com.scsoft.xmgl.system.entity.User" parameterType="String">
+        select * from sys_user where real_name=#{realName}
+    </select>
+    <select id="getBySection" resultType="com.scsoft.xmgl.system.entity.User" parameterType="String">
+        select * from sys_user where section =#{section}
+    </select>
+    <select id="getRoleByid" parameterType="int" resultType="com.scsoft.xmgl.system.entity.Role">
+        select * from sys_role where sys_role.id in (
+            select role_id from sys_user_role where sys_user_role.user_id = #{id}
+        )
+    </select>
+    <select id="getByDepart" parameterType="int" resultType="com.scsoft.xmgl.system.entity.User">
+        select * from sys_user where id in (
+            select user_id from sys_user_depart where depart_id = #{departId}
+        )
     </select>
 </mapper>

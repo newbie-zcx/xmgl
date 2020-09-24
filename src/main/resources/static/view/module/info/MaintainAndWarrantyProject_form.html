@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style type="text/css">
+        .label{
+            width: 120px;
+        }
+    </style>
+</head>
+<body >
+<!-- 项目表单弹窗 -->
+<form id="projectInfoForm" lay-filter="projectInfoForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+        <label class="layui-form-label">完成情况</label>
+        <div class="layui-input-block">
+            <select name="proCompletion" lay-verify="required">
+                <option value="未完成">未完成</option>
+                <option value="质保期">质保期</option>
+                <option value="维护期">维护期</option>
+            </select>
+        </div>
+        <label class="layui-form-label" style="margin-top: 15px">付款方式</label>
+        <div class="layui-input-block">
+            <input name="contractPayment" style="margin-top: 15px" placeholder="输入付款方式" type="text" class="layui-input" maxlength="20"/>
+        </div>
+    <div class="layui-input-block">
+        <button class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-top: 40px">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary" style="margin-left:40px;margin-top: 34px">重置</button>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'admin', 'formSelects','laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var laydate = layui.laydate;
+        //回显info数据
+        var info = admin.getTempData('t_info');
+        if (info) {
+            $('input[name="id"]').attr('readonly', 'readonly');
+            url = 'update';
+            form.val("projectInfoForm", {
+                "id": info.id,
+                "proCompletion": info.proCompletion,
+                "contractPayment": info.contractPayment,
+            });
+        }
+        //时间控件
+        laydate.render({
+            elem: '#test1',
+            // range:true,
+            format: 'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem: '#test2',
+            // range:true,
+            format: 'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem: '#test3',
+            // range:true,
+            format: 'yyyy-MM-dd',
+        });
+        laydate.render({
+            elem: '#test4',
+            // range:true,
+            format: 'yyyy-MM-dd',
+        });
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            layer.load(2);
+            $.post(url, data.field, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    admin.putTempData('formOk', true);  // 操作成功刷新表格
+                    // 关闭当前iframe弹出层
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+
+
+    });
+
+
+
+</script>
+</body>
+
+</html>

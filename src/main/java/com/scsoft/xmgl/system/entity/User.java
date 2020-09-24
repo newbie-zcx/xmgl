@@ -96,12 +96,54 @@ public class User extends BaseEntity {
     private Integer userType;
 
     /**
+     * 部门
+     */
+    @TableField("section")
+    private String section;
+    /**
+     * 部门职务
+     */
+    @TableField("section_post")
+    private String sectionPost;
+
+    /**
+     * 总工时
+     */
+    @TableField(exist = false)
+    private int totalHour;
+
+    /**
+     * 月总工时
+     */
+    @TableField(exist = false)
+    private int monthHour;
+
+    /**
+     * 上月周工时
+     */
+    @TableField(exist = false)
+    private int lastWeekHour;
+
+    /**
+     * 本月周工时
+     */
+    @TableField(exist = false)
+    private int thisWeekHour;
+
+    /**
      * 角色列表
      */
     @TableField(exist = false)
     private List<Role> roles;
 
-
-    // user_type
+    public User(int userId, String userName) {
+        setId(userId);
+        setUserName(userName);
+    }
+    public User(int userId) {
+        setId(userId);
+    }
+    public User() {
+    }
 
 }

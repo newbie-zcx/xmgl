@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scsoft.xmgl.work.mapper.ProWeeklyMapper">
+    <select id="getByWeeklyId" parameterType="int" resultType="com.scsoft.xmgl.work.entity.ProWeekly">
+        select * from work_pro_weekly where weekly_id = #{weeklyId}
+    </select>
+    <select id="getByProId" parameterType="int" resultType="com.scsoft.xmgl.work.entity.ProWeekly">
+        select * from work_pro_weekly where pro_id = #{proId}
+    </select>
+    <insert id="add">
+        insert into work_pro_weekly(pro_id,weekly_id) values (#{proId},#{weeklyId})
+    </insert>
+    <update id="update">
+        update work_pro_weekly set pro_id = #{proId} where weekly_id = #{weeklyId} ;
+    </update>
+    <delete id="deleteByWeeklyId">
+        delete from work_pro_weekly where weekly_id = #{weeklyId}
+    </delete>
+</mapper>

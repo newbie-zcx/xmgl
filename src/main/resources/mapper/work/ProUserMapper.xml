@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scsoft.xmgl.work.mapper.ProUserMapper">
+    <select id="selectByProIds" resultType="com.scsoft.xmgl.work.entity.ProUser">
+        SELECT a.*,b.real_name FROM work_pro_user a
+        LEFT JOIN sys_user b ON a.user_id=b.id
+        WHERE a.pro_id IN
+        <foreach collection="proIds" open="(" close=")" separator="," item="proId">
+            #{proId}
+        </foreach>
+    </select>
+    <insert id="addMember">
+        insert into work_pro_user(pro_id,user_id) values
+        <foreach collection="userIdList" item="userId" separator=",">
+            (#{proId},#{userId})
+        </foreach>
+    </insert>
+    <select id="IsExit" parameterType="int" resultType="int">
+        select count(1) from work_pro_user where pro_id = #{proId}
+    </select>
+    <select id="selectByProId" parameterType="int" resultType="com.scsoft.xmgl.work.entity.ProUser">
+        select * from work_pro_user where pro_id = #{proId}
+    </select>
+    <delete id="deleteByProId" parameterType="int" >
+        delete from work_pro_user where pro_id = #{proId};
+    </delete>
+    <select id="selectByUserId" parameterType="int" resultType="com.scsoft.xmgl.work.entity.ProUser">
+        select * from work_pro_user where user_id = #{userId}
+    </select>
+</mapper>

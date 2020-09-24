@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scsoft.xmgl.info.mapper.WorkSummaryMapper">
+    <update id="addComment" parameterType="com.scsoft.xmgl.info.entity.WorkSummary">
+        update work_summary set comment = #{comment} where id = #{id}
+    </update>
+    <select id="getByuserName" parameterType="String" resultType="com.scsoft.xmgl.info.entity.WorkSummary">
+        select * from work_summary where user_name = #{userName}
+    </select>
+    <select id="isExit" resultType="com.scsoft.xmgl.info.entity.WorkSummary">
+        select * from work_summary where user_name = #{userName} and pro_name = #{proName} and begin_date = #{beginDate} and end_date = #{endDate}
+    </select>
+</mapper>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style type="text/css">
+        .label{
+            width: 120px;
+        }
+    </style>
+</head>
+<body >
+<!-- 项目表单弹窗 -->
+<form id="projectEditForm" lay-filter="projectEditForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item" style="margin-left: 33px;">
+        <label class="layui-form-label" style="width: auto">上月周工时(h)</label>
+        <div class="layui-input-inline">
+            <input name="lastMonthHour" id="lastMonthHour" type="text" class="layui-input" maxlength="20"/>
+        </div>
+        <label class="layui-form-label" style="width: auto">本月周工时(h)</label>
+        <div class="layui-input-inline">
+            <input name="thisMonthHour" id="thisMonthHour" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
+        </div>
+        <input name="userName" type="hidden"/>
+        <input name="startDate" type="hidden"/>
+        <input name="endDate" type="hidden"/>
+    </div>
+    <!--周报内容-->
+    <div class="layui-form-item" id="addInput" style="margin-left:33px;margin-top: 30px;">
+        <label class="layui-form-label">项目名称</label>
+        <div class="layui-input-inline">
+            <select name="proId" id="proId" lay-verify="required">
+                <% for(project in projectList) { %>
+                <option value="${project.id}">${project.proName}</option>
+                <% } %>
+            </select>
+        </div>
+        <label class="layui-form-label" style="">周报内容</label>
+        <textarea name="scList" required lay-verify="required" class="layui-textarea" style="width: 400px"></textarea>
+<!--        <input type="button" style="margin-top: 5px;" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add" id="add" value="添加行"/>-->
+<!--        <div class="layui-input-block" style="margin-top: 10px">-->
+<!--            <span style="float: left;height: 38px;line-height: 38px;width: 2%">1.</span>-->
+<!--            <input type="text" id="content_0" style="width:92%;float: left" class="layui-input" maxlength="20" lay-verify="required"/>-->
+<!--        </div>-->
+    </div>
+
+    <div class="layui-input-block" style="width: 500px;margin: 25px auto">
+        <button type="button" class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 120px">保存</button>
+        <button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 50px">关闭</button>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'admin', 'formSelects','laydate','element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var url = 'update';
+        var element = layui.element;
+        // var summary ="";
+        // var max = 7;
+        // var x = 1;
+        //回显数据
+        var weekly = admin.getTempData('edit_weekly');
+        var project = weekly.project;
+        // var scList = weekly.scList;
+        //周报信息的回显
+        if (weekly) {
+            $('input[id="id"]').attr('readonly', 'readonly');
+            url = 'update';
+            form.val('projectEditForm', weekly);
+        }
+        //项目信息的回显
+        $("#proId").each(function() {
+            $(this).children("option").each(function() {
+                if (this.value == project.id) {
+                    $(this).attr("selected","selected");
+                }
+                form.render('select');
+            });
+        });
+        //周报内容的回显
+        // for (sc of scList){
+        //     if (x<max){
+        //         var str = '<div class="layui-input-block"  style="margin-top: 10px">'+
+        //             '<span style="float: left;height: 38px;line-height: 38px;width: 2%;">'+(x+1)+'.</span>'+
+        //             '<input style="width:92%;float: left" type="text" id=\"content_'+x+'\" class="layui-input" maxlength="20"/>'+
+        //             '</div>'
+        //         $("#addInput").append(str);
+        //         $("#content_"+(x-1)).attr("value",sc.content);
+        //         x++;
+        //     }
+        // }
+        //添加行
+        // $("#add").click(function(){
+        //     if (x<max){
+        //         var str = '<div class="layui-input-block"  style="margin-top: 10px">'+
+        //             '<span style="float: left;height: 38px;line-height: 38px;width: 2%;">'+(x+1)+'.</span>'+
+        //             '<input style="width:92%;float: left" type="text" id=\"content_'+x+'\" class="layui-input" maxlength="20" />'+
+        //             '</div>'
+        //         $("#addInput").append(str);
+        //         x++;
+        //     }else{
+        //         layer.msg("最多添加7条信息",{icon:2});
+        //     }
+        // });
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            //获取input框的数据
+            // $('.layui-input-block input').each(function(){
+            //     summary += this.value+"-";
+            // });
+            top.layer.confirm('确定要修改吗？',function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                // data.field.summary=summary;
+                $.post(url, data.field, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        top.layer.msg(data.msg, {icon: 1});
+                        admin.putTempData('formOk', true);  // 操作成功刷新表格
+                        // 关闭当前iframe弹出层
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                    } else {
+                        top.layer.msg(data.msg, {icon: 2});
+                    }
+                });
+                return false;
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

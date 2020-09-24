@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <base href="${ctxPath}">
+    <% include("../../layout/cssPart.html"){} %>
+    <style type="text/css">
+        .layui-table-cell{
+            height: auto;
+        }
+        .layui-form-label{
+            width: 140px;
+        }
+    </style>
+</head>
+<body>
+<!--周报参考-->
+<table class="layui-table" id="weeklyTable" lay-filter="weeklyTable"></table>
+<!-- 项目表单弹窗 -->
+<form id="acountEditForm" lay-filter="acountEditForm" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">项目名称</label>
+        <div class="layui-input-inline">
+            <select name="proId" id="weeklyShow" lay-filter="weeklyShow" lay-verify="required">
+                <% for(project in projectList) { %>
+                <option value="${project.id}">${project.proName}</option>
+                <% } %>
+            </select>
+        </div>
+        <label class="layui-form-label">项目级别</label>
+        <div class="layui-input-inline">
+            <input name="proLevel" id="proLevel" placeholder="输入项目级别" type="text" class="layui-input" maxlength="20" required="required"/>
+        </div>
+        <label class="layui-form-label">执行状态</label>
+        <div class="layui-input-inline">
+            <input name="executionStatus" id="executionStatus" placeholder="输入执行状态" type="text" class="layui-input" lay-verify="required"/>
+        </div>
+        <label class="layui-form-label">项目现状概述</label>
+        <div class="layui-input-inline">
+            <input name="proSituation" placeholder="输入项目现状概述" type="text" class="layui-input" maxlength="20" required="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">需协同事项</label>
+        <div class="layui-input-inline">
+            <input name="coordinatedMatters" placeholder="输入需协同事项" type="text" class="layui-input" lay-verify="required"/>
+        </div>
+        <label class="layui-form-label">本周评审情况</label>
+        <div class="layui-input-inline">
+            <input name="thisReview" placeholder="输入本周评审情况" type="text" class="layui-input" maxlength="20" required="required"/>
+        </div>
+        <label class="layui-form-label">本周提交文档情况</label>
+        <div class="layui-input-inline">
+            <select name="thisDoc" id="thisDoc" lay-verify="required">
+                <option></option>
+                <option value="1">是</option>
+                <option value="0">否</option>
+            </select>
+        </div>
+        <label class="layui-form-label">下周安排测试</label>
+        <div class="layui-input-inline">
+            <input name="nextTest" placeholder="输入下周安排测试" type="text" class="layui-input" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">下周提交文档情况</label>
+        <div class="layui-input-inline">
+            <input name="nextDoc" placeholder="输入下周提交文档情况" type="text" class="layui-input" maxlength="20" required="required"/>
+        </div>
+        <label class="layui-form-label">下周是否有评审</label>
+        <div class="layui-input-inline">
+            <select name="nextReview" id="nextReview" lay-verify="required">
+                <option></option>
+                <option value="1">是</option>
+                <option value="0">否</option>
+            </select>
+        </div>
+        <label class="layui-form-label">计划里程碑</label>
+        <div class="layui-input-inline">
+            <input name="planMilepost" placeholder="输入计划里程碑" type="text" class="layui-input" lay-verify="required"/>
+        </div>
+        <label class="layui-form-label">实际里程碑</label>
+        <div class="layui-input-inline">
+            <input name="actualMilepost" placeholder="输入实际里程碑" type="text" class="layui-input" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="margin-left: -33px;">备注</label>
+        <div class="layui-input-block">
+            <textarea name="remark" style="margin-left: -21px;" type="text" placeholder="输入备注" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <!--台账内容-->
+    <div class="layui-form-item" id="addSummary1" style="margin-left: -35px;margin-top: 30px;">
+        <label class="layui-form-label" style="margin-left: 69px">本周工作总结</label>
+        <input type="button" style="margin-top: 5px;" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="addThisSummary" id="addThisSummary" value="添加行"/>
+        <div class="layui-input-block" id="thisSummary" style="margin-top: 10px">
+            <span style="float: left;height: 38px;line-height: 38px;width: 2%">1.</span>
+            <input type="text" id="thisSummary_0" style="width:92%;float: left" class="layui-input" maxlength="20" lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item" id="addSummary2" style="margin-left: -35px;margin-top: 30px;">
+        <label class="layui-form-label" style="margin-left: 122px">下周或下阶段工作计划</label>
+        <input type="button" style="margin-top: 5px;" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="addNextSummary" id="addNextSummary" value="添加行"/>
+        <div class="layui-input-block" id="nextSummary" style="margin-top: 10px">
+            <span style="float: left;height: 38px;line-height: 38px;width: 2%">1.</span>
+            <input type="text" id="nextSummary_0" style="width:92%;float: left" class="layui-input" maxlength="20" lay-verify="required"/>
+        </div>
+    </div>
+
+    <div class="layui-input-block" style="width: 500px;margin: 25px auto">
+        <button type="button" class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 120px">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 50px">重置</button>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../layout/jsPart.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'admin','element','table'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var table = layui.table;
+        var form = layui.form;
+        var admin = layui.admin;
+        var url = 'add';
+        var element = layui.element;
+        var acThis ="";
+        var acNext ="";
+        var max = 7;
+        var x = 1;
+        var y = 1;
+        //回显数据
+        var acount = admin.getTempData('edit_acount');
+        var project = acount.project;
+        var acList = acount.acList;
+        //台账信息回显
+        if (acount) {
+            $('input[id="id"]').attr('readonly', 'readonly');
+            url = 'update';
+            form.val('acountEditForm', acount);
+        }
+        $("#thisDoc").each(function() {
+            $(this).children("option").each(function() {
+                if (this.value == acount.thisDoc) {
+                    $(this).attr("selected","selected");
+                }
+                form.render('select');
+            });
+        });
+        $("#nextReview").each(function() {
+            $(this).children("option").each(function() {
+                if (this.value == acount.nextReview) {
+                    $(this).attr("selected","selected");
+                }
+                form.render('select');
+            });
+        });
+        //项目信息回显
+        $("#proId").each(function() {
+            $(this).children("option").each(function() {
+                if (this.value == project.id) {
+                    $(this).attr("selected","selected");
+                }
+                form.render('select');
+            });
+        });
+        //台账内容回显
+        for (ac of acList){
+            console.log(ac);
+            console.log("this");
+            if (ac.thisSummary==null||ac.thisSummary==undefined||ac.thisSummary==""){
+            }else{
+                if (x<max){
+                    var str = '<div class="layui-input-block"  style="margin-top: 10px">'+
+                        '<span style="float: left;height: 38px;line-height: 38px;width: 2%;">'+(x+1)+'.</span>'+
+                        '<input style="width:92%;float: left" type="text" id=\"thisSummary_'+x+'\" class="layui-input" maxlength="20"/>'+
+                        '</div>'
+                    $("#addSummary1").append(str);
+                    $("#thisSummary_"+(x-1)).attr("value",ac.thisSummary);
+                    x++;
+                }
+            }
+        }
+        for (ac of acList){
+            console.log(ac);
+            console.log("next");
+            if (ac.nextSummary==null||ac.nextSummary==undefined||ac.nextSummary==""){
+            }else{
+                if (y<max){
+                    var str = '<div class="layui-input-block"  style="margin-top: 10px">'+
+                        '<span style="float: left;height: 38px;line-height: 38px;width: 2%;">'+(y+1)+'.</span>'+
+                        '<input style="width:92%;float: left" type="text" id=\"nextSummary_'+y+'\" class="layui-input" maxlength="20"/>'+
+                        '</div>'
+                    $("#addSummary2").append(str);
+                    $("#nextSummary_"+(y-1)).attr("value",ac.nextSummary);
+                    y++;
+                }
+            }
+        }
+        //监听项目选择框select
+        form.on('select(weeklyShow)', function(data){
+            // 渲染表格
+            table.render({
+                elem: '#weeklyTable',
+                url: '../weekly/list',
+                where:{proId:data.value},
+                page: true,
+                text: {
+                    none: '无相关数据'
+                },
+                limit:10,
+                limits:[10,20,30,40],
+                cols: [[
+                    {field: 'id', width: 75, sort: true, align: 'center', title: 'ID'},
+                    {field: 'project', width: 135,sort: true, title: '项目编码',align: 'center',templet:function(d){
+                            if(d.project!=null){
+                                var proHtml="";
+                                proHtml +="<div style='text-align: center;'>"+d.project.proId+"</div>";
+                                return proHtml
+                            }else {
+                                return ''
+                            }
+                        }},
+                    {field: 'project', width: 200,sort: true, title: '项目名称',align: 'center',templet:function(d){
+                            if(d.project!=null){
+                                var proHtml="";
+                                proHtml +="<div style='text-align: center;'>"+d.project.proName+"</div>";
+                                return proHtml
+                            }else {
+                                return ''
+                            }
+                        }},
+                    {field: 'project', width: 122,sort: true, title: '负责人',align: 'center',templet:function(d){
+                            if(d.project!=null){
+                                var proHtml="";
+                                proHtml +="<div style='text-align: center;'>"+d.project.proManager+"</div>";
+                                return proHtml
+                            }else {
+                                return ''
+                            }
+                        }},
+                    {field: 'startDate', width: 140, sort: true, align: 'center', title: '开始时间'},
+                    {field: 'endDate', width: 140, sort: true, align: 'center', title: '结束时间'},
+                    {field: 'userName', width: 120, sort: true, align: 'center', title: '添加人'},
+                    {field: 'lastMonthHour', width: 125, sort: true, align: 'center', title: '上月周工时'},
+                    {field: 'thisMonthHour', width: 125, sort: true, align: 'center', title: '本月周工时'},
+                    {field: 'scList', width: 210, title: '周报内容',align: 'center',templet:function(d){
+                            if(d.scList.length>0){
+                                var proHtml="";
+                                for(var i=0;i<d.scList.length;i++){
+                                    proHtml +="<div style='text-align: left;'>"+(i+1)+"."+d.scList[i].content+"</div>";
+                                }
+                                return proHtml
+                            }else {
+                                return ''
+                            }
+                        }},
+                    {field: 'updateLogList', width: 220, title: '修改信息',align: 'center',templet:function(d){
+                            if(d.updateLogList.length>0){
+                                var proHtml="";
+                                for(var i=0;i<d.updateLogList.length;i++){
+                                    proHtml +="<div style='text-align: left;'>"+(i+1)+"."+d.updateLogList[i].userName+"于"+d.updateLogList[i].createDate+"修改"+d.updateLogList[i].updateRow+",修改前为"+d.updateLogList[i].beforeParams+",修改后为"+d.updateLogList[i].afterParams+",修改原因为"+d.updateLogList[i].updateReason+"</div>";
+                                }
+                                return proHtml
+                            }else {
+                                return ''
+                            }
+                        }},
+                ]]
+            });
+        });
+        //添加行
+        $("#addThisSummary").click(function(){
+            if (x<max){
+                var str = '<div class="layui-input-block" style="margin-top: 10px">'+
+                    '<span style="float: left;height: 38px;line-height: 38px;width: 2%;">'+(x+1)+'.</span>'+
+                    '<input style="width:92%;float: left" type="text" id=\"thisSummary_'+x+'\" class="layui-input" maxlength="20" />'+
+                    '</div>'
+                $("#addSummary1").append(str);
+                x++;
+            }else{
+                layer.msg("最多添加6条信息",{icon:2});
+            }
+        });
+        //添加行
+        $("#addNextSummary").click(function(){
+            if (y<max){
+                var str = '<div class="layui-input-block" style="margin-top: 10px">'+
+                    '<span style="float: left;height: 38px;line-height: 38px;width: 2%;">'+(y+1)+'.</span>'+
+                    '<input  style="width:92%;float: left" type="text" id=\"nextSummary_'+y+'\" class="layui-input" maxlength="20" />'+
+                    '</div>'
+                $("#addSummary2").append(str);
+                y++;
+            }else{
+                layer.msg("最多添加6条信息",{icon:2});
+            }
+        });
+        // 表单提交事件
+        form.on('submit(btnSubmit)', function (data) {
+            //获取input框的数据
+            $('#addSummary1 input').each(function(){
+                acThis += this.value+"-";
+            });
+            $('#addSummary2 input').each(function(){
+                acNext += this.value+"-";
+            });
+            top.layer.confirm('确定要添加吗？',function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                data.field.acThis=acThis;
+                data.field.acNext=acNext;
+                $.post(url, data.field, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        top.layer.msg(data.msg, {icon: 1});
+                        admin.putTempData('formOk', true);
+                        // 关闭当前iframe弹出层
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                    } else {
+                        top.layer.msg(data.msg, {icon: 2});
+                    }
+                });
+                return false;
+            });
+        });
+    });
+</script>
+</body>
+
+</html>
