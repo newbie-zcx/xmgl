@@ -348,7 +348,7 @@ public class ProjectController extends BaseController {
     @ResponseBody
     @RequestMapping("/batchImportPro")
     @SysLog(operationType = "导入项目操作:",operationName = "批量导入项目信息")
-    public JsonResult importPro( @RequestParam("file") MultipartFile file, HttpServletRequest request) throws ParseException {
+    public JsonResult importPro( @RequestParam("file") MultipartFile file, HttpServletRequest request) throws Exception {
         boolean result = false;
         List<Object> list = EasyExcelFactory.read(new BufferedInputStream(getInputStream(file)),new Sheet(1));
         String listString = JSONObject.toJSONString(list);
@@ -361,17 +361,22 @@ public class ProjectController extends BaseController {
             Project project = new Project();
             project.setProId(String.valueOf(rowData.get(0)));
             project.setProName(String.valueOf(rowData.get(1)));
-            project.setProNature(String.valueOf(rowData.get(2)));
-            project.setProType(String.valueOf(rowData.get(3)));
-            project.setProManager(String.valueOf(rowData.get(4)));
-            project.setProDept(String.valueOf(rowData.get(5)));
-            project.setProSigner(String.valueOf(rowData.get(6)));
-            Date startDate = DateUtils.StringToDate(String.valueOf(rowData.get(7)));
+            project.setNickName(String.valueOf(rowData.get(2)));
+            project.setProResume(String.valueOf(rowData.get(3)));
+            project.setProNature(String.valueOf(rowData.get(4)));
+            project.setProType(String.valueOf(rowData.get(5)));
+            project.setProManager(String.valueOf(rowData.get(6)));
+            project.setManager(String.valueOf(rowData.get(7)));
+            project.setProDept(String.valueOf(rowData.get(8)));
+            project.setProSigner(String.valueOf(rowData.get(9)));
+            Date startDate = DateUtils.StringToDate(String.valueOf(rowData.get(10)));
             project.setStartDate(DateUtils.DateToString(startDate));
-            Date planCompleteDate = DateUtils.StringToDate(String.valueOf(rowData.get(8)));
+            Date planCompleteDate = DateUtils.StringToDate(String.valueOf(rowData.get(11)));
             project.setStartDate(DateUtils.DateToString(planCompleteDate));
-            Date planCheckDate = DateUtils.StringToDate(String.valueOf(rowData.get(9)));
-            project.setStartDate(DateUtils.DateToString(planCheckDate));
+            Date planChangeDate = DateUtils.StringToDate(String.valueOf(rowData.get(12)));
+            project.setPlanChangeDate(DateUtils.DateToString(planChangeDate));
+            Integer proEndState = Integer.parseInt(String.valueOf(rowData.get(13)));
+            project.setProEndState(proEndState);
             //插入数据库
             result =projectMapper.insert(project) > 0;
         }

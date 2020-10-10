@@ -47,7 +47,7 @@
 
     <div class="layui-input-block" style="width: 500px;margin: 25px auto">
         <button type="button" class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 120px">保存</button>
-        <button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 50px">关闭</button>
+        <button type="button" class="layui-btn layui-btn-primary" id="btnShut" style="margin-left: 50px">关闭</button>
     </div>
 </form>
 <!-- js部分 -->
@@ -82,6 +82,9 @@
                 }
                 form.render('select');
             });
+        });
+        $("#btnShut").on('click', function () {
+            parent.layer.closeAll();
         });
         //周报内容的回显
         // for (sc of scList){

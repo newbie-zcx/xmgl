@@ -36,7 +36,7 @@
         <div id="choosePro" style="height: 262px;display: none;" hidden class="chooseCss">
             <div class="chooseContent" style="height: 150px;">
                 <div style="text-align: center;">
-                    <a href="/static/template/用户导入模版文件.xls" title="点击下载模版文件" style="font-size: 18px;color: blue;">点击下载模版文件</a>
+                    <a href="/static/template/项目导入模版文件.xls" title="点击下载模版文件" style="font-size: 18px;color: blue;">点击下载模版文件</a>
                     <p>温馨提示：模版文件格式要求为【.XLS】</p>
                 </div>
                 <div class="layui-upload" style="margin: 20px 0 0 20px;">
@@ -174,6 +174,7 @@
                     {field: 'id', width: 80, sort: true,hide:true, align: 'center', title: 'ID'},
                     {field: 'proId', width: 116, sort: true, align: 'center', title: '项目编码'},
                     {field: 'proName', sort: true, width: 180, align: 'center', title: '项目名称'},
+                    {field: 'nickName', sort: true, width: 180, align: 'center', title: '项目简称'},
                     {field: 'proResume', sort: true, width: 180, align: 'center', title: '项目简述'},
                     {field: 'proNature', sort: true, width: 119, align: 'center', title: '项目性质'},
                     {field: 'proType', sort: true,width: 115, align: 'center', title: '项目类型'},
@@ -267,9 +268,9 @@
                 });
                 upload.render({
                     elem: '#chooseFile'
-                    , url: 'pro/batchImportPro' //改成您自己的上传接口
+                    , url: 'pro/batchImportPro'
                     , auto: false
-                    , accept: 'file' //普通文件
+                    , accept: 'file'
                     , exts: 'xls'
                     , bindAction: '#uploadFile'
                     , before: function () {

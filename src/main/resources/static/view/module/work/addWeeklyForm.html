@@ -65,9 +65,9 @@
             <% for(project in projectList) { %>
             <tr>
                 <th>${project.proName}</th>
-                <th><input type="text"/></th>
-                <th><input type="text"/></th>
-                <th><input type="text"/></th>
+                <th><input type="text" lay-verify="number"/></th>
+                <th><input type="text" lay-verify="number"/></th>
+                <th><input type="text" lay-verify="required"/></th>
             </tr>
             <% } %>
         </tbody>
@@ -127,20 +127,20 @@
             // $('.layui-input-block input').each(function(){
             //     sc += this.value+"-";
             // });
-            var trList = $("#addFormTable").find("tr");
-            for (var i = 1; i < trList.length; i++) {
-                var trArr = trList.eq(i);
-                var proName = trArr.children("th").eq(0).text;
-                var lastMonthHour = trArr.children("th").children("input").eq(1).value;
-                var thisMonthHour = trArr.children("th").children("input").eq(2).value;
-                var content = trArr.children("th").children("input").eq(3).value;
-                if (thisMonthHour == null || thisMonthHour == "" || thisMonthHour == undefined) {
-                    layer.msg("内容不可为空！")
-                }
-                if (content == null || content == "" || thisMonthHour == content) {
-                    layer.msg("内容不可为空！")
-                }
-                top.layer.confirm('确定要添加吗？', function (index) {
+            top.layer.confirm('确定要添加吗？', function (index) {
+                var trList = $("#addFormTable").find("tr");
+                for (var i = 1; i < trList.length; i++) {
+                    var trArr = trList.eq(i);
+                    var proName = trArr.children("th").eq(0).text;
+                    var lastMonthHour = trArr.children("th").children("input").eq(1).value;
+                    var thisMonthHour = trArr.children("th").children("input").eq(2).value;
+                    var content = trArr.children("th").children("input").eq(3).value;
+                    if (thisMonthHour == null || thisMonthHour == "" || thisMonthHour == undefined) {
+                        layer.msg("内容不可为空！")
+                    }
+                    if (content == null || content == "" || thisMonthHour == content) {
+                        layer.msg("内容不可为空！")
+                    }
                     top.layer.close(index);
                     layer.load(2);
                     // data.field.sc=sc;
@@ -159,8 +159,9 @@
                         }
                     });
                     return false;
-                });
-            }
+                }
+            });
+
         });
     });
 </script>

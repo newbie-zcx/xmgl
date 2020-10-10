@@ -57,12 +57,16 @@
         <div class="layui-input-inline">
             <input name="proName" id="proName" style="width: 266%" placeholder="输入项目名称" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
         </div>
-        <label class="layui-form-label" style="margin-left: 315px">项目简述</label>
+        <label class="layui-form-label" style="margin-left: 315px">项目简称</label>
         <div class="layui-input-inline">
-            <input name="proResume" id="proResume" placeholder="输入项目简述" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
+            <input name="nickName" id="nickName" placeholder="输入项目简称" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
         </div>
     </div>
     <div class="layui-form-item layui-div">
+        <label class="layui-form-label">项目简述</label>
+        <div class="layui-input-inline">
+            <input name="proResume" id="proResume" placeholder="输入项目简述" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
+        </div>
         <label class="layui-form-label">技术负责人</label>
         <div class="layui-input-inline">
             <select id="proManager" name="proManager" lay-verify="required">
@@ -76,6 +80,8 @@
         <div class="layui-input-inline">
             <input name="manager" id="manager" placeholder="请输入项目经理" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
         </div>
+    </div>
+    <div class="layui-form-item layui-div">
         <label class="layui-form-label">承担部门</label>
         <div class="layui-input-inline">
             <select name="proDept" id="proDept" lay-verify="required">
@@ -86,8 +92,6 @@
                 <option value="【技术】联合开发">联合开发</option>
             </select>
         </div>
-    </div>
-    <div class="layui-form-item layui-div">
         <label class="layui-form-label">商务负责人</label>
         <div class="layui-input-inline">
             <input name="proSigner" id="proSigner" placeholder="输入商务负责人" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
@@ -96,12 +100,12 @@
         <div class="layui-input-inline">
             <input name="startDate" placeholder="输入项目启动时间" type="text" class="layui-input" maxlength="20" lay-verify="required" id="startDate" />
         </div>
+    </div>
+    <div class="layui-form-item layui-div">
         <label class="layui-form-label">计划完成时间</label>
         <div class="layui-input-inline">
             <input name="planCompleteDate" placeholder="输入计划完成时间" type="text" class="layui-input" maxlength="20" id="planCompleteDate"/>
         </div>
-    </div>
-    <div class="layui-form-item layui-div">
         <label class="layui-form-label">项目变更时间</label>
         <div class="layui-input-inline">
             <input name="planChangeDate" placeholder="输入项目变更时间" type="text" class="layui-input" maxlength="20" id="planCheckDate"/>

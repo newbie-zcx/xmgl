@@ -64,7 +64,7 @@ public class WeeklyController extends BaseController {
         for (int i = 0;i<proUserList.size();i++){
             Integer proId = proUserList.get(i).getProId();
             Project project = projectService.getById(proId);
-            if (project.getProEndState()==1){
+            if (project.getProEndState()==0){
                 projectList.add(project);
             }
         }
