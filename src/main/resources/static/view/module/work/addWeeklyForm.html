@@ -65,15 +65,15 @@
             <% for(project in projectList) { %>
             <tr>
                 <th>${project.proName}</th>
-                <th><input type="text" lay-verify="number"/></th>
-                <th><input type="text" lay-verify="number"/></th>
-                <th><input type="text" lay-verify="required"/></th>
+                <th style="padding: 0px;margin: 0px;"><input type="text" lay-verify="number" style="padding: 0px;margin: 0px;width: 217px;height: 35px;border: none;font-size: 25px;"/></th>
+                <th style="padding: 0px;margin: 0px;"><input type="text" lay-verify="number" style="padding: 0px;margin: 0px;width: 217px;height: 35px;border: none;font-size: 25px;"/></th>
+                <th style="padding: 0px;margin: 0px;"><input type="text" lay-verify="required" style="padding: 0px;margin: 0px;width: 297px;height: 35px;border: none;font-size: 25px;"/></th>
             </tr>
             <% } %>
         </tbody>
     </table>
     <div class="layui-input-block pos_abs" style="width: 500px;margin: 25px auto">
-        <button type="button" class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 120px">保存</button>
+        <button type="button" class="layui-btn" lay-submit lay-filter="btnSubmit" style="margin-left: 50px">保存</button>
         <button type="button" class="layui-btn layui-btn-primary" id="btnShut" style="margin-left: 50px">关闭</button>
     </div>
 </form>

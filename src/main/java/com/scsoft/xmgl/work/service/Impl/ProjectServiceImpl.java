@@ -143,6 +143,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
                 if (StringUtils.isNotBlank(manager)){
                     wrapper.eq("manager",manager);
                 }
+                if (StringUtils.isNotBlank(proDept)){
+                    wrapper.eq("pro_dept",proDept);
+                }
                 if (StringUtils.isNotBlank(proSigner)){
                     wrapper.like("pro_signer",proSigner);
                 }
