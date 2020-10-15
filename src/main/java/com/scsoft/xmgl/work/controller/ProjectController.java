@@ -173,6 +173,7 @@ public class ProjectController extends BaseController {
         List<ProUser> proUserList = proUserMapper.selectByProId(id);
         List<User> userList = new ArrayList<User>();
         if (proUserList.size()<=0){
+            model.addAttribute("userList",userList);
         }else {
             for (int i = 0;i<proUserList.size();i++){
                 User user = userService.getById(proUserList.get(i).getUserId());

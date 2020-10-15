@@ -22,12 +22,6 @@
         <div class="layui-input-inline">
             <input name="thisMonthHour" id="thisMonthHour" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
         </div>
-        <input name="userName" type="hidden"/>
-        <input name="startDate" type="hidden"/>
-        <input name="endDate" type="hidden"/>
-    </div>
-    <!--周报内容-->
-    <div class="layui-form-item" id="addInput" style="margin-left:33px;margin-top: 30px;">
         <label class="layui-form-label">项目名称</label>
         <div class="layui-input-inline">
             <select name="proId" id="proId" lay-verify="required">
@@ -36,8 +30,14 @@
                 <% } %>
             </select>
         </div>
+        <input name="userName" type="hidden"/>
+        <input name="startDate" type="hidden"/>
+        <input name="endDate" type="hidden"/>
+    </div>
+    <!--周报内容-->
+    <div class="layui-form-item" id="addInput" style="margin-left:33px;margin-top: 30px;">
         <label class="layui-form-label" style="">周报内容</label>
-        <textarea name="scList" required lay-verify="required" class="layui-textarea" style="width: 400px"></textarea>
+        <textarea name="scList" required lay-verify="required" class="layui-textarea" style="width: 500px;height: 200px"></textarea>
 <!--        <input type="button" style="margin-top: 5px;" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add" id="add" value="添加行"/>-->
 <!--        <div class="layui-input-block" style="margin-top: 10px">-->
 <!--            <span style="float: left;height: 38px;line-height: 38px;width: 2%">1.</span>-->

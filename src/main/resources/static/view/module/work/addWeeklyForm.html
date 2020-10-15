@@ -56,8 +56,8 @@
         <thead>
             <tr>
                 <th>项目名称</th>
-                <th>上月周工时</th>
-                <th>本月周工时</th>
+                <th>上月周工时(h)</th>
+                <th>本月周工时(h)</th>
                 <th>周报内容</th>
             </tr>
         </thead>
@@ -65,8 +65,8 @@
             <% for(project in projectList) { %>
             <tr>
                 <th>${project.proName}</th>
-                <th style="padding: 0px;margin: 0px;"><input type="text" lay-verify="number" style="padding: 0px;margin: 0px;width: 217px;height: 35px;border: none;font-size: 25px;"/></th>
-                <th style="padding: 0px;margin: 0px;"><input type="text" lay-verify="number" style="padding: 0px;margin: 0px;width: 217px;height: 35px;border: none;font-size: 25px;"/></th>
+                <th style="padding: 0px;margin: 0px;"><input type="text" lay-tips="只能填写数字" style="padding: 0px;margin: 0px;width: 217px;height: 35px;border: none;font-size: 25px;"/></th>
+                <th style="padding: 0px;margin: 0px;"><input type="text" lay-tips="只能填写数字" lay-verify="number" style="padding: 0px;margin: 0px;width: 217px;height: 35px;border: none;font-size: 25px;"/></th>
                 <th style="padding: 0px;margin: 0px;"><input type="text" lay-verify="required" style="padding: 0px;margin: 0px;width: 297px;height: 35px;border: none;font-size: 25px;"/></th>
             </tr>
             <% } %>
@@ -131,16 +131,28 @@
                 var trList = $("#addFormTable").find("tr");
                 for (var i = 1; i < trList.length; i++) {
                     var trArr = trList.eq(i);
-                    var proName = trArr.children("th").eq(0).text;
-                    var lastMonthHour = trArr.children("th").children("input").eq(1).value;
-                    var thisMonthHour = trArr.children("th").children("input").eq(2).value;
-                    var content = trArr.children("th").children("input").eq(3).value;
+                    var proName = trArr.children("th").eq(0).text();
+                    var lastMonthHour = trArr.children("th").eq(1).children("input").val();
+                    var thisMonthHour = trArr.children("th").eq(2).children("input").val();
+                    var content = trArr.children("th").eq(3).children("input").val();
+                    if (lastMonthHour==null||lastMonthHour==""||lastMonthHour==undefined){
+                        lastMonthHour = 0;
+                    }else if (typeof(lastMonthHour)!="number"){
+                        layer.msg("只能填写数字");
+                    }
                     if (thisMonthHour == null || thisMonthHour == "" || thisMonthHour == undefined) {
                         layer.msg("内容不可为空！")
+                    }else if (typeof(thisMonthHour)!="number"){
+                        layer.msg("只能填写数字");
                     }
-                    if (content == null || content == "" || thisMonthHour == content) {
+                    if (content == null || content == "" || content == undefined) {
                         layer.msg("内容不可为空！")
                     }
+                    console.log("1");
+                    console.log(proName);
+                    console.log(lastMonthHour);
+                    console.log(thisMonthHour);
+                    console.log(content);
                     top.layer.close(index);
                     layer.load(2);
                     // data.field.sc=sc;
@@ -158,7 +170,6 @@
                             top.layer.msg(data.msg, {icon: 2});
                         }
                     });
-                    return false;
                 }
             });
 

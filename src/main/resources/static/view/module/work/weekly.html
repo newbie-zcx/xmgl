@@ -57,16 +57,28 @@
             <div class="layui-form-item" style="margin-top: 15px;margin-left: 70px">
                 <div class="layui-inline" style="width: auto;">
                     <form style="float: left">
+<!--                        <div class="layui-inline">-->
+<!--                            <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目编码：</label>-->
+<!--                            <div class="layui-input-inline mr0">-->
+<!--                                <input id="proId" class="layui-input" type="text"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="layui-inline">-->
+<!--                            <label class="layui-form-label w-auto" style="padding: 9px 0px;">项目名称：</label>-->
+<!--                            <div class="layui-input-inline mr0">-->
+<!--                                <input id="proName" class="layui-input" type="text"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
                         <div class="layui-inline">
                             <label class="layui-form-label w-auto" style="padding: 9px 0px;">开始时间：</label>
                             <div class="layui-input-inline mr0">
-                                <input id="startDate" class="layui-input" type="text"/>
+                                <input id="startDate" class="layui-input" type="text" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label w-auto" style="padding: 9px 0px;">结束时间：</label>
                             <div class="layui-input-inline mr0">
-                                <input id="endDate" class="layui-input" type="text"/>
+                                <input id="endDate" class="layui-input" type="text" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -87,9 +99,9 @@
                 <button id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export" >
                     <i class="layui-icon">&#xe67d;</i>导出
                 </button>
-                <button id="btnImp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="import" >
-                    <i class="layui-icon">&#xe681;</i>导入
-                </button>
+<!--                <button id="btnImp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="import" >-->
+<!--                    <i class="layui-icon">&#xe681;</i>导入-->
+<!--                </button>-->
             </div>
         </script>
         <table class="layui-table" id="weeklyTable" lay-filter="weeklyTable"></table>
@@ -190,6 +202,8 @@
 
             // 搜索按钮点击事件
             $('#btnSearch').click(function () {
+                // var proId = $('#proId').val();
+                // var proName = $('#proName').val();
                 var startDate = $('#startDate').val();
                 var endDate = $('#endDate').val();
                 table.reload('weeklyTable', {where: {startDate: startDate,endDate:endDate}});
@@ -217,7 +231,6 @@
 
             // 工具条点击事件
             table.on('tool(weeklyTable)', function (obj) {
-                console.log(obj);
                 var data = obj.data;
                 var layEvent = obj.event;
                 if (layEvent === 'edit') { // 修改
@@ -235,42 +248,42 @@
                 }
             });
 
-            function importWeeklies(){
-                layer.open({
-                    type: 1,
-                    title:"用户导入",
-                    content: $('#chooseUser'),
-                    area: ['500px', '200px']
-                });
-                var departId=$("#departId").val();
-                upload.render({
-                    elem: '#chooseFile'
-                    ,url: 'user/batchImportUser' //改成您自己的上传接口
-                    ,data: {departId:departId}
-                    ,auto: false
-                    ,accept: 'file' //普通文件
-                    ,exts: 'xls'
-                    ,bindAction: '#uploadFile'
-                    ,before: function(){
-                        layer.load(2);
-                    }
-                    ,done: function(data){
-                        layer.closeAll('loading');
-                        if (data.code == 200) {
-                            layer.msg(data.msg, {icon: 1});
-                        } else {
-                            layer.msg(data.msg, {icon: 2});
-                        }
-                    }
-                });
-            }
+            // function importWeeklies(){
+            //     layer.open({
+            //         type: 1,
+            //         title:"用户导入",
+            //         content: $('#chooseUser'),
+            //         area: ['500px', '200px']
+            //     });
+            //     var departId=$("#departId").val();
+            //     upload.render({
+            //         elem: '#chooseFile'
+            //         ,url: 'user/batchImportUser' //改成您自己的上传接口
+            //         ,data: {departId:departId}
+            //         ,auto: false
+            //         ,accept: 'file' //普通文件
+            //         ,exts: 'xls'
+            //         ,bindAction: '#uploadFile'
+            //         ,before: function(){
+            //             layer.load(2);
+            //         }
+            //         ,done: function(data){
+            //             layer.closeAll('loading');
+            //             if (data.code == 200) {
+            //                 layer.msg(data.msg, {icon: 1});
+            //             } else {
+            //                 layer.msg(data.msg, {icon: 2});
+            //             }
+            //         }
+            //     });
+            // }
             // 显示表单弹窗
             function showAddModel() {
                 admin.putTempData('formOk', false);
                 url = "work/weekly/addForm";
                 top.layui.admin.open({
                     type: 2,
-                    title: '新增'+monday+"至"+friday+"周报",
+                    title: "新增"+monday+"至"+friday+"周报",
                     area: ['50%', '55%'],
                     content: url,
                     end: function () {
@@ -296,7 +309,7 @@
                 url = "work/weekly/editForm";
                 top.layui.admin.open({
                     type: 2,
-                    title: '修改周报',
+                    title: "修改"+data.project.proName+":"+data.startDate+"至"+data.endDate+"周报",
                     area: ['54%', '50%'],
                     content: url,
                     end: function () {

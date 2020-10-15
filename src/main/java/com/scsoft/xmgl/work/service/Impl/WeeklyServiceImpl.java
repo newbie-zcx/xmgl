@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,10 +75,14 @@ public class WeeklyServiceImpl extends ServiceImpl<WeeklyMapper, Weekly> impleme
             if (StringUtils.isNotBlank(startdate)){
                 Date dateStart = DateUtils.StringToDate(startdate);
                 wrapper.ge("start_date",dateStart);
+            }else{
+                wrapper.ge("start_date",DateUtils.StringToDate("2020-01-01"));
             }
             if (StringUtils.isNotBlank(enddate)){
                 Date dateEnd = DateUtils.StringToDate(enddate);
                 wrapper.le("end_date",dateEnd);
+            }else{
+                wrapper.le("end_date",DateUtils.StringToDate("2020-12-31"));
             }
             wrapper.eq("user_name", SystemCommonHandler.getLoginUser().getRealName());
             weeklyList = weeklyMapper.selectList(wrapper);
