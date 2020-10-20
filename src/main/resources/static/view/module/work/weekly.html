@@ -125,8 +125,13 @@
             var upload = layui.upload;
             var laydate = layui.laydate;
             var date = new Date();
-            var monday = getLastSaturday(date);
-            var friday = getThisFriday(date);
+            if ((date.getDay() || 7==6)||(date.getDay() || 7==7)){
+                var monday = getThisFriday(date);
+                var friday = getNextFriday(date);
+            }else{
+                var monday = getLastFriday(date);
+                var friday = getThisFriday(date);
+            }
             //时间选择器
             laydate.render({
                 elem:'#startDate',
@@ -286,15 +291,15 @@
                     }
                 });
             }
-            function getLastSaturday(date) {
+            function getLastFriday (date) {
                 var day = date.getDay() || 7;
-                return util.toDateString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 6 -7 - day),"yyyy-MM-dd");
+                return util.toDateString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5 -7 - day),"yyyy-MM-dd");
             };
             function getThisFriday (date) {
                 var day = date.getDay() || 7;
                 return util.toDateString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5 - day),"yyyy-MM-dd");
             };
-            function getNextFriday(date) {
+            function getNextFriday (date) {
                 var day = date.getDay() || 7;
                 return util.toDateString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5 + 7 - day),"yyyy-MM-dd");
             };

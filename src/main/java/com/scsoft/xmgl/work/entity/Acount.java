@@ -65,7 +65,7 @@ public class Acount extends BaseEntity {
      * 本周评审情况
      **/
     @TableField("this_review")
-    private int thisReview;
+    private String thisReview;
     /**
      * 本周提交文档情况
      **/
@@ -75,7 +75,7 @@ public class Acount extends BaseEntity {
      * 下周安排测试
      **/
     @TableField("next_test")
-    private int nextTest;
+    private String nextTest;
     /**
      * 下周是否有评审
      **/
@@ -85,7 +85,7 @@ public class Acount extends BaseEntity {
      * 下周提交文档情况
      **/
     @TableField("next_doc")
-    private int nextDoc;
+    private String nextDoc;
     /**
      * 计划里程碑
      **/
@@ -96,11 +96,8 @@ public class Acount extends BaseEntity {
      **/
     @TableField("actual_milepost")
     private String actualMilepost;
-    /**
-    * 项目状态：0表示到项目经理；1表示到部门经理；2到技术中心
-    **/
-    @TableField("state")
-    private int state;
+
+
     /**
      * 项目信息
      **/

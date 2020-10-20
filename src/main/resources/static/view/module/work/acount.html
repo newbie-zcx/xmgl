@@ -63,7 +63,7 @@
                             <select id="proId" name="proId" lay-verify="required">
                                 <option value=""></option>
                                 <% for(project in projectList) { %>
-                                <option value="${project.id}">${project.proName}</option>
+                                <option value="${project.proId}">${project.proName}</option>
                                 <% } %>
                             </select>
                         </div>
@@ -71,13 +71,13 @@
                     <div class="layui-inline">
                         <label class="layui-form-label w-auto" style="padding: 9px 0px;">开始时间：</label>
                         <div class="layui-input-inline mr0">
-                            <input id="startDate" class="layui-input" type="text" autocomplete="off"/>
+                            <input id="startDate" class="layui-input" type="text"/>
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label w-auto" style="padding: 9px 0px;">结束时间：</label>
                         <div class="layui-input-inline mr0">
-                            <input id="endDate" class="layui-input" type="text" autocomplete="off"/>
+                            <input id="endDate" class="layui-input" type="text"/>
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -98,9 +98,9 @@
             <button id="btnExp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export" >
                 <i class="layui-icon">&#xe67d;</i>导出
             </button>
-<!--            <button id="btnImp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="import" >-->
-<!--                <i class="layui-icon">&#xe681;</i>导入-->
-<!--            </button>-->
+            <button id="btnImp" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="import" >
+                <i class="layui-icon">&#xe681;</i>导入
+            </button>
         </div>
     </script>
     <table class="layui-table" id="acountTable" lay-filter="acountTable"></table>
@@ -123,9 +123,7 @@
         var admin = layui.admin;
         var upload = layui.upload;
         var laydate = layui.laydate;
-        var date = new Date();
-        var monday = getLastSaturday(date);
-        var friday = getThisFriday(date);
+
         laydate.render({
             elem:'#startDate',
             format:'yyyy-MM-dd',
@@ -137,7 +135,7 @@
         // 渲染表格
         var ins = table.render({
             elem: '#acountTable',
-            url: 'managerAcount/list',
+            url: 'acount/list',
             toolbar: '#acount-toolbar',
             page: true,
             text: {
@@ -147,7 +145,7 @@
             limits:[15,30,45,60],
             cols: [[
                 {type: 'checkbox'},
-                {field: 'id', width: 68, sort: true, align: 'center', title: 'ID',hide:true},
+                {field: 'id', width: 68, sort: true, align: 'center', title: 'ID'},
                 {field: 'project', width: 115,sort: true, title: '项目编号',align: 'center',templet:function(d){
                         if(d.project!=null){
                             var proHtml="";
@@ -156,7 +154,7 @@
                         }else {
                             return ''
                         }
-                }},
+                    }},
                 {field: 'project', width: 200,sort: true, title: '项目名称',align: 'center',templet:function(d){
                         if(d.project!=null){
                             var proHtml="";
@@ -165,7 +163,7 @@
                         }else {
                             return ''
                         }
-                }},
+                    }},
                 {field: 'project', width: 115,sort: true, title: '项目经理',align: 'center',templet:function(d){
                         if(d.project!=null){
                             var proHtml="";
@@ -174,7 +172,7 @@
                         }else {
                             return ''
                         }
-                }},
+                    }},
                 {field: 'startDate', width: 124, sort: true, align: 'center', title: '开始时间'},
                 {field: 'endDate', width: 124, sort: true, align: 'center', title: '结束时间'},
                 {field: 'proLevel', width: 122,sort: true, align: 'center', title: '项目级别'},
@@ -194,7 +192,7 @@
                         }else {
                             return ''
                         }
-                }},
+                    }},
                 {field: 'acList', width: 210,sort: true, title: '下周或下阶段工作计划',align: 'center',templet:function(d){
                         if(d.acList.length>0){
                             var proHtml="";
@@ -209,7 +207,7 @@
                         }else {
                             return ''
                         }
-                }},
+                    }},
                 {field: 'coordinatedMatters', width: 137, sort: true, align: 'center', title: '需协同事项'},
                 {field: 'remark', width: 128, sort: true, align: 'center', title: '备注'},
                 {field: 'project', width: 240, sort: true, align: 'center', title: '项目计划完成时间(含变更后)',templet:function(d){
@@ -220,65 +218,28 @@
                         }else {
                             return ''
                         }
-                }},
-                {field: 'thisReview', width: 150, sort: true, align: 'center', title: '本周评审情况',templet:function(d){
-                        var thisReview = d.thisReview;
-                        if (thisReview==0){
-                            return '<p>否</p>';
-                        }else {
-                            return '<p>是</p>';
-                        }
-                }},
+                    }},
+                {field: 'thisReview', width: 150, sort: true, align: 'center', title: '本周评审情况'},
                 {field: 'thisDoc', width: 180, sort: true, align: 'center', title: '本周提交文档情况',templet:function(d){
                         var thisDoc = d.thisDoc;
                         if (thisDoc==0){
                             return '<p>否</p>';
                         }else {
                             return '<p>是</p>';
-                        }
-                }},
-                {field: 'nextTest', width: 140,sort: true ,align: 'center',title: '下周安排测试',templet:function(d){
-                        var nextTest = d.nextTest;
-                        if (nextTest==0){
-                            return '<p>否</p>';
-                        }else {
-                            return '<p>是</p>';
-                        }
-                }},
+                        }}},
+                {field: 'nextTest', width: 140,sort: true ,align: 'center',title: '下周安排测试'},
                 {field: 'nextReview', width: 130, title: '下周是否有评审',align: 'center',templet:function(d){
                         var nextReview = d.nextReview;
                         if (nextReview==0){
                             return '<p>否</p>';
                         }else {
                             return '<p>是</p>';
-                        }
-                }},
-                {field: 'nextDoc', width: 153, title: '下周提交文档情况',align: 'center',templet:function(d){
-                        var nextDoc = d.nextDoc;
-                        if (nextDoc==0){
-                            return '<p>否</p>';
-                        }else {
-                            return '<p>是</p>';
-                        }
-                }},
+                        }}},
+                {field: 'nextDoc', width: 153, title: '下周提交文档情况',align: 'center'},
                 {field: 'planMilepost', width: 124, title: '计划里程碑',align: 'center'},
                 {field: 'actualMilepost', width: 124, title: '实际里程碑',align: 'center'},
-                {field: 'state', width:160,title:'项目状态',align:'center',templet:function (d) {
-                    var state = d.state;
-                    if (state==1){
-                        return '<p class="dept">部门经理正在处理</p>'
-                    }else if (state==2){
-                        return '<p class="center">总监正在处理</p>'
-                    }else{
-                        return '<p class="project">项目经理正在处理</p>'
-                    }
-                }},
                 {align: 'center', toolbar: '#tableBar', title: '操作', width: 125}
             ]]
-            // ,done:function (res) {
-            //     console.log($('.project')[0]);
-            //     // if ($('.dept')[0])
-            // }
         });
 
         // 搜索按钮点击事件
@@ -308,20 +269,10 @@
                     break;
             };
         });
-        function getLastSaturday(date) {
-            var day = date.getDay() || 7;
-            return util.toDateString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 6 -7 - day),"yyyy-MM-dd");
-        };
-        function getThisFriday(date) {
-            var day = date.getDay() || 7;
-            return util.toDateString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5 - day),"yyyy-MM-dd");
-        };
-        function getNextFriday(date) {
-            var day = date.getDay() || 7;
-            return util.toDateString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5 + 7 - day),"yyyy-MM-dd");
-        };
+
         // 工具条点击事件
         table.on('tool(acountTable)', function (obj) {
+            console.log(obj);
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent === 'edit') { // 修改
@@ -363,10 +314,10 @@
         // 显示表单弹窗
         function showAddModel() {
             admin.putTempData('formOk', false);
-            url = "work/managerAcount/addForm";
+            url = "work/acount/addForm";
             top.layui.admin.open({
                 type: 2,
-                title: "新增"+monday+"至"+friday+"台账",
+                title: '新增台账',
                 area: ['80%', '80%'],
                 content: url,
                 offset:['120px','260px'],
@@ -376,50 +327,37 @@
             });
         }
         function showEditModel(data) {
-            if (data.state===1){
-                layer.msg("部门经理正在处理")
-            }else if (data.state===2){
-                layer.msg("总监正在处理")
-            }else if (data.state===0){
-                admin.putTempData('edit_acount',data);
-                admin.putTempData('formOk', false);
-                url = "work/managerAcount/editForm";
-                top.layui.admin.open({
-                    type: 2,
-                    title: '修改台帐',
-                    area: ['80%', '80%'],
-                    content: url,
-                    offset:['120px','260px'],
-                    end: function () {
-                        admin.getTempData('formOk') && table.reload('acountTable');  // 成功刷新表格
-                    }
-                });
-            }
+            admin.putTempData('edit_acount',data);
+            admin.putTempData('formOk', false);
+            url = "work/acount/editForm";
+            top.layui.admin.open({
+                type: 2,
+                title: '修改台帐',
+                area: ['80%', '80%'],
+                content: url,
+                offset:['120px','260px'],
+                end: function () {
+                    admin.getTempData('formOk') && table.reload('acountTable');  // 成功刷新表格
+                }
+            });
         }
         // 删除
         function doDelete(obj) {
-            if (obj.data.state===1){
-                layer.msg("部门经理正在处理")
-            }else if (obj.data.state===2){
-                layer.msg("总监正在处理")
-            }else if (obj.data.state===0){
-                console.log(obj.data.id);
-                top.layer.confirm('确定要删除吗？', function (index) {
-                    top.layer.close(index);
-                    layer.load(2);
-                    $.post('managerAcount/delete', {
-                        acountId: obj.data.id
-                    }, function (data) {
-                        layer.closeAll('loading');
-                        if (data.code == 200) {
-                            layer.msg(data.msg, {icon: 1});
-                            obj.del();
-                        } else {
-                            layer.msg(data.msg, {icon: 2});
-                        }
-                    });
+            top.layer.confirm('确定要删除吗？', function (index) {
+                top.layer.close(index);
+                layer.load(2);
+                $.post('weekly/delete', {
+                    weeklyId: obj.data.id
+                }, function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1});
+                        obj.del();
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
                 });
-            }
+            });
         }
     });
 
