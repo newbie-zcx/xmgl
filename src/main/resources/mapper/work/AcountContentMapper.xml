@@ -19,9 +19,6 @@
     </select>
 
     <insert id="addContent">
-        insert into work_acount_content(acount_id,content_id) values
-        <foreach collection="acIdList" item="acId" separator=",">
-            (#{acountId},#{acId})
-        </foreach>
+        insert into work_acount_content(acount_id,content_id) values (#{acountId},#{acId})
     </insert>
 </mapper>
