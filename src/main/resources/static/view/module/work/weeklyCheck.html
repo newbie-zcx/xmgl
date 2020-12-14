@@ -222,22 +222,15 @@
                     ],[{type: 'checkbox'},
                     {field: 'id', width: 80, sort: true, align: 'center', title: 'ID'},
                     {field: 'userName', width: 160, sort: true, align: 'center', title: '姓名'},
-                    {field: 'scList', width: 300, title: '周报内容', align: 'center', templet: function (d) {
-                            if (d && d.scList && d.scList.length > 0) {
-                                var proHtml = "";
-                                for (var i = 0; i < d.scList.length; i++) {
-                                    proHtml += "<div style='text-align: left;'>" + (i + 1) + "." + d.scList[i].content + "</div>";
-                                }
-                                return proHtml
-                            } else {
-                                return ''
-                    }}},
+                    {field: 'scList', width: 300, title: '周报内容', align: 'center',templet:function (d) {
+                            return "<textarea style='width: 300px;height: 90px;margin-left: -15px;margin-top: 0px;border: none;' readonly>"+d.scList+"</textarea>"
+                        }},
                     {field: 'startDate', sort: true, width: 180, align: 'center', title: '起始时间'},
                     {field: 'endDate', sort: true, width: 180, align: 'center', title: '结束时间'},
                     {field: 'lastMonthHour', sort: true, width: 150, edit: 'text', align: 'center', title: '上月周工时(h)'},
                     {field: 'thisMonthHour', sort: true, width: 150, edit: 'text', align: 'center', title: '本月周工时(h)'},
                     {field: 'projectHour', sort: true, width: 150, align: 'center', title: '项目总工时'},
-                    {field: 'monthHour', sort: true, width: 150, align: 'center', title: '本月总工时'},
+                    {field: 'monthHour', sort: true, width: 148, align: 'center', title: '本月总工时'},
                     {align: 'center', toolbar: '#tableBar', title: '操作', width: 110},
                 ]]
             });

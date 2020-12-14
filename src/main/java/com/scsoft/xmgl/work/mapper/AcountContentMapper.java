@@ -10,5 +10,5 @@ import java.util.List;
 @MyBatisDao
 public interface AcountContentMapper extends BaseMapper<AcountContent> {
     List<AcountContent> getByAcountId(int acountId);
-    int addContent(@Param("acountId") int acountId, @Param("acIdList") List<Integer> acIdList);
+    int addContent(@Param("acountId") int acountId, Integer acId);
 }

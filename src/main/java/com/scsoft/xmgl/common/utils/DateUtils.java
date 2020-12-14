@@ -39,13 +39,20 @@ public class DateUtils {
                 dayWeek = 6;
                 break;
         }
-
+        //上周一
+        cal.add(Calendar.DATE, -(dayWeek-1));
+        Date lastMondayDate = cal.getTime();
+        String lastWeekBegin = sdf.format(lastMondayDate);
+        //上周日
+        cal.add(Calendar.DATE, 4);
+        Date lastSundayDate = cal.getTime();
+        String lastWeekEnd = sdf.format(lastSundayDate);
         //本周一
         cal.add(Calendar.DATE, -(dayWeek-1));
         Date mondayDate = cal.getTime();
         String weekBegin = sdf.format(mondayDate);
         //本周日
-        cal.add(Calendar.DATE, 6);
+        cal.add(Calendar.DATE, 4);
         Date sundayDate = cal.getTime();
         String weekEnd = sdf.format(sundayDate);
         //下周一
@@ -53,9 +60,11 @@ public class DateUtils {
         Date nextMondayDate = cal.getTime();
         String nextWeekBegin = sdf.format(nextMondayDate);
         //下周日
-        cal.add(Calendar.DATE, 6);
+        cal.add(Calendar.DATE, 4);
         Date nextSundayDate = cal.getTime();
         String nextWeekEnd = sdf.format(nextSundayDate);
+        map.put("lastMondayDate", lastWeekBegin);
+        map.put("lastSundayDate", lastWeekEnd);
         map.put("mondayDate", weekBegin);
         map.put("sundayDate", weekEnd);
         map.put("nextMondayDate", nextWeekBegin);

@@ -9,5 +9,7 @@ import java.util.List;
 
 public interface IAcountService extends IService<Acount> {
     PageResult<Acount> list(int pageNum,int pageSize,String proId,String startDate,String endDate) throws ParseException;
-    boolean add(Acount acount, List<Integer> acThisIdList,List<Integer> acNextIdList,int proId) throws ParseException;
+    boolean add(Acount acount,Integer thisId,Integer nextId,int proId) throws ParseException;
+    boolean update(Acount acount);
+    boolean delete(int acountId);
 }

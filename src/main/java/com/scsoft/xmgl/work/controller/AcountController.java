@@ -7,14 +7,12 @@ import com.scsoft.scpt.common.JsonResult;
 import com.scsoft.scpt.common.PageResult;
 import com.scsoft.xmgl.common.handler.SystemCommonHandler;
 import com.scsoft.xmgl.common.utils.DateUtils;
-import com.scsoft.xmgl.work.entity.AC;
-import com.scsoft.xmgl.work.entity.Acount;
-import com.scsoft.xmgl.work.entity.Project;
-import com.scsoft.xmgl.work.entity.Weekly;
+import com.scsoft.xmgl.work.entity.*;
+import com.scsoft.xmgl.work.mapper.ACMapper;
+import com.scsoft.xmgl.work.mapper.AcountContentMapper;
 import com.scsoft.xmgl.work.service.IACService;
 import com.scsoft.xmgl.work.service.IAcountService;
 import com.scsoft.xmgl.work.service.IProjectService;
-import com.scsoft.xmgl.work.service.ISCService;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -24,14 +22,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 
 @Controller
-@RequestMapping("/work/acount")
+@RequestMapping("/work/managerAcount")
 public class AcountController extends BaseController {
 
     @Autowired
@@ -40,6 +38,10 @@ public class AcountController extends BaseController {
     private IProjectService projectService;
     @Autowired
     private IACService acService;
+    @Resource
+    private AcountContentMapper acountContentMapper;
+    @Resource
+    private ACMapper acMapper;
 
     private final String PREFIX="module/work";
 
@@ -51,7 +53,7 @@ public class AcountController extends BaseController {
         return PREFIX+"/acount";
     }
 
-    @RequiresPermissions("acount:add")
+    @RequiresPermissions("managerAcount:add")
     @RequestMapping("/addForm")
     public String addForm(Model model){
         String realName = SystemCommonHandler.getLoginUser().getRealName();
@@ -60,7 +62,7 @@ public class AcountController extends BaseController {
         return PREFIX+"/addAcountForm";
     }
 
-    @RequiresPermissions("acount:edit")
+    @RequiresPermissions("managerAcount:edit")
     @RequestMapping("/editForm")
     public String editForm(Model model){
         String realName = SystemCommonHandler.getLoginUser().getRealName();
@@ -70,7 +72,7 @@ public class AcountController extends BaseController {
     }
 
 
-    @RequiresPermissions("acount:view")
+    @RequiresPermissions("managerAcount:view")
     @ResponseBody
     @RequestMapping("/list")
     @ApiOperation(value = "查看所有台账",notes = "查看台账信息列表")
@@ -82,41 +84,73 @@ public class AcountController extends BaseController {
         return acountService.list(page,limit,proId,startDate,endDate);
     }
 
-    @RequiresPermissions("acount:add")
+    @RequiresPermissions("managerAcount:add")
     @ResponseBody
     @RequestMapping("/add")
-    @SysLog(operationType = "add操作:",operationName = "添加台账各个信息")
-    public JsonResult add(Acount acount,int proId, String acThis,String acNext) throws ParseException {
-        String[] acThisList = acThis.split("-");
-        String[] acNextList = acNext.split("-");
-        List<Integer> acThisIdList = new ArrayList<Integer>();
-        List<Integer> acNextIdList = new ArrayList<Integer>();
-        for (int i = 1;i<acThisList.length;i++){
-            if (StringUtils.isNotBlank(acThisList[i])){
-                AC acThisEntity = new AC();
-                acThisEntity.setThisSummary(acThisList[i]);
-                int thisId = acService.add(acThisEntity);
-                acThisIdList.add(thisId);
-            }
+    @SysLog(operationType = "add操作:",operationName = "添加台账信息")
+    public JsonResult add(Acount acount,int proId, String thisSummary,String nextSummary) throws ParseException {
+        Integer thisId = null;
+        Integer nextId = null;
+        if (StringUtils.isNotBlank(thisSummary)){
+            AC acThisEntity = new AC();
+            acThisEntity.setThisSummary(thisSummary);
+            thisId = acService.add(acThisEntity);
         }
-        for (int j = 1;j<acNextList.length;j++){
-            if (StringUtils.isNotBlank(acNextList[j])){
-                AC acNextEntity = new AC();
-                acNextEntity.setNextSummary(acNextList[j]);
-                int nextId = acService.add(acNextEntity);
-                acNextIdList.add(nextId);
-            }
+        if (StringUtils.isNotBlank(nextSummary)){
+            AC acNextEntity = new AC();
+            acNextEntity.setNextSummary(nextSummary);
+            nextId = acService.add(acNextEntity);
         }
         Map<String, String> map = DateUtils.getWeekDate();
         acount.setStartDate(map.get("mondayDate"));
         acount.setEndDate(map.get("sundayDate"));
-        if (acountService.add(acount,acThisIdList,acNextIdList,proId)){
+        acount.setState(0);
+        if (acountService.add(acount,thisId,nextId,proId)){
             return JsonResult.ok("添加成功");
         }else {
             return JsonResult.error("添加失败");
         }
     }
 
+    @RequiresPermissions("managerAcount:edit")
+    @ResponseBody
+    @RequestMapping("/update")
+    @SysLog(operationType = "update操作",operationName = "修改台账信息")
+    public JsonResult update(Acount acount,int proId,String thisSummary,String nextSummary){
+        List<AcountContent> acountContents = acountContentMapper.getByAcountId(acount.getId());
+        AC ac = new AC();
+        for (int i = 0;i<acountContents.size();i++){
+            Integer contentId = acountContents.get(i).getContentId();
+            ac.setId(contentId);
+            if (contentId!=null){
+                if (StringUtils.isNotBlank(thisSummary)){
+                    ac.setThisSummary(thisSummary);
+                    acMapper.updateById(ac);
+                }else{
+                    ac.setNextSummary(nextSummary);
+                    acMapper.updateById(ac);
+                }
+            }else {
+                return JsonResult.error("修改失败");
+            }
+        }
+        if (acountService.update(acount)){
+            return JsonResult.ok("修改成功");
+        }else{
+            return JsonResult.error("修改失败");
+        }
+    }
 
-
+    @RequiresPermissions("managerAcount:delete")
+    @ResponseBody
+    @RequestMapping("/delete")
+    @SysLog(operationType = "delete操作",operationName = "删除台账信息，并删除关联表")
+    public JsonResult delete(int acountId){
+        boolean result = acountService.delete(acountId);
+        if (result){
+            return JsonResult.ok("删除成功");
+        }else{
+            return JsonResult.error("删除失败");
+        }
+    }
 }

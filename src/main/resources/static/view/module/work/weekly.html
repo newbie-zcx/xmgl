@@ -125,13 +125,8 @@
             var upload = layui.upload;
             var laydate = layui.laydate;
             var date = new Date();
-            if ((date.getDay() || 7==6)||(date.getDay() || 7==7)){
-                var monday = getThisFriday(date);
-                var friday = getNextFriday(date);
-            }else{
-                var monday = getLastFriday(date);
-                var friday = getThisFriday(date);
-            }
+            var monday = getLastSaturday(date);
+            var friday = getThisFriday(date);
             //时间选择器
             laydate.render({
                 elem:'#startDate',
@@ -184,7 +179,9 @@
                     {field: 'userName', width: 120, sort: true, align: 'center', title: '添加人'},
                     {field: 'lastMonthHour', width: 140, sort: true, align: 'center', title: '上月周工时(h)'},
                     {field: 'thisMonthHour', width: 140, sort: true, align: 'center', title: '本月周工时(h)'},
-                    {field: 'scList', width: 210, title: '周报内容',align: 'center'},
+                    {field: 'scList', width: 210, title: '周报内容',align: 'center',templet:function (d) {
+                            return "<textarea style='width: 210px;height: 90px;margin-left: -15px;margin-top: 0px;border: none;' readonly>"+d.scList+"</textarea>"
+                        }},
                     {field: 'updateLogList', width: 220, title: '修改信息',align: 'center',templet:function(d){
                             if(d.updateLogList.length>0){
                                 var proHtml="";
@@ -291,15 +288,15 @@
                     }
                 });
             }
-            function getLastFriday (date) {
+            function getLastSaturday(date) {
                 var day = date.getDay() || 7;
-                return util.toDateString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5 -7 - day),"yyyy-MM-dd");
+                return util.toDateString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 6 -7 - day),"yyyy-MM-dd");
             };
             function getThisFriday (date) {
                 var day = date.getDay() || 7;
                 return util.toDateString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5 - day),"yyyy-MM-dd");
             };
-            function getNextFriday (date) {
+            function getNextFriday(date) {
                 var day = date.getDay() || 7;
                 return util.toDateString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5 + 7 - day),"yyyy-MM-dd");
             };

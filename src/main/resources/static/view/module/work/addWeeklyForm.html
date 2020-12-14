@@ -49,25 +49,26 @@
     <table class="layui-table" lay-even style="margin-left:10px" id="addFormTable">
         <colgroup>
             <col width="200">
-            <col width="150">
-            <col width="150">
-            <col width="300">
+            <col width="110">
+            <col width="110">
+            <col width="500">
         </colgroup>
         <thead>
             <tr>
-                <th>项目名称</th>
-                <th>上月周工时(h)</th>
-                <th>本月周工时(h)</th>
-                <th>周报内容</th>
+                <th style="width: 200px">项目名称</th>
+                <th style="width: 110px">上月周工时(h)</th>
+                <th style="width: 110px">本月周工时(h)</th>
+                <th style="width: 500px">周报内容</th>
             </tr>
         </thead>
         <tbody>
             <% for(project in projectList) { %>
             <tr>
                 <th>${project.proName}</th>
-                <th style="padding: 0px;margin: 0px;"><input type="text" lay-tips="只能填写数字" style="padding: 0px;margin: 0px;width: 217px;height: 35px;border: none;font-size: 25px;"/></th>
-                <th style="padding: 0px;margin: 0px;"><input type="text" lay-tips="只能填写数字" lay-verify="number" style="padding: 0px;margin: 0px;width: 217px;height: 35px;border: none;font-size: 25px;"/></th>
-                <th style="padding: 0px;margin: 0px;"><input type="text" lay-verify="required" style="padding: 0px;margin: 0px;width: 297px;height: 35px;border: none;font-size: 25px;"/></th>
+                <th style="padding: 0px;margin: 0px;"><input type="text" lay-tips="只能填写数字" style="padding: 0px;margin: 0px;width: 110px;height: 35px;border: none;font-size: 25px;"/></th>
+                <th style="padding: 0px;margin: 0px;"><input type="text" lay-tips="只能填写数字" lay-verify="number" style="padding: 0px;margin: 0px;width: 110px;height: 35px;border: none;font-size: 25px;"/></th>
+                <th style="padding: 0px;margin: 0px;"><textarea style="margin: 0px;padding:0px;width: 527px;height: 50px"></textarea></th>
+<!--                <input type="text" lay-verify="required" style="padding: 0px;margin: 0px;width: 450px;height: 35px;border: none;font-size: 25px;"/>-->
             </tr>
             <% } %>
         </tbody>
@@ -148,11 +149,11 @@
                     if (content == null || content == "" || content == undefined) {
                         layer.msg("内容不可为空！")
                     }
-                    console.log("1");
-                    console.log(proName);
-                    console.log(lastMonthHour);
-                    console.log(thisMonthHour);
-                    console.log(content);
+                    // console.log("1");
+                    // console.log(proName);
+                    // console.log(lastMonthHour);
+                    // console.log(thisMonthHour);
+                    // console.log(content);
                     top.layer.close(index);
                     layer.load(2);
                     // data.field.sc=sc;
@@ -171,6 +172,7 @@
                         }
                     });
                 }
+                table.reload("addFormTable");
             });
 
         });
