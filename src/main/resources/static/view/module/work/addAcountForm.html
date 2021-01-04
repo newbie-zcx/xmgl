@@ -212,8 +212,6 @@
                 done:function(data){
                     var thisSummaryText = '';
                     for (var i = 0; i < data.data.length; i++) {
-                        console.log("1111");
-                        console.log(data.data[i]);
                         thisSummaryText = data.data[i].userName + "---" + data.data[i].scList + '\n';
                     }
                     $("#thisSummary").html(thisSummaryText);
