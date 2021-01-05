@@ -107,8 +107,8 @@ public class WeeklyController extends BaseController {
     public JsonResult add(Weekly weekly,String proName,String content) throws ParseException {
         weekly.setUserName(SystemCommonHandler.getLoginUser().getRealName());
         Map<String, String> map = DateUtils.getWeekDate();
-        weekly.setStartDate(map.get("mondayDate"));
-        weekly.setEndDate(map.get("sundayDate"));
+        weekly.setStartDate(map.get("Saturday"));
+        weekly.setEndDate(map.get("Friday"));
         SC sc = new SC();
         sc.setContent(content);
         int scId = scService.add(sc);

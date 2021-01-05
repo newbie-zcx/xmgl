@@ -16,59 +16,54 @@ public class DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setFirstDayOfWeek(Calendar.MONDAY);
         int dayWeek = cal.get(Calendar.DAY_OF_WEEK);
+        String Saturday = null;
+        String Friday = null;
+        long nowDate = new Date().getTime();
+        long SaturdayTime = 0;
+        long FridayTime = 0;
         switch (dayWeek) {
             case 1:
                 dayWeek = 7;
+                SaturdayTime = nowDate-24*60*60*1000;
+                FridayTime = nowDate+5*24*60*60*1000;
                 break;
             case 2:
                 dayWeek = 1;
+                SaturdayTime = nowDate-2*24*60*60*1000;
+                FridayTime = nowDate+4*24*60*60*1000;
                 break;
             case 3:
                 dayWeek = 2;
+                SaturdayTime = nowDate-3*24*60*60*1000;
+                FridayTime = nowDate+3*24*60*60*1000;
                 break;
             case 4:
                 dayWeek = 3;
+                SaturdayTime = nowDate-4*24*60*60*1000;
+                FridayTime = nowDate+2*24*60*60*1000;
                 break;
             case 5:
                 dayWeek = 4;
+                SaturdayTime = nowDate-5*24*60*60*1000;
+                FridayTime = nowDate+1*24*60*60*1000;
                 break;
             case 6:
                 dayWeek = 5;
+                SaturdayTime = nowDate-6*24*60*60*1000;
+                FridayTime = nowDate;
                 break;
             case 7:
                 dayWeek = 6;
+                SaturdayTime = nowDate;
+                FridayTime = nowDate+6*24*60*60*1000;
                 break;
         }
-        //上周一
-        cal.add(Calendar.DATE, -(dayWeek-1));
-        Date lastMondayDate = cal.getTime();
-        String lastWeekBegin = sdf.format(lastMondayDate);
-        //上周日
-        cal.add(Calendar.DATE, 4);
-        Date lastSundayDate = cal.getTime();
-        String lastWeekEnd = sdf.format(lastSundayDate);
-        //本周一
-        cal.add(Calendar.DATE, -(dayWeek-1));
-        Date mondayDate = cal.getTime();
-        String weekBegin = sdf.format(mondayDate);
-        //本周日
-        cal.add(Calendar.DATE, 4);
-        Date sundayDate = cal.getTime();
-        String weekEnd = sdf.format(sundayDate);
-        //下周一
-        cal.add(Calendar.DATE, 1);
-        Date nextMondayDate = cal.getTime();
-        String nextWeekBegin = sdf.format(nextMondayDate);
-        //下周日
-        cal.add(Calendar.DATE, 4);
-        Date nextSundayDate = cal.getTime();
-        String nextWeekEnd = sdf.format(nextSundayDate);
-        map.put("lastMondayDate", lastWeekBegin);
-        map.put("lastSundayDate", lastWeekEnd);
-        map.put("mondayDate", weekBegin);
-        map.put("sundayDate", weekEnd);
-        map.put("nextMondayDate", nextWeekBegin);
-        map.put("nextSundayDate", nextWeekEnd);
+        Date SaturdayDate = new Date(SaturdayTime);
+        Date FridayDate = new Date(FridayTime);
+        Saturday = sdf.format(SaturdayDate);
+        Friday = sdf.format(FridayDate);
+        map.put("Saturday", Saturday);
+        map.put("Friday", Friday);
         return map;
     }
 

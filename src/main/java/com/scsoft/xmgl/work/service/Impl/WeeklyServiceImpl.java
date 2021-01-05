@@ -53,8 +53,8 @@ public class WeeklyServiceImpl extends ServiceImpl<WeeklyMapper, Weekly> impleme
                 weeklyIds.add(proWeeklyList.get(x).getWeeklyId());
             }
             Map<String, String> weekDate = DateUtils.getWeekDate();
-            String monday = weekDate.get("mondayDate");
-            String sunday = weekDate.get("sundayDate");
+            String monday = weekDate.get("Saturday");
+            String sunday = weekDate.get("Friday");
             Date startDate = DateUtils.StringToDate(monday);
             Date endDate = DateUtils.StringToDate(sunday);
             if (StringUtils.isNotBlank(startdate)){
@@ -82,7 +82,7 @@ public class WeeklyServiceImpl extends ServiceImpl<WeeklyMapper, Weekly> impleme
                 Date dateEnd = DateUtils.StringToDate(enddate);
                 wrapper.le("end_date",dateEnd);
             }else{
-                wrapper.le("end_date",DateUtils.StringToDate("2020-12-31"));
+                wrapper.le("end_date",DateUtils.StringToDate("2021-12-31"));
             }
             wrapper.eq("user_name", SystemCommonHandler.getLoginUser().getRealName());
             weeklyList = weeklyMapper.selectList(wrapper);

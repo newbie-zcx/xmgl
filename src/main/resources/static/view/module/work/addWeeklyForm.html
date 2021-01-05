@@ -67,7 +67,7 @@
                 <th>${project.proName}</th>
                 <th style="padding: 0px;margin: 0px;"><input type="text" lay-tips="只能填写数字" style="padding: 0px;margin: 0px;width: 110px;height: 35px;border: none;font-size: 25px;"/></th>
                 <th style="padding: 0px;margin: 0px;"><input type="text" lay-tips="只能填写数字" lay-verify="number" style="padding: 0px;margin: 0px;width: 110px;height: 35px;border: none;font-size: 25px;"/></th>
-                <th style="padding: 0px;margin: 0px;"><textarea style="margin: 0px;padding:0px;width: 527px;height: 50px"></textarea></th>
+                <th style="padding: 0px;margin: 0px;"><textarea style="margin: 0px;padding:0px;width: 527px;height: 50px;border: none"></textarea></th>
 <!--                <input type="text" lay-verify="required" style="padding: 0px;margin: 0px;width: 450px;height: 35px;border: none;font-size: 25px;"/>-->
             </tr>
             <% } %>
@@ -135,15 +135,15 @@
                     var proName = trArr.children("th").eq(0).text();
                     var lastMonthHour = trArr.children("th").eq(1).children("input").val();
                     var thisMonthHour = trArr.children("th").eq(2).children("input").val();
-                    var content = trArr.children("th").eq(3).children("input").val();
-                    if (lastMonthHour==null||lastMonthHour==""||lastMonthHour==undefined){
+                    var content = trArr.children("th").eq(3).children("textarea").val();
+                    if (lastMonthHour == null || lastMonthHour == "" || lastMonthHour == undefined) {
                         lastMonthHour = 0;
-                    }else if (typeof(lastMonthHour)!="number"){
+                    } else if (typeof (lastMonthHour) != "number") {
                         layer.msg("只能填写数字");
                     }
                     if (thisMonthHour == null || thisMonthHour == "" || thisMonthHour == undefined) {
                         layer.msg("内容不可为空！")
-                    }else if (typeof(thisMonthHour)!="number"){
+                    } else if (typeof (thisMonthHour) != "number") {
                         layer.msg("只能填写数字");
                     }
                     if (content == null || content == "" || content == undefined) {
