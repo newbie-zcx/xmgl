@@ -89,8 +89,6 @@ public class DateUtils {
         }else {
             return simpleDateFormat.parse(simpleDateFormat.format(new Date()));
         }
-
-
     }
 
     public static String DateToString(Date date) throws ParseException{

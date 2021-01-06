@@ -354,33 +354,102 @@ public class ProjectController extends BaseController {
         com.alibaba.fastjson.JSONArray jsonArray = JSONObject.parseArray(listString);
         // 时间格式转换
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        int count = 0;
         for (int i = 1;i < jsonArray.size();i++){
             Map<String, Object> map = new HashMap<>();
             com.alibaba.fastjson.JSONArray rowData = JSONObject.parseArray(JSONObject.toJSONString(jsonArray.get(i)));
             Project project = new Project();
-            project.setProId(String.valueOf(rowData.get(0)));
-            project.setProName(String.valueOf(rowData.get(1)));
-            project.setNickName(String.valueOf(rowData.get(2)));
-            project.setProResume(String.valueOf(rowData.get(3)));
-            project.setProNature(String.valueOf(rowData.get(4)));
-            project.setProType(String.valueOf(rowData.get(5)));
-            project.setProManager(String.valueOf(rowData.get(6)));
-            project.setManager(String.valueOf(rowData.get(7)));
-            project.setProDept(String.valueOf(rowData.get(8)));
-            project.setProSigner(String.valueOf(rowData.get(9)));
-            Date startDate = DateUtils.StringToDate(String.valueOf(rowData.get(10)));
-            project.setStartDate(DateUtils.DateToString(startDate));
-            Date planCompleteDate = DateUtils.StringToDate(String.valueOf(rowData.get(11)));
-            project.setStartDate(DateUtils.DateToString(planCompleteDate));
-            Date planChangeDate = DateUtils.StringToDate(String.valueOf(rowData.get(12)));
-            project.setPlanChangeDate(DateUtils.DateToString(planChangeDate));
-            Integer proEndState = Integer.parseInt(String.valueOf(rowData.get(13)));
-            project.setProEndState(proEndState);
+            if (String.valueOf(rowData.get(0))==null){
+                project.setProId("");
+            }else{
+                project.setProId(String.valueOf(rowData.get(0)));
+            }
+            if (String.valueOf(rowData.get(1))==null){
+                project.setProName("");
+            }else{
+                project.setProName(String.valueOf(rowData.get(1)));
+            }
+            if (String.valueOf(rowData.get(2))==null){
+                project.setNickName("");
+            }else{
+                project.setNickName(String.valueOf(rowData.get(2)));
+            }
+            if (String.valueOf(rowData.get(3))==null){
+                project.setProResume("");
+            }else{
+                project.setProResume(String.valueOf(rowData.get(3)));
+            }
+            if (String.valueOf(rowData.get(4))==null){
+                project.setProNature("");
+            }else{
+                project.setProNature(String.valueOf(rowData.get(4)));
+            }
+            if (String.valueOf(rowData.get(5))==null){
+                project.setProType("");
+            }else{
+                project.setProType(String.valueOf(rowData.get(5)));
+            }
+            if (String.valueOf(rowData.get(6))==null){
+                project.setProManager("");
+            }else{
+                project.setProManager(String.valueOf(rowData.get(6)));
+            }
+            if (String.valueOf(rowData.get(7))==null){
+                project.setManager("");
+            }else{
+                project.setManager(String.valueOf(rowData.get(7)));
+            }
+            if (String.valueOf(rowData.get(8))==null){
+                project.setProDept("");
+            }else{
+                project.setProDept(String.valueOf(rowData.get(8)));
+            }
+            if (String.valueOf(rowData.get(9))==null){
+                project.setProSigner("");
+            }else{
+                project.setProSigner(String.valueOf(rowData.get(9)));
+            }
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            if (String.valueOf(rowData.get(10))==null){
+            }else{
+                try {
+                    Date startDate = simpleDateFormat.parse(String.valueOf(rowData.get(10)));
+                    project.setStartDate(DateUtils.DateToString(startDate));
+                }catch (Exception e){
+                    return JsonResult.error("时间格式错误！导入成功"+count+"条！");
+                }
+            }
+            if (String.valueOf(rowData.get(11))==null){
+            }else{
+                try {
+                    Date planCompleteDate = simpleDateFormat.parse(String.valueOf(rowData.get(11)));
+                    project.setPlanCompleteDate(DateUtils.DateToString(planCompleteDate));
+                }catch (Exception e){
+                    return JsonResult.error("时间格式错误！导入成功"+count+"条！");
+                }
+            }
+            if (String.valueOf(rowData.get(12))==null){
+            }else{
+                try {
+                    Date planChangeDate = simpleDateFormat.parse(String.valueOf(rowData.get(12)));
+                    project.setPlanChangeDate(DateUtils.DateToString(planChangeDate));
+                }catch (Exception e){
+                    return JsonResult.error("时间格式错误！导入成功"+count+"条！");
+                }
+            }
+            if (String.valueOf(rowData.get(13))==null){
+            }else{
+                Integer proEndState = Integer.parseInt(String.valueOf(rowData.get(13)));
+                project.setProEndState(proEndState);
+            }
             //插入数据库
-            result =projectMapper.insert(project) > 0;
+            result = projectMapper.insert(project)>0;
+            if (result){
+                count++;
+            }
         }
-        if (result){
-            return JsonResult.ok("导入成功！");
+        if (count>0){
+            return JsonResult.ok("导入成功"+count+"条！");
         }else {
             return JsonResult.error("导入失败！");
         }
